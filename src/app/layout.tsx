@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import Header from "@/components/custom/header";
 import Footer from "@/components/custom/footer";
 import { ThemeProvider } from "@/components/providers";
+import Sidebar from "@/components/sidebar";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -35,7 +36,16 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <div className="flex justify-between">
+            <Sidebar className={""}/>
+
+          <div className="grow w-full">
           {children}
+
+          </div>
+            
+          </div>
+
 
           <Footer />
         </ThemeProvider>

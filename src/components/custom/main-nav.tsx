@@ -2,85 +2,59 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { useSelectedLayoutSegment } from "next/navigation"
 
+import { MainNavItem } from "@/../types"
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/custom/icons"
+import { MobileNav } from "@/components/custom/mobile-nav"
 
-export function MainNav() {
-  const pathname = usePathname()
+interface MainNavProps {
+  items?: MainNavItem[]
+  children?: React.ReactNode
+}
+
+export function MainNav({ items, children }: MainNavProps) {
+  const segment = useSelectedLayoutSegment()
+  const [showMobileMenu, setShowMobileMenu] = React.useState<boolean>(false)
 
   return (
-    <div className="mr-4 hidden md:flex">
-      <Link href="/" className="mr-6 flex items-center space-x-2">
-        <Icons.logo className="h-6 w-6" />
+    <div className="flex gap-6 md:gap-10">
+      <Link href="/" className="hidden items-center space-x-2 md:flex">
+        <Icons.logo />
         <span className="hidden font-bold sm:inline-block">
-          {"to ne"}
+          logo test
         </span>
       </Link>
-      <nav className="flex items-center gap-4 text-sm lg:gap-6">
-        <Link
-          href="/docs"
-          className={cn(
-            "transition-colors hover:text-foreground/80",
-            pathname === "/docs" ? "text-foreground" : "text-foreground/60"
-          )}
-        >
-          Docs
-        </Link>
-        <Link
-          href="/docs/components"
-          className={cn(
-            "transition-colors hover:text-foreground/80",
-            pathname?.startsWith("/docs/components")
-              ? "text-foreground"
-              : "text-foreground/60"
-          )}
-        >
-          Components
-        </Link>
-        <Link
-          href="/themes"
-          className={cn(
-            "transition-colors hover:text-foreground/80",
-            pathname?.startsWith("/themes")
-              ? "text-foreground"
-              : "text-foreground/60"
-          )}
-        >
-          Themes
-        </Link>
-        <Link
-          href="/examples"
-          className={cn(
-            "transition-colors hover:text-foreground/80",
-            pathname?.startsWith("/examples")
-              ? "text-foreground"
-              : "text-foreground/60"
-          )}
-        >
-          Examples
-        </Link>
-        <Link
-          href="/blocks"
-          className={cn(
-            "transition-colors hover:text-foreground/80",
-            pathname?.startsWith("/blocks")
-              ? "text-foreground"
-              : "text-foreground/60"
-          )}
-        >
-          Blocks
-        </Link>
-        <Link
-          href={"https://github.com/abel3t"}
-          className={cn(
-            "hidden text-foreground/60 transition-colors hover:text-foreground/80 lg:block"
-          )}
-        >
-          GitHub
-        </Link>
-      </nav>
+      {items?.length ? (
+        <nav className="hidden gap-6 md:flex">
+          {items?.map((item, index) => (
+            <Link
+              key={index}
+              href={item.disabled ? "#" : item.href}
+              className={cn(
+                "flex items-center text-lg font-medium transition-colors hover:text-foreground/80 sm:text-sm",
+                item.href.startsWith(`/${segment}`)
+                  ? "text-foreground"
+                  : "text-foreground/60",
+                item.disabled && "cursor-not-allowed opacity-80"
+              )}
+            >
+              {item.title}
+            </Link>
+          ))}
+        </nav>
+      ) : null}
+      <button
+        className="flex items-center space-x-2 md:hidden"
+        onClick={() => setShowMobileMenu(!showMobileMenu)}
+      >
+        {showMobileMenu ? <Icons.close /> : <Icons.logo />}
+        <span className="font-bold">Menu</span>
+      </button>
+      {showMobileMenu && items && (
+        <MobileNav items={items}>{children}</MobileNav>
+      )}
     </div>
   )
 }
