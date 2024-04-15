@@ -18,41 +18,28 @@ import { SidebarMobile } from './sidebar-mobile';
 
 const sidebarItems: SidebarItems = {
   links: [
-    { label: 'Home', href: '/', icon: Home },
-    { label: 'Notifications', href: '/item/notifications', icon: Bell },
-    { label: 'Messages', href: '/item/messages', icon: Mail },
+    { label: 'Thống kê', href: '/', icon: Home },
+    { label: 'Thành Viên', href: '/members', icon: Bell },
+    { label: 'Bạn hữu / Thân hữu', href: '/friends', icon: Mail },
     {
-      href: '/item/lists',
+      href: '/cares',
       icon: List,
-      label: 'Lists',
+      label: 'Chăm sóc',
     },
     {
-      href: '/item/bookmarks',
+      href: '/discipleship',
       icon: Bookmark,
-      label: 'Bookmarks',
+      label: 'Môn đồ hóa',
     },
     {
-      href: '/item/communities',
+      href: 'faith-project',
       icon: Users,
-      label: 'Communities',
-    },
-    {
-      href: '/item/profile',
-      icon: User,
-      label: 'Profile',
-    },
+      label: 'Dự án đức tin',
+    }
   ],
   extras: (
     <div className='flex flex-col gap-2'>
-      <SidebarButton icon={MoreHorizontal} className='w-full'>
-        More
-      </SidebarButton>
-      <SidebarButton
-        className='w-full justify-center text-white'
-        variant='default'
-      >
-        Tweet
-      </SidebarButton>
+     
     </div>
   ),
 };
