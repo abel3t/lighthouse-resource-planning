@@ -36,18 +36,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex justify-between">
-            <Sidebar className={""}/>
+          <Sidebar />
 
-          <div className="grow w-full">
-          {children}
+          <main className="mx-5 mt-16 sm:ml-[300px] sm:mt-3">
+            {children}
 
-          </div>
-            
-          </div>
-
-
-          <Footer />
+            <Footer />
+          </main>
         </ThemeProvider>
       </body>
     </html>

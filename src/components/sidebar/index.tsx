@@ -1,65 +1,70 @@
-'use client'
-import { LayoutGrid, Library, ListMusic, Mic2, Music2, PlayCircle, Radio, User } from "lucide-react"
-import { Button } from "../ui/button"
-import { ScrollArea } from "../ui/scroll-area"
-import { cn } from "@/lib/utils"
+'use client';
 
+import {
+  Bell,
+  Bookmark,
+  Home,
+  List,
+  Mail,
+  MoreHorizontal,
+  User,
+  Users,
+} from 'lucide-react';
+import { SidebarDesktop } from './sidebar-desktop';
+import { SidebarItems } from '@/types';
+import { SidebarButton } from './sidebar-button';
+import { useMediaQuery } from 'usehooks-ts';
+import { SidebarMobile } from './sidebar-mobile';
 
-export default function Sidebar({ className }) {
-  return (
-    <div className={cn("pb-12", className)}>
-      <div className="space-y-4 py-4">
-        <div className="px-4 py-2">
-          <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
-            Discover
-          </h2>
-          <div className="space-y-1">
-            <Button
-              variant="secondary"
-              size="sm"
-              className="w-full justify-start"
-            >
-              <PlayCircle className="mr-2 h-4 w-4" />
-              Listen Now
-            </Button>
-            <Button variant="ghost" size="sm" className="w-full justify-start">
-              <LayoutGrid className="mr-2 h-4 w-4" />
-              Browse
-            </Button>
-            <Button variant="ghost" size="sm" className="w-full justify-start">
-              <Radio className="mr-2 h-4 w-4" />
-              Radio
-            </Button>
-          </div>
-        </div>
-        <div className="px-4 py-2">
-          <h2 className="mb-2 px-2 text-lg font-semibold tracking-tight">
-            Library
-          </h2>
-          <div className="space-y-1">
-            <Button variant="ghost" size="sm" className="w-full justify-start">
-              <ListMusic className="mr-2 h-4 w-4" />
-              Playlists
-            </Button>
-            <Button variant="ghost" size="sm" className="w-full justify-start">
-              <Music2 className="mr-2 h-4 w-4" />
-              Songs
-            </Button>
-            <Button variant="ghost" size="sm" className="w-full justify-start">
-              <User className="mr-2 h-4 w-4" />
-              Made for You
-            </Button>
-            <Button variant="ghost" size="sm" className="w-full justify-start">
-              <Mic2 className="mr-2 h-4 w-4" />
-              Artists
-            </Button>
-            <Button variant="ghost" size="sm" className="w-full justify-start">
-              <Library className="mr-2 h-4 w-4" />
-              Albums
-            </Button>
-          </div>
-        </div>
-      </div>
+const sidebarItems: SidebarItems = {
+  links: [
+    { label: 'Home', href: '/', icon: Home },
+    { label: 'Notifications', href: '/item/notifications', icon: Bell },
+    { label: 'Messages', href: '/item/messages', icon: Mail },
+    {
+      href: '/item/lists',
+      icon: List,
+      label: 'Lists',
+    },
+    {
+      href: '/item/bookmarks',
+      icon: Bookmark,
+      label: 'Bookmarks',
+    },
+    {
+      href: '/item/communities',
+      icon: Users,
+      label: 'Communities',
+    },
+    {
+      href: '/item/profile',
+      icon: User,
+      label: 'Profile',
+    },
+  ],
+  extras: (
+    <div className='flex flex-col gap-2'>
+      <SidebarButton icon={MoreHorizontal} className='w-full'>
+        More
+      </SidebarButton>
+      <SidebarButton
+        className='w-full justify-center text-white'
+        variant='default'
+      >
+        Tweet
+      </SidebarButton>
     </div>
-  )
+  ),
+};
+
+export default function Sidebar() {
+  const isDesktop = useMediaQuery('(min-width: 640px)', {
+    initializeWithValue: false,
+  });
+
+  if (isDesktop) {
+    return <SidebarDesktop sidebarItems={sidebarItems} />;
+  }
+
+  return <SidebarMobile sidebarItems={sidebarItems} />;
 }
