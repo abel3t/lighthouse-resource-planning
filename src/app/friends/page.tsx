@@ -1,7 +1,9 @@
+import ListFriends from "./list";
+
 export default function MemberPage() {
   return (
     <div>
-      <h1>friend</h1>
+      <ListFriends />
     </div>
   )
 }
