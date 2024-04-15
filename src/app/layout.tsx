@@ -27,7 +27,7 @@ function Header() {
         <SignInButton/>
       </SignedOut>
     </header>
-  );
+  )
 }
 
 export default function RootLayout({
