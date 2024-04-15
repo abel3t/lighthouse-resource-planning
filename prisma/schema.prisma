@@ -1,0 +1,211 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id String @unique
+  name   String
+  admins Account[]
+  people Person[]
+  groups Group[]
+  cares  Care[]
+  image  String?
+
+  createdAt DateTime @default(now()) @db.Timestamptz(0)
+  createdBy String?
+  updatedAt DateTime @updatedAt @db.Timestamptz(0)
+  updatedBy String?
+
+  isDeleted Boolean    @default(false)
+  absences  Absence[]
+  Disciple  Disciple[]
+
+  @@id([id])
+  @@index([isDeleted])
+}
+
+model Account {
+  id String @unique
+  name     String?
+  email    String?
+  status   String?
+  image    String?
+  role     String
+
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?
+  people         Person[]
+  cares          Care[]
+
+  createdAt DateTime @default(now()) @db.Timestamptz(0)
+  createdBy String?
+  updatedAt DateTime @updatedAt @db.Timestamptz(0)
+  updatedBy String?
+
+  isDeleted Boolean    @default(false)
+  absences  Absence[]
+  disciples Disciple[]
+
+  @@id([id])
+  @@index([organizationId, isDeleted])
+}
+
+model Person {
+  id                  String    @id @default(cuid())
+  faithStatus         Int?
+  name                String
+  firstName           String?
+  phone               String?
+  image               String?
+  introducedBy        String?
+  gender              String?
+  birthday            DateTime?
+  career              String?
+  address             String?
+  email               String?
+  maritalStatus       String?
+  description         String?
+  discipleshipProcess String?
+
+  firstComeToLEC    DateTime?
+  believeInJesusDay DateTime?
+  baptismalDay      DateTime?
+  memberDay         DateTime?
+
+  weddingDate   DateTime?
+  hometown      String?
+  newLifeMentor String?
+  role          String?
+  type          String
+
+  cares     Care[]
+  absences  Absence[]
+  disciples Disciple[]
+  groups    GroupsMembers[]
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+  curator        Account?     @relation(fields: [curatorId], references: [id])
+  curatorId      String?
+  friendId       String?
+  friend         Person?      @relation("FriendRelation", fields: [friendId], references: [id])
+  friends        Person[]     @relation("FriendRelation")
+
+  createdAt DateTime @default(now()) @db.Timestamptz(0)
+  createdBy String?
+  updatedAt DateTime @updatedAt @db.Timestamptz(0)
+  updatedBy String?
+
+  isDeleted Boolean @default(false)
+
+  @@index([organizationId, curatorId, isDeleted])
+}
+
+model Group {
+  id    String  @id @default(cuid())
+  name  String
+  image String?
+
+  members        GroupsMembers[]
+  organization   Organization    @relation(fields: [organizationId], references: [id])
+  organizationId String
+
+  createdAt DateTime @default(now()) @db.Timestamptz(0)
+  createdBy String?
+  updatedAt DateTime @updatedAt @db.Timestamptz(0)
+  updatedBy String?
+
+  isDeleted Boolean @default(false)
+
+  @@index([organizationId, isDeleted])
+}
+
+model Care {
+  id             String       @id @default(cuid())
+  description    String?
+  priority       String
+  type           String
+  image          String?
+  date           DateTime
+  curator        Account      @relation(fields: [curatorId], references: [id])
+  curatorId      String
+  person         Person       @relation(fields: [personId], references: [id])
+  personId       String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+
+  createdAt DateTime @default(now()) @db.Timestamptz(0)
+  createdBy String?
+  updatedAt DateTime @updatedAt @db.Timestamptz(0)
+  updatedBy String?
+
+  isDeleted Boolean @default(false)
+
+  @@index([organizationId, curatorId, personId, date, isDeleted])
+}
+
+model GroupsMembers {
+  person   Person @relation(fields: [personId], references: [id])
+  personId String
+  group    Group  @relation(fields: [groupId], references: [id])
+  groupId  String
+  role     Int
+
+  createdAt DateTime @default(now()) @db.Timestamptz(0)
+  createdBy String?
+  updatedAt DateTime @updatedAt @db.Timestamptz(0)
+  updatedBy String?
+
+  @@id([personId, groupId])
+}
+
+model Absence {
+  id             String       @id @default(cuid())
+  description    String?
+  type           String
+  date           DateTime
+  curator        Account      @relation(fields: [curatorId], references: [id])
+  curatorId      String
+  person         Person       @relation(fields: [personId], references: [id])
+  personId       String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+
+  createdAt DateTime @default(now()) @db.Timestamptz(0)
+  createdBy String?
+  updatedAt DateTime @updatedAt @db.Timestamptz(0)
+  updatedBy String?
+
+  isDeleted Boolean @default(false)
+
+  @@index([organizationId, personId, date, isDeleted])
+}
+
+model Disciple {
+  id             String       @id @default(cuid())
+  description    String?
+  priority       String
+  type           String
+  image          String?
+  date           DateTime
+  curator        Account      @relation(fields: [curatorId], references: [id])
+  curatorId      String
+  person         Person       @relation(fields: [personId], references: [id])
+  personId       String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+
+  createdAt DateTime @default(now()) @db.Timestamptz(0)
+  createdBy String?
+  updatedAt DateTime @updatedAt @db.Timestamptz(0)
+  updatedBy String?
+
+  isDeleted Boolean @default(false)
+
+  @@index([organizationId, curatorId, date, isDeleted])
+}
