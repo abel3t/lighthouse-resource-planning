@@ -1,6 +1,6 @@
 import { Phone } from "lucide-react";
 import ListMembers from "./list";
-import { TasksTable } from "./table";
+import { TasksTable } from "../../components/pages/member-table";
 import { SearchParams } from "@/types";
 import { getMembers } from "@/lib/api";
 

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import Header from "@/components/custom/header";
 import Footer from "@/components/custom/footer";
 import { ThemeProvider } from "@/components/providers";
-import Sidebar from "@/components/sidebar";
+import Sidebar from "@/components/custom/sidebar";
 
 const fontSans = FontSans({
   subsets: ["latin"],

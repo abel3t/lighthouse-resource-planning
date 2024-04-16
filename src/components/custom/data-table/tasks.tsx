@@ -5,9 +5,9 @@ import * as React from "react"
 
 import { useDataTable } from "@/hooks/use-data-table"
 import { DataTable } from "./index"
-import { DataTableToolbar } from "@/components/data-table/data-table-toolbar"
-import { getColumns } from "@/app/members/tasks-table-columns"
-import { TasksTableToolbarActions } from "@/app/members/tasks-table-toolbar-actions"
+import { DataTableToolbar } from "@/components/custom/data-table/data-table-toolbar"
+import { getColumns } from "@/components/pages/member-table/tasks-table-columns"
+import { TasksTableToolbarActions } from "@/components/pages/member-table/tasks-table-toolbar-actions"
 
 
 interface TasksTableProps {

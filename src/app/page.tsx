@@ -1,4 +1,4 @@
-import Sidebar from "@/components/sidebar";
+import Sidebar from "@/components/custom/sidebar";
 import {
   RegisterLink,
   LoginLink,
