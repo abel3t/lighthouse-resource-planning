@@ -38,18 +38,14 @@ import { DataTableColumnHeader } from "@/components/data-table/data-table-column
 
 export const filterFields: DataTableFilterField<any>[] = [
   {
-    label: "Title",
-    value: "title",
-    placeholder: "Filter titles...",
+    label: "Name",
+    value: "name",
+    placeholder: "Filter name...",
   },
   {
-    label: "Status",
-    value: "status"
-  },
-  {
-    label: "Priority",
-    value: "priority",
-  },
+    label: "Discipleship Process",
+    value: "DiscipleshipProcess",
+  }
 ]
 
 export function getColumns(): ColumnDef<any>[] {
@@ -82,27 +78,23 @@ export function getColumns(): ColumnDef<any>[] {
       enableHiding: false,
     },
     {
-      accessorKey: "code",
+      accessorKey: "id",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Task" />
+        <DataTableColumnHeader column={column} title="id" />
       ),
-      cell: ({ row }) => <div className="w-20">{row.getValue("code")}</div>,
+      cell: ({ row }) => <div className="w-20">{(row.getValue("id") as string).substring(5, 10)}</div>,
       enableSorting: false,
       enableHiding: false,
     },
     {
-      accessorKey: "title",
+      accessorKey: "name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Title" />
+        <DataTableColumnHeader column={column} title="Name" />
       ),
       cell: ({ row }) => {
-        const label = 'okk '
         return (
           <div className="flex space-x-2">
-            {label && <Badge variant="outline">{label}</Badge>}
-            <span className="max-w-[31.25rem] truncate font-medium">
-              {row.getValue("title")}
-            </span>
+            {row.getValue("name")}
           </div>
         )
       },
@@ -199,7 +191,7 @@ export function getColumns(): ColumnDef<any>[] {
       header: ({ column }) => (
         <DataTableColumnHeader column={column} title="Created At" />
       ),
-      cell: ({ cell }) => cell.getValue() as Date,
+      cell: ({ cell }) => `${(cell.getValue() as Date).toDateString()}`,
     },
     {
       id: "actions",

@@ -1,25 +1,20 @@
 import { Phone } from "lucide-react";
 import ListMembers from "./list";
+import { TasksTable } from "./table";
+import { SearchParams } from "@/types";
+import { getMembers } from "@/lib/api";
 
-async function getData(): Promise<any[]> {
-
-  // Fetch data from your API here.
-  return [
-    {
-      id: "728ed52f",
-      name: 'Trần Tâm Tỏ',
-      discipleship_process: 'OK',
-      curator: 'Abel Tran',
-      phone: '+84 123 456 789',
-    },
-  ]
+export interface IndexPageProps {
+  searchParams: SearchParams
 }
 
-export default async function MemberPage() {
-  const data = await getData();
+export default async function MemberPage({ searchParams }: IndexPageProps) {
+  const data = getMembers(searchParams);
+
+  console.log('searchParams', searchParams)
   return (
     <div>
-      <ListMembers />
+      <TasksTable tasksPromise={data} />
     </div>
   )
 }
