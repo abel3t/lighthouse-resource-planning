@@ -23,7 +23,9 @@ model Organization {
 
   isDeleted Boolean    @default(false)
   absences  Absence[]
-  Disciple  Disciple[]
+  discipleship  Discipleship[]
+  funds         Fund[]
+
 
   @@id([id])
   @@index([isDeleted])
@@ -49,7 +51,7 @@ model Account {
 
   isDeleted Boolean    @default(false)
   absences  Absence[]
-  disciples Disciple[]
+  disciples Discipleship[]
 
   @@id([id])
   @@index([organizationId, isDeleted])
@@ -72,21 +74,22 @@ model Person {
   description         String?
   discipleshipProcess String?
 
-  firstComeToLEC    DateTime?
-  believeInJesusDay DateTime?
-  baptismalDay      DateTime?
-  memberDay         DateTime?
+  firstComeToLEC      DateTime?
+  believeInJesusDay   DateTime?
+  baptismalDay        DateTime?
+  memberDay           DateTime?
 
-  weddingDate   DateTime?
-  hometown      String?
-  newLifeMentor String?
-  role          String?
-  type          String
+  weddingDate         DateTime?
+  hometown            String?
+  newLifeMentor       String?
+  role                String?
+  type                String
 
-  cares     Care[]
-  absences  Absence[]
-  disciples Disciple[]
-  groups    GroupsMembers[]
+  cares           Care[]
+  absences      Absence[]
+  discipleships   Discipleship[]
+  groups          GroupsMembers[]
+  funds           FundRecord[]
 
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId String
@@ -186,7 +189,7 @@ model Absence {
   @@index([organizationId, personId, date, isDeleted])
 }
 
-model Disciple {
+model Discipleship {
   id             String       @id @default(cuid())
   description    String?
   priority       String
@@ -208,4 +211,45 @@ model Disciple {
   isDeleted Boolean @default(false)
 
   @@index([organizationId, curatorId, date, isDeleted])
+}
+
+model Fund {
+  id             String       @id @default(cuid())
+  name           String
+  description    String?
+
+  amount         Float        @default(0)
+  currency       String       @default("VND")
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+
+  createdAt DateTime @default(now()) @db.Timestamptz(0)
+  createdBy String?
+  updatedAt DateTime @updatedAt @db.Timestamptz(0)
+  updatedBy String?
+  isDeleted Boolean @default(false)
+}
+
+enum FundRecordType {
+  Income
+  Expense
+}
+
+model FundRecord {
+  id             String       @id @default(cuid())
+
+  description    String?
+  date           DateTime @default(now()) @db.Timestamptz(0)
+  type           FundRecordType
+  amount         Float    @default(0)
+
+  contributor         Person?       @relation(fields: [contributorId], references: [id])
+  contributorId       String?
+  
+  createdAt DateTime @default(now()) @db.Timestamptz(0)
+  createdBy String?
+  updatedAt DateTime @updatedAt @db.Timestamptz(0)
+  updatedBy String?
+  isDeleted Boolean @default(false)
 }

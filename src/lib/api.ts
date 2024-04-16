@@ -15,7 +15,7 @@ export const getMembers = async (searchParams: SearchParams) => {
       type: 'Member',
       name: {
         contains: search
-      } 
+      },
     },
     orderBy: {
       [sortField]: sortOrder
@@ -24,6 +24,34 @@ export const getMembers = async (searchParams: SearchParams) => {
 
   return {
     data: members,
+    pageCount: 1
+  }
+}
+
+export async function createFundRecord(data: any) {
+  console.log('datane', data)
+
+  if (!data) {
+    return
+  }
+
+ console.log('datane2', data)
+  const test = await prisma.fundRecord.create({
+    data
+  })
+
+  console.log('trstest', test)
+}
+
+export async function getFundRecords() {
+  const records = await prisma.fundRecord.findMany({
+    include: {
+      contributor: true
+    },
+  });
+
+  return {
+    data: records,
     pageCount: 1
   }
 }

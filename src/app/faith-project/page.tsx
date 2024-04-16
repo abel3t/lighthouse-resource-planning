@@ -1,7 +1,8 @@
+import FaithProjectTable from "@/components/pages/faith-project-table";
+import { getFundRecords, getMembers } from "@/lib/api";
+
 export default function MemberPage() {
   return (
-    <div>
-      <h1>Faith project</h1>
-    </div>
+    <FaithProjectTable promiseData={getFundRecords()} promiseMembers={getMembers({})} />
   )
 }
