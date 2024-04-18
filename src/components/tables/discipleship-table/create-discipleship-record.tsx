@@ -128,7 +128,7 @@ export function CreateDiscipleshipDialog() {
           New Record
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="h-5/6 overflow-y-scroll">
         <DialogHeader>
           <DialogTitle>Create Record</DialogTitle>
           <DialogDescription>Điền thông tin.</DialogDescription>

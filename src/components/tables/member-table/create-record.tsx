@@ -34,6 +34,7 @@ import {
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -117,7 +118,7 @@ export function CreateFundRecordDialog() {
           New Record
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="h-5/6 overflow-y-scroll">
         <DialogHeader>
           <DialogTitle>Create Record</DialogTitle>
           <DialogDescription>Điền thông tin.</DialogDescription>
@@ -181,7 +182,7 @@ const CuratorField = ({ form }: any) => {
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
           <FormLabel>Curator</FormLabel>
-          <Popover open={isOpen} onOpenChange={setIsOpen}>
+          <Popover open={isOpen} onOpenChange={setIsOpen} modal>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
@@ -194,31 +195,33 @@ const CuratorField = ({ form }: any) => {
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent className=" p-0">
-              <Command>
-                <CommandInput placeholder="Search Curator..." />
-                <CommandList>
-                  <CommandEmpty>No curator found.</CommandEmpty>
+            <PopoverContent className=" max-h-[300px] p-0">
+              <ScrollArea className={'[&>[data-radix-scroll-area-viewport]]:max-h-[300px]'}>
+                <Command>
+                  <CommandInput placeholder="Search Curator..." />
+                  <CommandList>
+                    <CommandEmpty>No curator found.</CommandEmpty>
 
-                  <CommandGroup>
-                    {accounts.map((account) => (
-                      <CommandItem
-                        value={account.id}
-                        key={account.id}
-                        onSelect={() => {
-                          form.setValue('curatorId', account.id);
-                          setIsOpen(false);
-                        }}
-                      >
-                        <Check
-                          className={cn('mr-2 h-4 w-4', account.id === field.value ? 'opacity-100' : 'opacity-0')}
-                        />
-                        {account.name}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
+                    <CommandGroup>
+                      {accounts.map((account) => (
+                        <CommandItem
+                          value={account.id}
+                          key={account.id}
+                          onSelect={() => {
+                            form.setValue('curatorId', account.id);
+                            setIsOpen(false);
+                          }}
+                        >
+                          <Check
+                            className={cn('mr-2 h-4 w-4', account.id === field.value ? 'opacity-100' : 'opacity-0')}
+                          />
+                          {account.name}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </ScrollArea>
             </PopoverContent>
           </Popover>
           <FormMessage />
