@@ -77,7 +77,7 @@ export function getColumns(): ColumnDef<any>[] {
     {
       accessorKey: 'date',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Date" />,
-      cell: ({ row }) => <div className="w-20">{(row.getValue('date') as Date).toISOString()}</div>,
+      cell: ({ row }) => <div className="w-20">{new Date(row.getValue('date')).toISOString()}</div>,
       enableSorting: false,
       enableHiding: false
     },

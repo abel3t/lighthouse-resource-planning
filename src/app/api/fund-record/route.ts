@@ -24,3 +24,8 @@ export async function POST(req: Request, res: Response) {
 
   return NextResponse.json(data);
 }
+
+export async function GET(req: Request, res: Response) {
+  const data = await prisma.fundRecord.findMany();
+  return NextResponse.json(data);
+}

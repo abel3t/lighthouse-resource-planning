@@ -3,10 +3,18 @@
 import useFundStore from '@/stores/useFundStore';
 import { Fund } from '@prisma/client';
 import { WalletIcon } from 'lucide-react';
+import { useEffect } from 'react';
 
 import { cn } from '@/lib/utils';
 
-export default function Funds({ funds }: { funds: Fund[] }) {
+export default function Funds() {
+  const fetchFunds = useFundStore((state) => state.fetchFunds);
+  const funds = useFundStore((state) => state.funds);
+
+  useEffect(() => {
+    fetchFunds();
+  }, []);
+
   return (
     <div className="grid grid-cols-4 gap-4">
       {funds.map((fund) => (
@@ -21,7 +29,6 @@ const FundCard = ({ className, fund }: { className?: string; fund: Fund }) => {
   const setCurrentFund = useFundStore((state) => state.setCurrentFund);
 
   const handleSelect = () => {
-    console.log('fund ne', fund);
     setCurrentFund(fund);
   };
 

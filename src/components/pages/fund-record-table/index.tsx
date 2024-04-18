@@ -1,6 +1,7 @@
 'use client';
 
-import * as React from 'react';
+import useFundRecordStore from '@/stores/useFundRecordStore';
+import { use, useEffect, useMemo } from 'react';
 
 import { DataTable } from '@/components/custom/data-table';
 import { DataTableToolbar } from '@/components/custom/data-table/data-table-toolbar';
@@ -11,22 +12,25 @@ import { filterFields, getColumns } from './fund-record-table-columns';
 import { FaithProjectTableToolbarActions } from './fund-record-table-toolbar-actions';
 
 interface TableProps {
-  promiseData: any;
   promiseMembers: any;
 }
 
-export default function FundRecordTable({ promiseData, promiseMembers }: TableProps) {
-  // Learn more about React.use here: https://react.dev/reference/react/use
-  const { data, pageCount } = React.use(promiseData);
-  const { data: members } = React.use(promiseMembers);
+export default function FundRecordTable({ promiseMembers }: TableProps) {
+  const { data: members } = use(promiseMembers);
+  const fundRecords = useFundRecordStore((state) => state.records);
+  const fetchFundRecords = useFundRecordStore((state) => state.fetchRecords);
 
   // Memoize the columns so they don't re-render on every render
-  const columns = React.useMemo(() => getColumns(), []);
+  const columns = useMemo(() => getColumns(), []);
+
+  useEffect(() => {
+    fetchFundRecords();
+  }, []);
 
   const { table } = useDataTable({
-    data,
+    data: fundRecords || [],
     columns,
-    pageCount,
+    pageCount: 1,
     filterFields
   });
 

@@ -1,5 +1,6 @@
 'use client';
 
+import useFundRecordStore from '@/stores/useFundRecordStore';
 import useFundStore from '@/stores/useFundStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CaretSortIcon, CheckIcon, PlusIcon } from '@radix-ui/react-icons';
@@ -51,6 +52,9 @@ export function CreateFundRecordDialog({ members }: CreateTaskDialogProps) {
     resolver: zodResolver(createFundRecordSchema)
   });
 
+  const fetchFunds = useFundStore((state) => state.fetchFunds);
+  const fetchRecords = useFundRecordStore((state) => state.fetchRecords);
+
   const currentFund = useFundStore((state) => state.currentFund);
 
   function onSubmit(input: CreateRecordSchema) {
@@ -73,6 +77,10 @@ export function CreateFundRecordDialog({ members }: CreateTaskDialogProps) {
           success: () => {
             form.reset();
             setOpen(false);
+
+            fetchFunds();
+            fetchRecords();
+
             return 'Record created';
           },
           error: (error) => {

@@ -4,7 +4,7 @@ import { Inter as FontSans } from 'next/font/google';
 import Footer from '@/components/custom/footer';
 import Header from '@/components/custom/header';
 import Sidebar from '@/components/custom/sidebar';
-import { ThemeProvider } from '@/components/providers';
+import { QueryProviders, ThemeProvider } from '@/components/providers';
 
 import { cn } from '@/lib/utils';
 
@@ -29,13 +29,15 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <Sidebar />
+          <QueryProviders>
+            <Sidebar />
 
-          <main className="mx-5 mt-16 sm:ml-[300px] sm:mt-3">
-            {children}
+            <main className="mx-5 mt-16 sm:ml-[300px] sm:mt-3">
+              {children}
 
-            <Footer />
-          </main>
+              <Footer />
+            </main>
+          </QueryProviders>
         </ThemeProvider>
       </body>
     </html>
