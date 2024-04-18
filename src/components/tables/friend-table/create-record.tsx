@@ -162,7 +162,7 @@ const IntroducedByField = ({ form }: any) => {
       control={form.control}
       name="friendId"
       render={({ field }) => (
-        <FormItem className="flex flex-col space-y-2">
+        <FormItem className="flex w-1/2 flex-col">
           <FormLabel>Introduced by</FormLabel>
           <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
@@ -217,7 +217,7 @@ const NameField = ({ form }: any) => {
       control={form.control}
       name="name"
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="flex w-1/2 flex-col">
           <FormLabel>Tên</FormLabel>
           <FormControl>
             <Input placeholder="Tên" className="resize-none" {...field} />
@@ -235,7 +235,7 @@ const PhoneField = ({ form }: any) => {
       control={form.control}
       name="phone"
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="flex w-1/2 flex-col">
           <FormLabel>Phone</FormLabel>
           <FormControl>
             <Input placeholder="Phone" className="resize-none" {...field} />
@@ -253,7 +253,7 @@ const EmailField = ({ form }: any) => {
       control={form.control}
       name="email"
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="flex w-1/2 flex-col">
           <FormLabel>Email</FormLabel>
           <FormControl>
             <Input placeholder="Email" className="resize-none" {...field} />
@@ -271,7 +271,7 @@ const AddressField = ({ form }: any) => {
       control={form.control}
       name="address"
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="flex w-1/2 flex-col">
           <FormLabel>Address</FormLabel>
           <FormControl>
             <Input placeholder="Address" className="resize-none" {...field} />
@@ -289,7 +289,7 @@ const HometownField = ({ form }: any) => {
       control={form.control}
       name="hometown"
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="flex w-1/2 flex-col">
           <FormLabel>Hometown</FormLabel>
           <FormControl>
             <Input placeholder="hometown" className="resize-none" {...field} />
@@ -307,7 +307,7 @@ const DescriptionField = ({ form }: any) => {
       control={form.control}
       name="description"
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="flex w-full flex-col">
           <FormLabel>Ghi chú</FormLabel>
           <FormControl>
             <Textarea placeholder="Thông tin chi tiết..." className="resize-none" {...field} />
@@ -330,9 +330,10 @@ const GenderField = ({ form }: any) => {
       control={form.control}
       name="gender"
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="flex w-1/2 flex-col">
           <FormControl>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormLabel>Giới tính</FormLabel>
               <FormControl>
                 <SelectTrigger
                   className={cn(`min-w-[200px] ${bgColor[field.value]}`, field.value && 'font-bold text-white')}
@@ -366,7 +367,7 @@ const FriendTypeField = ({ form }: any) => {
       control={form.control}
       name="type"
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="flex w-1/2 flex-col">
           <FormLabel className="my-0 py-0">Type</FormLabel>
           <FormControl>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -398,7 +399,7 @@ const BirthdayField = ({ form }: any) => {
       control={form.control}
       name="birthday"
       render={({ field }) => (
-        <FormItem className="flex flex-col">
+        <FormItem className="flex w-1/2 flex-col">
           <FormLabel>Date of birth</FormLabel>
           <Popover>
             <PopoverTrigger asChild>

@@ -152,7 +152,7 @@ const ContributorField = ({ form, members }: any) => {
       control={form.control}
       name="contributorId"
       render={({ field }) => (
-        <FormItem className="flex flex-col space-y-2">
+        <FormItem className="flex w-1/2 flex-col">
           <FormLabel>Người Dâng</FormLabel>
           <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
@@ -207,7 +207,7 @@ const DescriptionField = ({ form }: any) => {
       control={form.control}
       name="description"
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="flex w-full flex-col">
           <FormLabel>Ghi chú</FormLabel>
           <FormControl>
             <Textarea placeholder="Thông tin chi tiết..." className="resize-none" {...field} />
@@ -225,7 +225,7 @@ const AmountField = ({ form }: any) => {
       control={form.control}
       name="amount"
       render={({ field }) => (
-        <FormItem className="flex flex-col space-y-2">
+        <FormItem className="flex w-1/2 flex-col">
           <FormLabel className="my-0 py-0">Số tiền</FormLabel>
           <FormControl className="mt-0 py-0">
             <Input className="mt-0 py-0" type="number" {...field} />
@@ -249,11 +249,11 @@ const RecordTypeField = ({ form }: any) => {
       control={form.control}
       name="type"
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="flex w-1/2 flex-col">
           <FormControl>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className={cn(`w-1/2 ${bgColor[field.value]}`, field.value && 'font-bold text-white')}>
+                <SelectTrigger className={cn(`${bgColor[field.value]}`, field.value && 'font-bold text-white')}>
                   <SelectValue placeholder="Thu/Chi" />
                 </SelectTrigger>
               </FormControl>

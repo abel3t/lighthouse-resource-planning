@@ -12,8 +12,6 @@ import {
 import useAccountStore from '@/stores/useAccountStore';
 import useCareStore from '@/stores/useCareStore';
 import useDiscipleshipStore from '@/stores/useDiscipleshipStore';
-import useFriendStore from '@/stores/useFriendStore';
-import useMemberStore from '@/stores/useMemberStore';
 import usePersonStore from '@/stores/usePersonStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusIcon } from '@radix-ui/react-icons';
@@ -21,12 +19,14 @@ import axios from 'axios';
 import { CommandList } from 'cmdk';
 import { format } from 'date-fns';
 import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
+import Image from 'next/image';
 import * as React from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
 
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
@@ -45,7 +45,7 @@ import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { UploadDropzone } from '@/components/uploadthing';
+import { UploadButton, UploadDropzone } from '@/components/uploadthing';
 
 import { getErrorMessage } from '@/lib/handle-error';
 import { cn } from '@/lib/utils';
@@ -146,18 +146,28 @@ export function CreateDiscipleshipDialog() {
               <DateField form={form} />
             </div>
 
-            <UploadDropzone
-              endpoint="imageUploader"
-              onClientUploadComplete={(res) => {
-                const file: any = res?.[0];
+            <div className="flex items-start gap-2">
+              {!fileUrl && (
+                <UploadButton
+                  endpoint="imageUploader"
+                  onClientUploadComplete={(res) => {
+                    const file: any = res?.[0];
 
-                setFileUrl(file?.url || '');
-                toast('Upload Completed');
-              }}
-              onUploadError={(error: Error) => {
-                alert(`ERROR! ${error.message}`);
-              }}
-            />
+                    setFileUrl(file?.url || '');
+                    console.log('ok', fileUrl);
+                    toast('Upload Completed');
+                  }}
+                  onUploadError={(error: Error) => {
+                    alert(`ERROR! ${error.message}`);
+                  }}
+                />
+              )}
+              {fileUrl && (
+                <AspectRatio ratio={16 / 9}>
+                  <Image src={fileUrl} fill alt="Image" />
+                </AspectRatio>
+              )}
+            </div>
 
             <DescriptionField form={form} />
 
@@ -186,7 +196,7 @@ const MemberField = ({ form }: any) => {
       control={form.control}
       name="personId"
       render={({ field }) => (
-        <FormItem className="flex flex-col space-y-2">
+        <FormItem className="flex w-1/2 flex-col">
           <FormLabel>Person</FormLabel>
           <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
@@ -235,24 +245,6 @@ const MemberField = ({ form }: any) => {
   );
 };
 
-const DescriptionField = ({ form }: any) => {
-  return (
-    <FormField
-      control={form.control}
-      name="description"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>Ghi chú</FormLabel>
-          <FormControl>
-            <Textarea placeholder="Thông tin chi tiết..." className="resize-none" {...field} />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-  );
-};
-
 const CareTypeField = ({ form }: any) => {
   const bgColor: Record<string, string> = {
     [DiscipleshipType.Believe]: 'bg-yellow-400',
@@ -265,8 +257,8 @@ const CareTypeField = ({ form }: any) => {
       control={form.control}
       name="type"
       render={({ field }) => (
-        <FormItem>
-          <FormLabel className="my-0 py-0">Discipleship Type</FormLabel>
+        <FormItem className="flex w-1/2 flex-col">
+          <FormLabel className="my-0  py-0">Discipleship Type</FormLabel>
           <FormControl>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
@@ -302,8 +294,8 @@ const CarePriorityField = ({ form }: any) => {
       control={form.control}
       name="priority"
       render={({ field }) => (
-        <FormItem>
-          <FormLabel className="my-0 py-0">Type</FormLabel>
+        <FormItem className="flex w-1/2 flex-col">
+          <FormLabel>Type</FormLabel>
           <FormControl>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
@@ -333,7 +325,7 @@ const DateField = ({ form }: any) => {
       control={form.control}
       name="date"
       render={({ field }) => (
-        <FormItem className="flex flex-col">
+        <FormItem className="flex w-1/2 flex-col">
           <FormLabel>Date</FormLabel>
           <Popover>
             <PopoverTrigger asChild>
@@ -357,6 +349,24 @@ const DateField = ({ form }: any) => {
               />
             </PopoverContent>
           </Popover>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+};
+
+const DescriptionField = ({ form }: any) => {
+  return (
+    <FormField
+      control={form.control}
+      name="description"
+      render={({ field }) => (
+        <FormItem className="flex w-full flex-col">
+          <FormLabel>Ghi chú</FormLabel>
+          <FormControl>
+            <Textarea placeholder="Thông tin chi tiết..." className="resize-none" {...field} />
+          </FormControl>
           <FormMessage />
         </FormItem>
       )}
