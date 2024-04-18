@@ -49,6 +49,13 @@ export enum PersonalType {
   NewLife = 'NewLife'
 }
 
+export enum FriendType {
+  Unbeliever = 'Unbeliever',
+  Unsure = 'Unsure',
+  Friend = 'Friend',
+  NewLife = 'NewLife'
+}
+
 export enum Gender {
   Male = 'Male',
   Female = 'Female'

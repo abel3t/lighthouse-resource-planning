@@ -1,6 +1,6 @@
 import { SearchParams } from '@/types';
 
-import MemberTable from '@/components/pages/member-table';
+import MemberTable from '@/components/tables/member-table';
 
 import { getMembers } from '@/lib/api';
 

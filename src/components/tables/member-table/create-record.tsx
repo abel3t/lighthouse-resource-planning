@@ -350,7 +350,7 @@ const AddressField = ({ form }: any) => {
         <FormItem>
           <FormLabel>Address</FormLabel>
           <FormControl>
-            <Input placeholder="Tên" className="resize-none" {...field} />
+            <Input placeholder="Address" className="resize-none" {...field} />
           </FormControl>
           <FormMessage />
         </FormItem>

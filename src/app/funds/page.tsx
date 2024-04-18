@@ -1,5 +1,5 @@
 import Funds from '@/components/custom/funds';
-import FundRecordTable from '@/components/pages/fund-record-table';
+import FundRecordTable from '@/components/tables/fund-record-table';
 
 import { getFundRecords, getFunds, getMembers } from '@/lib/api';
 

@@ -1,9 +1,9 @@
-import ListFriends from './list';
+import FriendTable from '@/components/tables/friend-table';
 
 export default function MemberPage() {
   return (
     <div>
-      <ListFriends />
+      <FriendTable />
     </div>
   );
 }
