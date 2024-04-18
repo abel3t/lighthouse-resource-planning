@@ -195,11 +195,11 @@ const CuratorField = ({ form }: any) => {
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent className=" max-h-[300px] p-0">
+            <PopoverContent className="max-h-[300px] p-0">
               <Command>
                 <CommandInput placeholder="Search Curator..." />
                 <CommandList>
-                  <ScrollArea className={'h-72'}>
+                  <ScrollArea className={'h-72 overflow-y-auto'}>
                     <CommandEmpty>No curator found.</CommandEmpty>
 
                     <CommandGroup>

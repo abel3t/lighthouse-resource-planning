@@ -32,6 +32,7 @@ import {
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -181,25 +182,27 @@ const IntroducedByField = ({ form }: any) => {
               <Command>
                 <CommandInput placeholder="Search Contributor..." />
                 <CommandList>
-                  <CommandEmpty>No member found.</CommandEmpty>
+                  <ScrollArea className="h-72">
+                    <CommandEmpty>No member found.</CommandEmpty>
 
-                  <CommandGroup>
-                    {members.map((member) => (
-                      <CommandItem
-                        value={member.id}
-                        key={member.id}
-                        onSelect={() => {
-                          form.setValue('friendId', member.id);
-                          setIsOpen(false);
-                        }}
-                      >
-                        <Check
-                          className={cn('mr-2 h-4 w-4', member.id === field.value ? 'opacity-100' : 'opacity-0')}
-                        />
-                        {member.name}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
+                    <CommandGroup>
+                      {members.map((member) => (
+                        <CommandItem
+                          value={member.id}
+                          key={member.id}
+                          onSelect={() => {
+                            form.setValue('friendId', member.id);
+                            setIsOpen(false);
+                          }}
+                        >
+                          <Check
+                            className={cn('mr-2 h-4 w-4', member.id === field.value ? 'opacity-100' : 'opacity-0')}
+                          />
+                          {member.name}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </ScrollArea>
                 </CommandList>
               </Command>
             </PopoverContent>
