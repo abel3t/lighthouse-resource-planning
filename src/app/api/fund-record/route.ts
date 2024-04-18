@@ -26,6 +26,45 @@ export async function POST(req: Request, res: Response) {
 }
 
 export async function GET(req: Request, res: Response) {
-  const data = await prisma.fundRecord.findMany();
-  return NextResponse.json(data);
+  const url = new URL(req.url);
+  const s = new URLSearchParams(url.searchParams);
+
+  const search = s.get('search');
+  const page = s.get('page');
+  const pageSize = s.get('pageSize');
+  type SortType = 'asc' | 'desc';
+
+  let [sortField, sortOrder] = (s.get('sort') as string)?.split('.');
+  if (sortField && !['id'].includes(sortField)) {
+    sortField = 'id';
+  }
+
+  const $condition: Record<string, any> = {};
+
+  console.log('searchne', search);
+
+  if (search) {
+    $condition.name = {
+      contains: search,
+      mode: 'insensitive'
+    };
+  }
+
+  const data = await prisma.fundRecord.findMany({
+    where: {
+      contributor: $condition
+    },
+    include: {
+      contributor: {
+        select: {
+          id: true,
+          name: true
+        }
+      }
+    },
+    orderBy: {
+      date: sortOrder as SortType
+    }
+  });
+  return NextResponse.json(data || []);
 }

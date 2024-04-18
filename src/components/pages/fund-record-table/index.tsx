@@ -1,15 +1,25 @@
 'use client';
 
 import useFundRecordStore from '@/stores/useFundRecordStore';
-import { use, useEffect, useMemo } from 'react';
+import {
+  ColumnFiltersState,
+  PaginationState,
+  SortingState,
+  VisibilityState,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  useReactTable
+} from '@tanstack/react-table';
+import { useDebounce } from '@uidotdev/usehooks';
+import { use, useEffect, useMemo, useState } from 'react';
 
 import { DataTable } from '@/components/custom/data-table';
 import { DataTableToolbar } from '@/components/custom/data-table/data-table-toolbar';
-
-import { useDataTable } from '@/hooks/use-data-table';
+import { Input } from '@/components/ui/input';
 
 import { filterFields, getColumns } from './fund-record-table-columns';
-import { FaithProjectTableToolbarActions } from './fund-record-table-toolbar-actions';
+import { FundRecordTableToolbarActions } from './fund-record-table-toolbar-actions';
 
 interface TableProps {
   promiseMembers: any;
@@ -22,25 +32,99 @@ export default function FundRecordTable({ promiseMembers }: TableProps) {
 
   // Memoize the columns so they don't re-render on every render
   const columns = useMemo(() => getColumns(), []);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+
+  const queryParams = useFundRecordStore((state) => state.queryParams);
+  const setQueryParams = useFundRecordStore((state) => state.setQueryParams);
+
+  const debouncedSearch = useDebounce(queryParams, 300);
 
   useEffect(() => {
-    fetchFundRecords();
+    fetchFundRecords({});
   }, []);
 
-  const { table } = useDataTable({
+  useEffect(() => {
+    console.log('change', debouncedSearch.search);
+    fetchFundRecords(debouncedSearch);
+  }, [debouncedSearch.search]);
+
+  const handlePaginationChange = (updater: any) => {
+    const nextState = updater(pagination);
+
+    setPagination(nextState);
+    setQueryParams({
+      pagination: {
+        page: nextState.pageIndex + 1,
+        pageSize: nextState.pageSize
+      }
+    });
+
+    fetchFundRecords(queryParams);
+    console.log('handlePaginationChange');
+  };
+
+  const handleSortChange = (updater: any) => {
+    const nextState = updater(sorting);
+
+    setSorting(nextState);
+    setQueryParams({
+      sort: {
+        field: nextState[0].id,
+        order: nextState[0].desc ? 'desc' : 'asc'
+      }
+    });
+
+    fetchFundRecords(queryParams);
+    console.log('handleSortChange');
+  };
+
+  const handleFilterChange = async (updater: any) => {
+    const nextState = updater(columnFilters);
+    setQueryParams({
+      search: nextState[0]?.value
+    });
+
+    setColumnFilters(nextState);
+
+    if (!nextState[0]?.value) {
+      fetchFundRecords({
+        ...queryParams,
+        search: ''
+      });
+    }
+  };
+
+  const table = useReactTable({
     data: fundRecords || [],
     columns,
-    pageCount: 1,
-    filterFields
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onPaginationChange: handlePaginationChange,
+    onSortingChange: handleSortChange,
+    onColumnVisibilityChange: setColumnVisibility,
+    onColumnFiltersChange: handleFilterChange,
+    state: {
+      sorting,
+      columnFilters,
+      pagination,
+      columnVisibility
+    },
+    manualPagination: true,
+    manualSorting: true,
+    manualFiltering: true
   });
 
   return (
     <div className="w-full space-y-2.5 overflow-auto">
       <DataTableToolbar table={table} filterFields={filterFields}>
-        <FaithProjectTableToolbarActions table={table} members={members} />
+        <FundRecordTableToolbarActions table={table} members={members} />
       </DataTableToolbar>
 
-      <DataTable table={table} floatingBar={null} />
+      <DataTable table={table} />
     </div>
   );
 }

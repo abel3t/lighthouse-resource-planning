@@ -35,16 +35,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import { getErrorMessage } from '@/lib/handle-error';
+import { cn } from '@/lib/utils';
 
 export const filterFields: DataTableFilterField<any>[] = [
   {
     label: 'Name',
     value: 'name',
     placeholder: 'Filter name...'
-  },
-  {
-    label: 'Discipleship Process',
-    value: 'DiscipleshipProcess'
   }
 ];
 
@@ -100,13 +97,13 @@ export function getColumns(): ColumnDef<any>[] {
       accessorKey: 'amount',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Amount" />,
       cell: ({ row }) => {
-        const status = 'canceled';
-
-        if (!status) return null;
+        const amount = parseFloat(row.getValue('amount')) || 0;
 
         return (
           <div className="flex w-[6.25rem] items-center">
-            <span className="capitalize">{row.getValue('amount')}</span>
+            <span className={cn('font-bold capitalize', amount > 0 ? 'text-green-600' : 'text-red-600')}>
+              {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount)}
+            </span>
           </div>
         );
       },

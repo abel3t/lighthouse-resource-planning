@@ -34,7 +34,7 @@ export function TasksTable({ tasksPromise }: TasksTableProps) {
         <TasksTableToolbarActions table={table} />
       </DataTableToolbar>
 
-      <DataTable table={table} floatingBar={null} />
+      <DataTable table={table} />
     </div>
   );
 }

@@ -13,7 +13,7 @@ interface TasksTableToolbarActionsProps {
   members: any[];
 }
 
-export function FaithProjectTableToolbarActions({ table, members }: TasksTableToolbarActionsProps) {
+export function FundRecordTableToolbarActions({ table, members }: TasksTableToolbarActionsProps) {
   return (
     <div className="flex items-center gap-2">
       {table.getFilteredSelectedRowModel().rows.length > 0 ? (

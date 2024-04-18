@@ -21,7 +21,7 @@ interface DataTableProps<TData> {
   floatingBar?: React.ReactNode | null;
 }
 
-export function DataTable<TData>({ table, floatingBar = null }: DataTableProps<TData>) {
+export function DataTable<TData>({ table }: DataTableProps<TData>) {
   return (
     <div className="w-full space-y-2.5 overflow-auto">
       <div className="rounded-md border">
@@ -60,7 +60,7 @@ export function DataTable<TData>({ table, floatingBar = null }: DataTableProps<T
       </div>
       <div className="flex flex-col gap-2.5">
         <DataTablePagination table={table} />
-        {table.getFilteredSelectedRowModel().rows.length > 0 && floatingBar}
+        {table.getFilteredSelectedRowModel().rows.length > 0}
       </div>
     </div>
   );

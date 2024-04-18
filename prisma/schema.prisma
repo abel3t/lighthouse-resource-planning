@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Organization {
-  id String @unique
+  id     String    @unique
   name   String
   admins Account[]
   people Person[]
@@ -21,23 +21,22 @@ model Organization {
   updatedAt DateTime @updatedAt @db.Timestamptz(0)
   updatedBy String?
 
-  isDeleted Boolean    @default(false)
-  absences  Absence[]
-  discipleship  Discipleship[]
-  funds         Fund[]
-
+  isDeleted    Boolean        @default(false)
+  absences     Absence[]
+  discipleship Discipleship[]
+  funds        Fund[]
 
   @@id([id])
   @@index([isDeleted])
 }
 
 model Account {
-  id String @unique
-  name     String?
-  email    String?
-  status   String?
-  image    String?
-  role     String
+  id     String  @unique
+  name   String?
+  email  String?
+  status String?
+  image  String?
+  role   String
 
   organization   Organization? @relation(fields: [organizationId], references: [id])
   organizationId String?
@@ -49,7 +48,7 @@ model Account {
   updatedAt DateTime @updatedAt @db.Timestamptz(0)
   updatedBy String?
 
-  isDeleted Boolean    @default(false)
+  isDeleted Boolean        @default(false)
   absences  Absence[]
   disciples Discipleship[]
 
@@ -74,22 +73,22 @@ model Person {
   description         String?
   discipleshipProcess String?
 
-  firstComeToLEC      DateTime?
-  believeInJesusDay   DateTime?
-  baptismalDay        DateTime?
-  memberDay           DateTime?
+  firstComeToLEC    DateTime?
+  believeInJesusDay DateTime?
+  baptismalDay      DateTime?
+  memberDay         DateTime?
 
-  weddingDate         DateTime?
-  hometown            String?
-  newLifeMentor       String?
-  role                String?
-  type                String
+  weddingDate   DateTime?
+  hometown      String?
+  newLifeMentor String?
+  role          String?
+  type          String
 
-  cares           Care[]
+  cares         Care[]
   absences      Absence[]
-  discipleships   Discipleship[]
-  groups          GroupsMembers[]
-  funds           FundRecord[]
+  discipleships Discipleship[]
+  groups        GroupsMembers[]
+  funds         FundRecord[]
 
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId String
@@ -214,46 +213,45 @@ model Discipleship {
 }
 
 model Fund {
-  id             String       @id @default(cuid())
-  name           String
-  description    String?
+  id          String  @id @default(cuid())
+  name        String
+  description String?
 
-  amount         Float        @default(0)
-  currency       String       @default("VND")
-  color          String       @default("#77B6EA")
+  amount   Float  @default(0)
+  currency String @default("VND")
+  color    String @default("#77B6EA")
 
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId String
 
-
-  records        FundRecord[]
+  records FundRecord[]
 
   createdAt DateTime @default(now()) @db.Timestamptz(0)
   createdBy String?
   updatedAt DateTime @updatedAt @db.Timestamptz(0)
   updatedBy String?
-  isDeleted Boolean @default(false)
+  isDeleted Boolean  @default(false)
 }
 
 model FundRecord {
-  id             String       @id @default(cuid())
+  id String @id @default(cuid())
 
-  description    String?
-  date           DateTime @default(now()) @db.Timestamptz(0)
-  type           FundRecordType
-  amount         Float    @default(0)
+  description String?
+  date        DateTime       @default(now()) @db.Timestamptz(0)
+  type        FundRecordType
+  amount      Float          @default(0)
 
-  fund           Fund     @relation(fields: [fundId], references: [id])
-  fundId         String
+  fund   Fund   @relation(fields: [fundId], references: [id])
+  fundId String
 
-  contributor         Person?       @relation(fields: [contributorId], references: [id])
-  contributorId       String?
-  
+  contributor   Person? @relation(fields: [contributorId], references: [id])
+  contributorId String?
+
   createdAt DateTime @default(now()) @db.Timestamptz(0)
   createdBy String?
   updatedAt DateTime @updatedAt @db.Timestamptz(0)
   updatedBy String?
-  isDeleted Boolean @default(false)
+  isDeleted Boolean  @default(false)
 }
 
 enum FundRecordType {
