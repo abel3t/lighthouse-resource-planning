@@ -1,10 +1,8 @@
 import { SearchParams } from '@/types';
-import { Phone } from 'lucide-react';
+
+import MemberTable from '@/components/pages/member-table';
 
 import { getMembers } from '@/lib/api';
-
-import { TasksTable } from '../../components/pages/member-table';
-import ListMembers from './list';
 
 export interface IndexPageProps {
   searchParams: SearchParams;
@@ -16,7 +14,7 @@ export default async function MemberPage({ searchParams }: IndexPageProps) {
   console.log('searchParams', searchParams);
   return (
     <div>
-      <TasksTable tasksPromise={data} />
+      <MemberTable />
     </div>
   );
 }

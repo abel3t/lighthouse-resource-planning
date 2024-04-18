@@ -39,7 +39,7 @@ interface CreateTaskDialogProps {
 }
 
 const createFundRecordSchema = z.object({
-  amount: z.string(),
+  amount: z.string().min(3, 'Số tiền không hợp lệ'),
   type: z.nativeEnum(FundRecordType),
   contributorId: z.string().optional(),
   description: z.string().optional()
@@ -96,7 +96,16 @@ export function CreateFundRecordDialog({ members }: CreateTaskDialogProps) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(open) => {
+        setOpen(open);
+
+        if (!open) {
+          form.reset();
+        }
+      }}
+    >
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <PlusIcon className="mr-2 size-4" aria-hidden="true" />

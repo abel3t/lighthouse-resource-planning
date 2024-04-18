@@ -5,6 +5,7 @@ import Footer from '@/components/custom/footer';
 import Header from '@/components/custom/header';
 import Sidebar from '@/components/custom/sidebar';
 import { QueryProviders, ThemeProvider } from '@/components/providers';
+import { Toaster } from '@/components/ui/sonner';
 
 import { cn } from '@/lib/utils';
 
@@ -34,6 +35,7 @@ export default function RootLayout({
 
             <main className="mx-5 mt-16 sm:ml-[300px] sm:mt-3">
               {children}
+              <Toaster />
 
               <Footer />
             </main>

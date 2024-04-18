@@ -1,5 +1,6 @@
 'use client';
 
+import { NOT_APPLICABLE } from '@/constant';
 import type { DataTableFilterField } from '@/types';
 import {
   ArrowDownIcon,
@@ -35,16 +36,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import { getErrorMessage } from '@/lib/handle-error';
+import { cn } from '@/lib/utils';
 
 export const filterFields: DataTableFilterField<any>[] = [
   {
     label: 'Name',
     value: 'name',
     placeholder: 'Filter name...'
-  },
-  {
-    label: 'Discipleship Process',
-    value: 'DiscipleshipProcess'
   }
 ];
 
@@ -75,79 +73,47 @@ export function getColumns(): ColumnDef<any>[] {
       enableHiding: false
     },
     {
-      accessorKey: 'id',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="id" />,
-      cell: ({ row }) => <div className="w-20">{(row.getValue('id') as string).substring(5, 10)}</div>,
-      enableSorting: false,
-      enableHiding: false
-    },
-    {
       accessorKey: 'name',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
       cell: ({ row }) => {
-        return <div className="flex space-x-2">{row.getValue('name')}</div>;
-      }
+        return <div className="w-20">{row.getValue('name')}</div>;
+      },
+      enableSorting: true,
+      enableHiding: false
     },
     {
-      accessorKey: 'status',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
+      accessorKey: 'phone',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Phone" />,
       cell: ({ row }) => {
-        const status = 'canceled';
+        const date = new Date(row.getValue('phone'));
 
-        if (!status) return null;
+        return <div className="w-20">{row.getValue('phone')}</div>;
+      },
+      enableSorting: true,
+      enableHiding: false
+    },
+    {
+      accessorKey: 'discipleshipProcess',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Discipleship" />,
+      cell: ({ row }) => {
+        const amount = parseFloat(row.getValue('amount')) || 0;
 
-        return (
-          <div className="flex w-[6.25rem] items-center">
-            {status === 'canceled' ? (
-              <CrossCircledIcon className="mr-2 size-4 text-muted-foreground" aria-hidden="true" />
-            ) : status === 'done' ? (
-              <CheckCircledIcon className="mr-2 size-4 text-muted-foreground" aria-hidden="true" />
-            ) : status === 'in-progress' ? (
-              <StopwatchIcon className="mr-2 size-4 text-muted-foreground" aria-hidden="true" />
-            ) : status === 'todo' ? (
-              <QuestionMarkCircledIcon className="mr-2 size-4 text-muted-foreground" aria-hidden="true" />
-            ) : (
-              <CircleIcon className="mr-2 size-4 text-muted-foreground" aria-hidden="true" />
-            )}
-            <span className="capitalize">{status}</span>
-          </div>
-        );
+        return <div className="flex space-x-2">{row.getValue('discipleshipProcess') || NOT_APPLICABLE}</div>;
       },
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));
-      }
-    },
-    {
-      accessorKey: 'priority',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Priority" />,
-      cell: ({ row }) => {
-        const priority = 'low';
-
-        if (!priority) return null;
-
-        return (
-          <div className="flex items-center">
-            {priority === 'low' ? (
-              <ArrowDownIcon className="mr-2 size-4 text-muted-foreground" aria-hidden="true" />
-            ) : priority === 'medium' ? (
-              <ArrowRightIcon className="mr-2 size-4 text-muted-foreground" aria-hidden="true" />
-            ) : priority === 'high' ? (
-              <ArrowUpIcon className="mr-2 size-4 text-muted-foreground" aria-hidden="true" />
-            ) : (
-              <CircleIcon className="mr-2 size-4 text-muted-foreground" aria-hidden="true" />
-            )}
-            <span className="capitalize">{priority}</span>
-          </div>
-        );
       },
-      filterFn: (row, id, value) => {
-        return Array.isArray(value) && value.includes(row.getValue(id));
-      }
+      enableSorting: true,
+      enableHiding: false
     },
     {
-      accessorKey: 'createdAt',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Created At" />,
-      cell: ({ cell }) => `${(cell.getValue() as Date).toDateString()}`
+      accessorKey: 'curatorName',
+      accessorFn: (row) => row.curator?.name,
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Curator" />,
+      cell: ({ row }) => {
+        return <div className="flex space-x-2">{row.getValue('curatorName') || NOT_APPLICABLE}</div>;
+      },
+      enableSorting: false
     },
     {
       id: 'actions',
