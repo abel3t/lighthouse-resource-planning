@@ -1,24 +1,9 @@
 'use client';
 
 import { SidebarItems } from '@/types';
-import {
-  Bell,
-  BookUser,
-  Bookmark,
-  Church,
-  HandPlatter,
-  Home,
-  List,
-  Mail,
-  MoreHorizontal,
-  People,
-  User,
-  Users,
-  Wallet2
-} from 'lucide-react';
+import { BookUser, Church, HandPlatter, Home, User, Users, Wallet2 } from 'lucide-react';
 import { useMediaQuery } from 'usehooks-ts';
 
-import { SidebarButton } from './sidebar-button';
 import { SidebarDesktop } from './sidebar-desktop';
 import { SidebarMobile } from './sidebar-mobile';
 

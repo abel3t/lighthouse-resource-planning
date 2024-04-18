@@ -2,6 +2,7 @@
 
 import useFundRecordStore from '@/stores/useFundRecordStore';
 import useFundStore from '@/stores/useFundStore';
+import useMemberStore from '@/stores/useMemberStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FundRecordType } from '@prisma/client';
 import { PlusIcon } from '@radix-ui/react-icons';
@@ -46,7 +47,7 @@ const createFundRecordSchema = z.object({
 });
 export type CreateRecordSchema = z.infer<typeof createFundRecordSchema>;
 
-export function CreateFundRecordDialog({ members }: CreateTaskDialogProps) {
+export function CreateFundRecordDialog() {
   const [open, setOpen] = React.useState(false);
   const [isCreatePending, startCreateTransition] = React.useTransition();
 
@@ -57,6 +58,7 @@ export function CreateFundRecordDialog({ members }: CreateTaskDialogProps) {
   const queryParams = useFundRecordStore((state) => state.queryParams);
   const fetchFunds = useFundStore((state) => state.fetchFunds);
   const fetchRecords = useFundRecordStore((state) => state.fetchRecords);
+  const fetchMembers = useMemberStore((state) => state.fetchMembers);
 
   const currentFund = useFundStore((state) => state.currentFund);
 
@@ -124,7 +126,7 @@ export function CreateFundRecordDialog({ members }: CreateTaskDialogProps) {
             <div className="flex items-start gap-2">
               <AmountField form={form} />
 
-              <ContributorField form={form} members={members} />
+              <ContributorField form={form} />
             </div>
 
             <DescriptionField form={form} />
@@ -144,7 +146,9 @@ export function CreateFundRecordDialog({ members }: CreateTaskDialogProps) {
   );
 }
 
-const ContributorField = ({ form, members }: any) => {
+const ContributorField = ({ form }: any) => {
+  const members = useMemberStore((state) => state.members);
+
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (

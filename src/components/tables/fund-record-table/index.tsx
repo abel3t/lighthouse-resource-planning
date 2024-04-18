@@ -24,8 +24,7 @@ interface TableProps {
   promiseMembers: any;
 }
 
-export default function FundRecordTable({ promiseMembers }: TableProps) {
-  const { data: members } = use(promiseMembers);
+export default function FundRecordTable() {
   const fundRecords = useFundRecordStore((state) => state.records);
   const fetchFundRecords = useFundRecordStore((state) => state.fetchRecords);
 
@@ -131,7 +130,7 @@ export default function FundRecordTable({ promiseMembers }: TableProps) {
   return (
     <div className="w-full space-y-2.5 overflow-auto">
       <DataTableToolbar table={table} filterFields={filterFields}>
-        <FundRecordTableToolbarActions table={table} members={members} />
+        <FundRecordTableToolbarActions table={table} />
       </DataTableToolbar>
 
       <DataTable table={table} />

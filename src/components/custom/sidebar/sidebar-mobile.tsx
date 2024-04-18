@@ -26,7 +26,7 @@ export function SidebarMobile(props: SidebarMobileProps) {
           <Menu size={20} />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="px-3 py-4" hideClose>
+      <SheetContent side="left" className="px-3 py-4">
         <SheetHeader className="flex flex-row items-center justify-between space-y-0">
           <span className="mx-3 text-lg font-semibold text-foreground">LRP</span>
           <SheetClose asChild>

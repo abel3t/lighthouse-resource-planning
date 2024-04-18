@@ -3,7 +3,7 @@ import axios from 'axios';
 import queryString from 'query-string';
 import { create } from 'zustand';
 
-type QueryParams = {
+export type QueryParams = {
   sort?: {
     field: string;
     order: 'asc' | 'desc';

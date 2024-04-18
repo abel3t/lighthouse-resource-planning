@@ -11,13 +11,18 @@ export const getMembers = async (searchParams: SearchParams) => {
     sortField = 'name';
   }
 
+  const $condition: Record<string, any> = {
+    type: 'Member'
+  };
+
+  if (search) {
+    $condition.name = {
+      contains: search
+    };
+  }
+
   const members = await prisma.person.findMany({
-    where: {
-      type: 'Member',
-      name: {
-        contains: search
-      }
-    },
+    where: $condition,
     orderBy: {
       [sortField]: sortOrder
     }

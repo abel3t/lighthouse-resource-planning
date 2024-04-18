@@ -10,10 +10,9 @@ import { CreateFundRecordDialog } from './create-record';
 
 interface TasksTableToolbarActionsProps {
   table: Table<any>;
-  members: any[];
 }
 
-export function FundRecordTableToolbarActions({ table, members }: TasksTableToolbarActionsProps) {
+export function FundRecordTableToolbarActions({ table }: TasksTableToolbarActionsProps) {
   return (
     <div className="flex items-center gap-2">
       {table.getFilteredSelectedRowModel().rows.length > 0 ? (
@@ -24,7 +23,7 @@ export function FundRecordTableToolbarActions({ table, members }: TasksTableTool
       // />
       null}
 
-      <CreateFundRecordDialog members={members} />
+      <CreateFundRecordDialog />
     </div>
   );
 }
