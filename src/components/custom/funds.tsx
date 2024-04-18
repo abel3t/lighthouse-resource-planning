@@ -16,7 +16,7 @@ export default function Funds() {
   }, []);
 
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-3 lg:grid-cols-4 lg:gap-4">
       {funds.map((fund) => (
         <FundCard key={fund.id} fund={fund} />
       ))}
@@ -47,7 +47,7 @@ const FundCard = ({ className, fund }: { className?: string; fund: Fund }) => {
       </div>
 
       <div className="flex flex-1 flex-col p-1 px-2">
-        <p className="text-gray-600">{fund.name}</p>
+        <p className="md:text-md text-sm text-gray-600 lg:text-base">{fund.name}</p>
         <p className="text-secondary">
           <span className={cn('font-bold capitalize', fund.amount > 0 ? 'text-green-600' : 'text-red-600')}>
             {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(fund.amount)}
