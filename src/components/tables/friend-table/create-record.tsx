@@ -397,7 +397,7 @@ const BirthdayField = ({ form }: any) => {
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
           <FormLabel>Date of birth</FormLabel>
-          <Popover>
+          <Popover modal>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button

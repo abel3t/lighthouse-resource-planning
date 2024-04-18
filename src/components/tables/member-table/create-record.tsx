@@ -196,10 +196,10 @@ const CuratorField = ({ form }: any) => {
               </FormControl>
             </PopoverTrigger>
             <PopoverContent className=" max-h-[300px] p-0">
-              <ScrollArea className={'[&>[data-radix-scroll-area-viewport]]:max-h-[300px]'}>
-                <Command>
-                  <CommandInput placeholder="Search Curator..." />
-                  <CommandList>
+              <Command>
+                <CommandInput placeholder="Search Curator..." />
+                <CommandList>
+                  <ScrollArea className={'h-72'}>
                     <CommandEmpty>No curator found.</CommandEmpty>
 
                     <CommandGroup>
@@ -219,9 +219,9 @@ const CuratorField = ({ form }: any) => {
                         </CommandItem>
                       ))}
                     </CommandGroup>
-                  </CommandList>
-                </Command>
-              </ScrollArea>
+                  </ScrollArea>
+                </CommandList>
+              </Command>
             </PopoverContent>
           </Popover>
           <FormMessage />
@@ -260,25 +260,27 @@ const IntroducedByField = ({ form }: any) => {
               <Command>
                 <CommandInput placeholder="Search Contributor..." />
                 <CommandList>
-                  <CommandEmpty>No member found.</CommandEmpty>
+                  <ScrollArea className="h-72">
+                    <CommandEmpty>No member found.</CommandEmpty>
 
-                  <CommandGroup>
-                    {members.map((member) => (
-                      <CommandItem
-                        value={member.id}
-                        key={member.id}
-                        onSelect={() => {
-                          form.setValue('friendId', member.id);
-                          setIsOpen(false);
-                        }}
-                      >
-                        <Check
-                          className={cn('mr-2 h-4 w-4', member.id === field.value ? 'opacity-100' : 'opacity-0')}
-                        />
-                        {member.name}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
+                    <CommandGroup>
+                      {members.map((member) => (
+                        <CommandItem
+                          value={member.id}
+                          key={member.id}
+                          onSelect={() => {
+                            form.setValue('friendId', member.id);
+                            setIsOpen(false);
+                          }}
+                        >
+                          <Check
+                            className={cn('mr-2 h-4 w-4', member.id === field.value ? 'opacity-100' : 'opacity-0')}
+                          />
+                          {member.name}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </ScrollArea>
                 </CommandList>
               </Command>
             </PopoverContent>
@@ -476,7 +478,7 @@ const BirthdayField = ({ form }: any) => {
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
           <FormLabel>Date of birth</FormLabel>
-          <Popover>
+          <Popover modal>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
@@ -513,7 +515,7 @@ const MemberDayField = ({ form }: any) => {
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
           <FormLabel>Member Date</FormLabel>
-          <Popover>
+          <Popover modal>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button

@@ -33,6 +33,7 @@ import {
 } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { UploadButton, UploadDropzone } from '@/components/uploadthing';
@@ -204,27 +205,29 @@ const MemberField = ({ form }: any) => {
             <PopoverContent className=" p-0">
               <Command>
                 <CommandInput placeholder="Search Contributor..." />
-                <CommandList>
-                  <CommandEmpty>No member found.</CommandEmpty>
+                <ScrollArea className="h-72">
+                  <CommandList>
+                    <CommandEmpty>No member found.</CommandEmpty>
 
-                  <CommandGroup>
-                    {members.map((member) => (
-                      <CommandItem
-                        value={member.id}
-                        key={member.id}
-                        onSelect={() => {
-                          form.setValue('personId', member.id);
-                          setIsOpen(false);
-                        }}
-                      >
-                        <Check
-                          className={cn('mr-2 h-4 w-4', member.id === field.value ? 'opacity-100' : 'opacity-0')}
-                        />
-                        {member.name}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </CommandList>
+                    <CommandGroup>
+                      {members.map((member) => (
+                        <CommandItem
+                          value={member.id}
+                          key={member.id}
+                          onSelect={() => {
+                            form.setValue('personId', member.id);
+                            setIsOpen(false);
+                          }}
+                        >
+                          <Check
+                            className={cn('mr-2 h-4 w-4', member.id === field.value ? 'opacity-100' : 'opacity-0')}
+                          />
+                          {member.name}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </ScrollArea>
               </Command>
             </PopoverContent>
           </Popover>
@@ -333,7 +336,7 @@ const DateField = ({ form }: any) => {
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
           <FormLabel>Date</FormLabel>
-          <Popover>
+          <Popover modal>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button

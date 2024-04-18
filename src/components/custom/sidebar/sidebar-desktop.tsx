@@ -39,7 +39,7 @@ export function SidebarDesktop(props: SidebarDesktopProps) {
           </div>
           <div className="absolute bottom-3 left-0 w-full px-3">
             <Separator className="absolute -top-3 left-0 w-full" />
-            <Popover>
+            <Popover modal>
               <PopoverTrigger asChild>
                 <Button variant="ghost" className="w-full justify-start">
                   <div className="flex w-full items-center justify-between">

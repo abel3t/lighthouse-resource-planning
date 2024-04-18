@@ -29,6 +29,7 @@ import {
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -67,6 +68,10 @@ export function CreateFundRecordDialog() {
       toast('Please select a fund to create a record');
       return;
     }
+
+    React.useEffect(() => {
+      fetchMembers({});
+    }, []);
 
     startCreateTransition(() => {
       const amount = parseFloat(input.amount);
@@ -164,7 +169,7 @@ const ContributorField = ({ form }: any) => {
                 <Button
                   variant="outline"
                   role="combobox"
-                  className={cn('min-w-[200px] justify-between', !field.value && 'text-muted-foreground')}
+                  className={cn('justify-between', !field.value && 'text-muted-foreground')}
                 >
                   {field.value ? members.find((member) => member.id === field.value)?.name : 'Select contributor'}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -175,25 +180,27 @@ const ContributorField = ({ form }: any) => {
               <Command>
                 <CommandInput placeholder="Search Contributor..." />
                 <CommandList>
-                  <CommandEmpty>No contributor found.</CommandEmpty>
+                  <ScrollArea className="h-72">
+                    <CommandEmpty>No contributor found.</CommandEmpty>
 
-                  <CommandGroup>
-                    {members.map((member) => (
-                      <CommandItem
-                        value={member.id}
-                        key={member.id}
-                        onSelect={() => {
-                          form.setValue('contributorId', member.id);
-                          setIsOpen(false);
-                        }}
-                      >
-                        <Check
-                          className={cn('mr-2 h-4 w-4', member.id === field.value ? 'opacity-100' : 'opacity-0')}
-                        />
-                        {member.name}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
+                    <CommandGroup>
+                      {members.map((member) => (
+                        <CommandItem
+                          value={member.id}
+                          key={member.id}
+                          onSelect={() => {
+                            form.setValue('contributorId', member.id);
+                            setIsOpen(false);
+                          }}
+                        >
+                          <Check
+                            className={cn('mr-2 h-4 w-4', member.id === field.value ? 'opacity-100' : 'opacity-0')}
+                          />
+                          {member.name}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </ScrollArea>
                 </CommandList>
               </Command>
             </PopoverContent>
