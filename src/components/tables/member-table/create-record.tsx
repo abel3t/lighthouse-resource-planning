@@ -187,7 +187,7 @@ const CuratorField = ({ form }: any) => {
                 <Button
                   variant="outline"
                   role="combobox"
-                  className={cn('min-w-[200px] justify-between', !field.value && 'text-muted-foreground')}
+                  className={cn('justify-between', !field.value && 'text-muted-foreground')}
                 >
                   {field.value ? accounts.find((account) => account.id === field.value)?.name : 'Select contributor'}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -246,7 +246,7 @@ const IntroducedByField = ({ form }: any) => {
                 <Button
                   variant="outline"
                   role="combobox"
-                  className={cn('min-w-[200px] justify-between', !field.value && 'text-muted-foreground')}
+                  className={cn('justify-between', !field.value && 'text-muted-foreground')}
                 >
                   {field.value ? members.find((member) => member.id === field.value)?.name : 'Select Member'}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -411,9 +411,7 @@ const GenderField = ({ form }: any) => {
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormLabel>Giới tính</FormLabel>
               <FormControl>
-                <SelectTrigger
-                  className={cn(`min-w-[200px] ${bgColor[field.value]}`, field.value && 'font-bold text-white')}
-                >
+                <SelectTrigger className={cn(`${bgColor[field.value]}`, field.value && 'font-bold text-white')}>
                   <SelectValue placeholder="Gender" />
                 </SelectTrigger>
               </FormControl>
@@ -448,9 +446,7 @@ const DiscipleshipProcessField = ({ form }: any) => {
           <FormControl>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger
-                  className={cn(`min-w-[200px] ${bgColor[field.value]}`, field.value && 'font-bold text-white')}
-                >
+                <SelectTrigger className={cn(`${bgColor[field.value]}`, field.value && 'font-bold text-white')}>
                   <SelectValue placeholder="Discipleship" />
                 </SelectTrigger>
               </FormControl>
@@ -482,7 +478,7 @@ const BirthdayField = ({ form }: any) => {
               <FormControl>
                 <Button
                   variant={'outline'}
-                  className={cn('min-w-[200px]  pl-3 text-left font-normal', !field.value && 'text-muted-foreground')}
+                  className={cn(' pl-3 text-left font-normal', !field.value && 'text-muted-foreground')}
                 >
                   {field.value ? format(field.value, 'dd/MM/yyyy') : <span>Pick a date</span>}
                   <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
@@ -519,7 +515,7 @@ const MemberDayField = ({ form }: any) => {
               <FormControl>
                 <Button
                   variant={'outline'}
-                  className={cn('min-w-[200px] pl-3 text-left font-normal', !field.value && 'text-muted-foreground')}
+                  className={cn('pl-3 text-left font-normal', !field.value && 'text-muted-foreground')}
                 >
                   {field.value ? format(field.value, 'dd/MM/yyyy') : <span>Pick a date</span>}
                   <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />

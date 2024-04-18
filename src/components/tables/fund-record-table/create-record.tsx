@@ -164,7 +164,7 @@ const ContributorField = ({ form }: any) => {
                 <Button
                   variant="outline"
                   role="combobox"
-                  className={cn('min-w-[200px] justify-between', !field.value && 'text-muted-foreground')}
+                  className={cn('justify-between', !field.value && 'text-muted-foreground')}
                 >
                   {field.value ? members.find((member) => member.id === field.value)?.name : 'Select contributor'}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />

@@ -204,7 +204,7 @@ const MemberField = ({ form }: any) => {
                 <Button
                   variant="outline"
                   role="combobox"
-                  className={cn('min-w-[200px] justify-between', !field.value && 'text-muted-foreground')}
+                  className={cn('justify-between', !field.value && 'text-muted-foreground')}
                 >
                   {field.value ? people.find((person) => person.id === field.value)?.name : 'Select Member'}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -262,9 +262,7 @@ const CareTypeField = ({ form }: any) => {
           <FormControl>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger
-                  className={cn(`min-w-[200px] ${bgColor[field.value]}`, field.value && 'font-bold text-white')}
-                >
+                <SelectTrigger className={cn(`${bgColor[field.value]}`, field.value && 'font-bold text-white')}>
                   <SelectValue placeholder="Type" />
                 </SelectTrigger>
               </FormControl>
@@ -299,9 +297,7 @@ const CarePriorityField = ({ form }: any) => {
           <FormControl>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger
-                  className={cn(`min-w-[200px] ${bgColor[field.value]}`, field.value && 'font-bold text-white')}
-                >
+                <SelectTrigger className={cn(`${bgColor[field.value]}`, field.value && 'font-bold text-white')}>
                   <SelectValue placeholder="Type" />
                 </SelectTrigger>
               </FormControl>
@@ -332,7 +328,7 @@ const DateField = ({ form }: any) => {
               <FormControl>
                 <Button
                   variant={'outline'}
-                  className={cn('min-w-[200px]  pl-3 text-left font-normal', !field.value && 'text-muted-foreground')}
+                  className={cn(' pl-3 text-left font-normal', !field.value && 'text-muted-foreground')}
                 >
                   {field.value ? format(field.value, 'dd/MM/yyyy') : <span>Pick a date</span>}
                   <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
