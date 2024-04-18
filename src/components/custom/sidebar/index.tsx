@@ -1,7 +1,21 @@
 'use client';
 
 import { SidebarItems } from '@/types';
-import { Bell, Bookmark, Home, List, Mail, MoreHorizontal, User, Users } from 'lucide-react';
+import {
+  Bell,
+  BookUser,
+  Bookmark,
+  Church,
+  HandPlatter,
+  Home,
+  List,
+  Mail,
+  MoreHorizontal,
+  People,
+  User,
+  Users,
+  Wallet2
+} from 'lucide-react';
 import { useMediaQuery } from 'usehooks-ts';
 
 import { SidebarButton } from './sidebar-button';
@@ -11,22 +25,22 @@ import { SidebarMobile } from './sidebar-mobile';
 const sidebarItems: SidebarItems = {
   links: [
     { label: 'Thống kê', href: '/', icon: Home },
-    { label: 'Thành Viên', href: '/members', icon: Bell },
-    { label: 'Bạn hữu / Thân hữu', href: '/friends', icon: Mail },
+    { label: 'Thành Viên', href: '/members', icon: Users },
+    { label: 'Bạn hữu / Thân hữu', href: '/friends', icon: BookUser },
     {
       href: '/cares',
-      icon: List,
+      icon: HandPlatter,
       label: 'Chăm sóc'
     },
     {
       href: '/discipleship',
-      icon: Bookmark,
+      icon: Church,
       label: 'Môn đồ hóa'
     },
     {
-      href: 'faith-project',
-      icon: Users,
-      label: 'Dự án đức tin'
+      href: '/funds',
+      icon: Wallet2,
+      label: 'Quỹ'
     }
   ],
   extras: <div className="flex flex-col gap-2"></div>

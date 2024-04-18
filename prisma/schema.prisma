@@ -220,20 +220,19 @@ model Fund {
 
   amount         Float        @default(0)
   currency       String       @default("VND")
+  color          String       @default("#77B6EA")
 
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId String
+
+
+  records        FundRecord[]
 
   createdAt DateTime @default(now()) @db.Timestamptz(0)
   createdBy String?
   updatedAt DateTime @updatedAt @db.Timestamptz(0)
   updatedBy String?
   isDeleted Boolean @default(false)
-}
-
-enum FundRecordType {
-  Income
-  Expense
 }
 
 model FundRecord {
@@ -244,6 +243,9 @@ model FundRecord {
   type           FundRecordType
   amount         Float    @default(0)
 
+  fund           Fund     @relation(fields: [fundId], references: [id])
+  fundId         String
+
   contributor         Person?       @relation(fields: [contributorId], references: [id])
   contributorId       String?
   
@@ -252,4 +254,9 @@ model FundRecord {
   updatedAt DateTime @updatedAt @db.Timestamptz(0)
   updatedBy String?
   isDeleted Boolean @default(false)
+}
+
+enum FundRecordType {
+  Income
+  Expense
 }

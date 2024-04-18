@@ -1,12 +1,26 @@
-import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
+
+import prisma from '@/lib/prisma';
 
 export async function POST(req: Request, res: Response) {
   const data = await req.json();
 
-  await prisma.fundRecord.create({
-    data,
-  }); 
+  if (!data?.fundId) {
+    return NextResponse.json({ error: 'Invalid data' });
+  }
+  await prisma.$transaction([
+    prisma.fundRecord.create({
+      data
+    }),
+    prisma.fund.update({
+      where: {
+        id: data.fundId
+      },
+      data: {
+        amount: { increment: data.amount }
+      }
+    })
+  ]);
 
   return NextResponse.json(data);
 }
