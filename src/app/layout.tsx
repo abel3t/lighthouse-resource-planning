@@ -26,6 +26,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <meta
+        name="viewport"
+        content="initial-scale=1, width=device-width, height=device-height, maximum-scale=1, initial-scale=1,"
+      />
+
       <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
         <Sidebar />
 
