@@ -5,13 +5,13 @@ import { create } from 'zustand';
 export interface AccountStore {
   myAccount: Account | null;
   accounts: Account[];
-  fetchAccount: () => void;
+  fetchAccounts: () => void;
 }
 
 const useAccountStore = create<AccountStore>((set) => ({
   myAccount: null,
   accounts: [],
-  fetchAccount: async () => {
+  fetchAccounts: async () => {
     const accounts = await axios.get('/api/accounts').then((res) => res.data);
     set({ accounts });
   }

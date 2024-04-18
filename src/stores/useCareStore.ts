@@ -25,6 +25,7 @@ const useCareStore = create<CareStore>((set) => ({
     });
 
     const cares = await axios.get('/api/cares/?' + qs).then((res) => res.data);
+
     set({ cares: cares || [] });
   },
   queryParams: {

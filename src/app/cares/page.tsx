@@ -1,7 +1,9 @@
+import CareTable from '@/components/tables/care-table';
+
 export default function MemberPage() {
   return (
     <div>
-      <h1>Care</h1>
+      <CareTable />
     </div>
   );
 }

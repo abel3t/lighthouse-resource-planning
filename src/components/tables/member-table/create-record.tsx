@@ -66,7 +66,7 @@ export function CreateFundRecordDialog() {
   const queryParams = useMemberStore((state) => state.queryParams);
   const fetchMembers = useMemberStore((state) => state.fetchMembers);
 
-  const fetchAccounts = useAccountStore((state) => state.fetchAccount);
+  const fetchAccounts = useAccountStore((state) => state.fetchAccounts);
 
   React.useEffect(() => {
     fetchAccounts();

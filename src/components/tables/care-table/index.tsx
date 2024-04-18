@@ -1,6 +1,7 @@
 'use client';
 
-import useFundRecordStore from '@/stores/useFundRecordStore';
+import useCareStore from '@/stores/useCareStore';
+import useFriendStore from '@/stores/useFriendStore';
 import {
   ColumnFiltersState,
   PaginationState,
@@ -12,22 +13,17 @@ import {
   useReactTable
 } from '@tanstack/react-table';
 import { useDebounce } from '@uidotdev/usehooks';
-import { use, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { DataTable } from '@/components/custom/data-table';
 import { DataTableToolbar } from '@/components/custom/data-table/data-table-toolbar';
 
-import { filterFields, getColumns } from './fund-record-table-columns';
-import { FundRecordTableToolbarActions } from './fund-record-table-toolbar-actions';
+import { filterFields, getColumns } from './care-table-columns';
+import { MemberTableToolbarActions } from './care-table-toolbar-actions';
 
-interface TableProps {
-  promiseMembers: any;
-}
-
-export default function FundRecordTable({ promiseMembers }: TableProps) {
-  const { data: members } = use(promiseMembers);
-  const fundRecords = useFundRecordStore((state) => state.records);
-  const fetchFundRecords = useFundRecordStore((state) => state.fetchRecords);
+export default function CareTable() {
+  const cares = useCareStore((state) => state.cares);
+  const fetchCares = useCareStore((state) => state.fetchCares);
 
   // Memoize the columns so they don't re-render on every render
   const columns = useMemo(() => getColumns(), []);
@@ -36,24 +32,23 @@ export default function FundRecordTable({ promiseMembers }: TableProps) {
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
-  const queryParams = useFundRecordStore((state) => state.queryParams);
-  const setQueryParams = useFundRecordStore((state) => state.setQueryParams);
+  const queryParams = useCareStore((state) => state.queryParams);
+  const setQueryParams = useCareStore((state) => state.setQueryParams);
 
   const debouncedSearch = useDebounce(queryParams, 300);
 
   useEffect(() => {
-    fetchFundRecords({});
+    fetchCares({});
   }, []);
 
   useEffect(() => {
-    console.log('change', debouncedSearch.search);
-    fetchFundRecords(debouncedSearch);
+    fetchCares(debouncedSearch);
   }, [debouncedSearch.search]);
 
   const handlePaginationChange = (updater: any) => {
     const nextState = updater(pagination);
 
-    fetchFundRecords({
+    fetchCares({
       ...queryParams,
       pagination: {
         page: nextState.pageIndex + 1,
@@ -73,7 +68,7 @@ export default function FundRecordTable({ promiseMembers }: TableProps) {
   const handleSortChange = (updater: any) => {
     const nextState = updater(sorting);
 
-    fetchFundRecords({
+    fetchCares({
       ...queryParams,
       sort: {
         field: nextState[0].id,
@@ -94,7 +89,7 @@ export default function FundRecordTable({ promiseMembers }: TableProps) {
     const nextState = updater(columnFilters);
 
     if (!nextState[0]?.value) {
-      fetchFundRecords({
+      fetchCares({
         ...queryParams,
         search: ''
       });
@@ -108,7 +103,7 @@ export default function FundRecordTable({ promiseMembers }: TableProps) {
   };
 
   const table = useReactTable({
-    data: fundRecords || [],
+    data: cares || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -131,7 +126,7 @@ export default function FundRecordTable({ promiseMembers }: TableProps) {
   return (
     <div className="w-full space-y-2.5 overflow-auto">
       <DataTableToolbar table={table} filterFields={filterFields}>
-        <FundRecordTableToolbarActions table={table} members={members} />
+        <MemberTableToolbarActions table={table} />
       </DataTableToolbar>
 
       <DataTable table={table} />

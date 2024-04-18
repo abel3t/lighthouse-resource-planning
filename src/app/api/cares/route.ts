@@ -20,7 +20,7 @@ export async function GET(req: Request, res: Response) {
   const url = new URL(req.url);
   const s = new URLSearchParams(url.searchParams);
 
-  const members = await prisma.person.findMany({ where: {} });
+  const cares = await prisma.care.findMany({ where: {}, include: { person: true, curator: true } });
 
-  return NextResponse.json({ data: members });
+  return NextResponse.json(cares);
 }

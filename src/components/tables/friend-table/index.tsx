@@ -17,7 +17,7 @@ import { use, useEffect, useMemo, useState } from 'react';
 import { DataTable } from '@/components/custom/data-table';
 import { DataTableToolbar } from '@/components/custom/data-table/data-table-toolbar';
 
-import { filterFields, getColumns } from './member-table-columns';
+import { filterFields, getColumns } from './friend-table-columns';
 import { MemberTableToolbarActions } from './member-table-toolbar-actions';
 
 export default function FriendTable() {
