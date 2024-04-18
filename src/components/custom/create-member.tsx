@@ -1,56 +1,50 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-  DialogClose,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { zodResolver } from "@hookform/resolvers/zod";
-import axios from 'axios'
-import { z } from "zod";
+  DialogTrigger
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
-import { useForm } from "react-hook-form";
-import { Textarea } from "../ui/textarea";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { Textarea } from '../ui/textarea';
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   phone: z.string().min(10).max(10),
   curator: z.string().min(2).max(50),
   address: z.string().min(2).max(50),
-  description: z.string().min(2).max(50),
+  description: z.string().min(2).max(50)
 });
 
 export function CreateDialog() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      phone: "",
-      curator: "",
-      address: "",
-      description: "",
-    },
+      name: '',
+      phone: '',
+      curator: '',
+      address: '',
+      description: ''
+    }
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-    axios.post("/api/members", values).then((res) => {
+    axios.post('/api/members', values).then((res) => {
       console.log(res);
     });
   }

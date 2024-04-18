@@ -1,14 +1,18 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CaretSortIcon, CheckIcon, PlusIcon } from "@radix-ui/react-icons";
-import { type Row } from "@tanstack/react-table";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CaretSortIcon, CheckIcon, PlusIcon } from '@radix-ui/react-icons';
+import { type Row } from '@tanstack/react-table';
+import axios from 'axios';
+import { CommandList } from 'cmdk';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import * as React from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import * as z from 'zod';
 
-import { getErrorMessage } from "@/lib/handle-error";
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
 import {
   Dialog,
   DialogClose,
@@ -17,37 +21,16 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
-import * as z from "zod";
-import { createFundRecord } from "@/lib/api";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import { Input } from "@/components/ui/input";
-import { CommandList } from "cmdk";
-import { Check, ChevronsUpDown } from "lucide-react";
-import axios from "axios";
+  DialogTrigger
+} from '@/components/ui/dialog';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Textarea } from '@/components/ui/textarea';
+
+import { createFundRecord } from '@/lib/api';
+import { getErrorMessage } from '@/lib/handle-error';
+import { cn } from '@/lib/utils';
 
 interface CreateTaskDialogProps {
   members: any[];
@@ -56,7 +39,7 @@ interface CreateTaskDialogProps {
 const createFundRecordSchema = z.object({
   amount: z.string(),
   contributorId: z.string(),
-  description: z.string(),
+  description: z.string()
 });
 export type CreateRecordSchema = z.infer<typeof createFundRecordSchema>;
 
@@ -65,27 +48,27 @@ export function CreateFundRecordDialog({ members }: CreateTaskDialogProps) {
   const [isCreatePending, startCreateTransition] = React.useTransition();
 
   const form = useForm<CreateRecordSchema>({
-    resolver: zodResolver(createFundRecordSchema),
+    resolver: zodResolver(createFundRecordSchema)
   });
   function onSubmit(input: CreateRecordSchema) {
     startCreateTransition(() => {
       toast.promise(
-        axios.post("/api/fund-record", {
+        axios.post('/api/fund-record', {
           ...input,
           amount: parseFloat(input.amount),
           type: 'Income'
         }),
         {
-          loading: "Creating record...",
+          loading: 'Creating record...',
           success: () => {
             form.reset();
             setOpen(false);
-            return "Record created";
+            return 'Record created';
           },
           error: (error) => {
             setOpen(false);
             return getErrorMessage(error);
-          },
+          }
         }
       );
     });
@@ -102,15 +85,10 @@ export function CreateFundRecordDialog({ members }: CreateTaskDialogProps) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Create task</DialogTitle>
-          <DialogDescription>
-            Fill in the details below to create a new record.
-          </DialogDescription>
+          <DialogDescription>Fill in the details below to create a new record.</DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-4"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
             <FormField
               control={form.control}
               name="contributorId"
@@ -123,16 +101,11 @@ export function CreateFundRecordDialog({ members }: CreateTaskDialogProps) {
                         <Button
                           variant="outline"
                           role="combobox"
-                          className={cn(
-                            "w-[200px] justify-between",
-                            !field.value && "text-muted-foreground"
-                          )}
+                          className={cn('w-[200px] justify-between', !field.value && 'text-muted-foreground')}
                         >
                           {field.value
-                            ? members.find(
-                                (member) => member.id === field.value
-                              )?.name
-                            : "Select contributor"}
+                            ? members.find((member) => member.id === field.value)?.name
+                            : 'Select contributor'}
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </FormControl>
@@ -147,16 +120,11 @@ export function CreateFundRecordDialog({ members }: CreateTaskDialogProps) {
                               value={member.id}
                               key={member.id}
                               onSelect={() => {
-                                form.setValue("contributorId", member.id);
+                                form.setValue('contributorId', member.id);
                               }}
                             >
                               <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  member.id === field.value
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
+                                className={cn('mr-2 h-4 w-4', member.id === field.value ? 'opacity-100' : 'opacity-0')}
                               />
                               {member.name}
                             </CommandItem>
@@ -165,9 +133,7 @@ export function CreateFundRecordDialog({ members }: CreateTaskDialogProps) {
                       </Command>
                     </PopoverContent>
                   </Popover>
-                  <FormDescription>
-                    This is the language that will be used in the dashboard.
-                  </FormDescription>
+                  <FormDescription>This is the language that will be used in the dashboard.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -179,11 +145,7 @@ export function CreateFundRecordDialog({ members }: CreateTaskDialogProps) {
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Enter description"
-                      className="resize-none"
-                      {...field}
-                    />
+                    <Textarea placeholder="Enter description" className="resize-none" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -199,9 +161,7 @@ export function CreateFundRecordDialog({ members }: CreateTaskDialogProps) {
                   <FormControl>
                     <Input type="number" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This is your public display name.
-                  </FormDescription>
+                  <FormDescription>This is your public display name.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

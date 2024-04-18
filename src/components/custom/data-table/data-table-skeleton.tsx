@@ -1,47 +1,40 @@
-import { Skeleton } from "@/components/ui/skeleton"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+import { Skeleton } from '@/components/ui/skeleton';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 interface DataTableSkeletonProps {
   /**
    * The number of columns in the table.
    * @type number
    */
-  columnCount: number
+  columnCount: number;
 
   /**
    * The number of rows in the table.
    * @default 10
    * @type number | undefined
    */
-  rowCount?: number
+  rowCount?: number;
 
   /**
    * The number of searchable columns in the table.
    * @default 0
    * @type number | undefined
    */
-  searchableColumnCount?: number
+  searchableColumnCount?: number;
 
   /**
    * The number of filterable columns in the table.
    * @default 0
    * @type number | undefined
    */
-  filterableColumnCount?: number
+  filterableColumnCount?: number;
 
   /**
    * Flag to show the table view options.
    * @default undefined
    * @type boolean | undefined
    */
-  showViewOptions?: boolean
+  showViewOptions?: boolean;
 
   /**
    * The width of each cell in the table.
@@ -50,14 +43,14 @@ interface DataTableSkeletonProps {
    * @default ["auto"]
    * @type string[] | undefined
    */
-  cellWidths?: string[]
+  cellWidths?: string[];
 
   /**
    * Flag to prevent the table from shrinking to fit the content.
    * @default false
    * @type boolean | undefined
    */
-  shrinkZero?: boolean
+  shrinkZero?: boolean;
 }
 
 export function DataTableSkeleton({
@@ -66,8 +59,8 @@ export function DataTableSkeleton({
   searchableColumnCount = 0,
   filterableColumnCount = 0,
   showViewOptions = true,
-  cellWidths = ["auto"],
-  shrinkZero = false,
+  cellWidths = ['auto'],
+  shrinkZero = false
 }: DataTableSkeletonProps) {
   return (
     <div className="w-full space-y-3 overflow-auto">
@@ -84,9 +77,7 @@ export function DataTableSkeleton({
               ))
             : null}
         </div>
-        {showViewOptions ? (
-          <Skeleton className="ml-auto hidden h-7 w-[4.5rem] lg:flex" />
-        ) : null}
+        {showViewOptions ? <Skeleton className="ml-auto hidden h-7 w-[4.5rem] lg:flex" /> : null}
       </div>
       <div className="rounded-md border">
         <Table>
@@ -98,7 +89,7 @@ export function DataTableSkeleton({
                     key={j}
                     style={{
                       width: cellWidths[j],
-                      minWidth: shrinkZero ? cellWidths[j] : "auto",
+                      minWidth: shrinkZero ? cellWidths[j] : 'auto'
                     }}
                   >
                     <Skeleton className="h-6 w-full" />
@@ -115,7 +106,7 @@ export function DataTableSkeleton({
                     key={j}
                     style={{
                       width: cellWidths[j],
-                      minWidth: shrinkZero ? cellWidths[j] : "auto",
+                      minWidth: shrinkZero ? cellWidths[j] : 'auto'
                     }}
                   >
                     <Skeleton className="h-6 w-full" />
@@ -145,5 +136,5 @@ export function DataTableSkeleton({
         </div>
       </div>
     </div>
-  )
+  );
 }

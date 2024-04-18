@@ -1,12 +1,14 @@
-import Link from "next/link"
+import Link from 'next/link';
 
-import { cn } from "@/lib/utils"
 // import { Icons } from "@/components/icons"
-import { MainNav } from "@/components/custom/main-nav"
-import { MobileNav } from "@/components/custom/mobile-nav"
+import { MainNav } from '@/components/custom/main-nav';
+import { MobileNav } from '@/components/custom/mobile-nav';
+
+import { cn } from '@/lib/utils';
+
 // import { ModeToggle } from "@/components/mode-toggle"
-import { Icons } from "./icons"
-import { ModeToggle } from "./mode-toggle"
+import { Icons } from './icons';
+import { ModeToggle } from './mode-toggle';
 
 export default function SiteHeader() {
   return (
@@ -15,34 +17,16 @@ export default function SiteHeader() {
         <MainNav />
         <MobileNav />
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <div className="w-full flex-1 md:w-auto md:flex-none">
-            {/* <CommandMenu /> */}
-          </div>
+          <div className="w-full flex-1 md:w-auto md:flex-none">{/* <CommandMenu /> */}</div>
           <nav className="flex items-center">
-            <Link
-              href={""}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div
-                className={cn(
-                  "w-9 px-0"
-                )}
-              >
+            <Link href={''} target="_blank" rel="noreferrer">
+              <div className={cn('w-9 px-0')}>
                 {/* <Icons.gitHub className="h-4 w-4" /> */}
                 <span className="sr-only">GitHub</span>
               </div>
             </Link>
-            <Link
-              href={""}
-              target="_blank"
-              rel="noreferrer"
-            >
-              <div
-                className={cn(
-                  "w-9 px-0"
-                )}
-              >
+            <Link href={''} target="_blank" rel="noreferrer">
+              <div className={cn('w-9 px-0')}>
                 <Icons.twitter className="h-3 w-3 fill-current" />
                 <span className="sr-only">LRP</span>
               </div>
@@ -52,5 +36,5 @@ export default function SiteHeader() {
         </div>
       </div>
     </header>
-  )
+  );
 }

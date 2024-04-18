@@ -3,5 +3,5 @@ export default function MemberPage() {
     <div>
       <h1>Dashboard</h1>
     </div>
-  )
+  );
 }

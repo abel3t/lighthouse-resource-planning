@@ -1,19 +1,11 @@
 'use client';
 
-import {
-  Bell,
-  Bookmark,
-  Home,
-  List,
-  Mail,
-  MoreHorizontal,
-  User,
-  Users,
-} from 'lucide-react';
-import { SidebarDesktop } from './sidebar-desktop';
 import { SidebarItems } from '@/types';
-import { SidebarButton } from './sidebar-button';
+import { Bell, Bookmark, Home, List, Mail, MoreHorizontal, User, Users } from 'lucide-react';
 import { useMediaQuery } from 'usehooks-ts';
+
+import { SidebarButton } from './sidebar-button';
+import { SidebarDesktop } from './sidebar-desktop';
 import { SidebarMobile } from './sidebar-mobile';
 
 const sidebarItems: SidebarItems = {
@@ -24,29 +16,25 @@ const sidebarItems: SidebarItems = {
     {
       href: '/cares',
       icon: List,
-      label: 'Chăm sóc',
+      label: 'Chăm sóc'
     },
     {
       href: '/discipleship',
       icon: Bookmark,
-      label: 'Môn đồ hóa',
+      label: 'Môn đồ hóa'
     },
     {
       href: 'faith-project',
       icon: Users,
-      label: 'Dự án đức tin',
+      label: 'Dự án đức tin'
     }
   ],
-  extras: (
-    <div className='flex flex-col gap-2'>
-     
-    </div>
-  ),
+  extras: <div className="flex flex-col gap-2"></div>
 };
 
 export default function Sidebar() {
   const isDesktop = useMediaQuery('(min-width: 640px)', {
-    initializeWithValue: false,
+    initializeWithValue: false
   });
 
   if (isDesktop) {

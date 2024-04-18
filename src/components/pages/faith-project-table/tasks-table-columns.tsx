@@ -1,7 +1,6 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import type { DataTableFilterField } from "@/types"
+import type { DataTableFilterField } from '@/types';
 import {
   ArrowDownIcon,
   ArrowRightIcon,
@@ -11,15 +10,16 @@ import {
   CrossCircledIcon,
   DotsHorizontalIcon,
   QuestionMarkCircledIcon,
-  StopwatchIcon,
-} from "@radix-ui/react-icons"
-import { type ColumnDef } from "@tanstack/react-table"
-import { toast } from "sonner"
+  StopwatchIcon
+} from '@radix-ui/react-icons';
+import { type ColumnDef } from '@tanstack/react-table';
+import * as React from 'react';
+import { toast } from 'sonner';
 
-import { getErrorMessage } from "@/lib/handle-error"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { DataTableColumnHeader } from '@/components/custom/data-table/data-table-column-header';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,36 +31,33 @@ import {
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { DataTableColumnHeader } from "@/components/custom/data-table/data-table-column-header"
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
 
+import { getErrorMessage } from '@/lib/handle-error';
 
 export const filterFields: DataTableFilterField<any>[] = [
   {
-    label: "Name",
-    value: "name",
-    placeholder: "Filter name...",
+    label: 'Name',
+    value: 'name',
+    placeholder: 'Filter name...'
   },
   {
-    label: "Discipleship Process",
-    value: "DiscipleshipProcess",
+    label: 'Discipleship Process',
+    value: 'DiscipleshipProcess'
   }
-]
+];
 
 export function getColumns(): ColumnDef<any>[] {
   const updateTask = async (data: any) => {
-    console.log('update task', data)
-  }
+    console.log('update task', data);
+  };
   return [
     {
-      id: "select",
+      id: 'select',
       header: ({ table }) => (
         <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
+          checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate')}
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
           className="translate-y-0.5"
@@ -75,72 +72,54 @@ export function getColumns(): ColumnDef<any>[] {
         />
       ),
       enableSorting: false,
-      enableHiding: false,
+      enableHiding: false
     },
     {
-      accessorKey: "date",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Date" />
-      ),
-      cell: ({ row }) => <div className="w-20">{(row.getValue("date") as Date).toISOString()}</div>,
+      accessorKey: 'date',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Date" />,
+      cell: ({ row }) => <div className="w-20">{(row.getValue('date') as Date).toISOString()}</div>,
       enableSorting: false,
-      enableHiding: false,
+      enableHiding: false
     },
     {
-      accessorKey: "name",
+      accessorKey: 'name',
       accessorFn: (row) => row.contributor?.name,
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Name" />
-      ),
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
       cell: ({ row }) => {
-        return (
-          <div className="flex space-x-2">
-            {row.getValue("name")}
-          </div>
-        )
-      },
+        return <div className="flex space-x-2">{row.getValue('name')}</div>;
+      }
     },
     {
-      accessorKey: "description",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Description" />
-      ),
+      accessorKey: 'description',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Description" />,
       cell: ({ row }) => {
-        return (
-          <div className="flex space-x-2">
-            {row.getValue("description")}
-          </div>
-        )
-      },
+        return <div className="flex space-x-2">{row.getValue('description')}</div>;
+      }
     },
     {
-      accessorKey: "amount",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Amount" />
-      ),
+      accessorKey: 'amount',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Amount" />,
       cell: ({ row }) => {
-        const status = 'canceled'
+        const status = 'canceled';
 
-        if (!status) return null
+        if (!status) return null;
 
         return (
           <div className="flex w-[6.25rem] items-center">
-            <span className="capitalize">{row.getValue("amount")}</span>
+            <span className="capitalize">{row.getValue('amount')}</span>
           </div>
-        )
+        );
       },
       filterFn: (row, id, value) => {
-        return Array.isArray(value) && value.includes(row.getValue(id))
-      },
+        return Array.isArray(value) && value.includes(row.getValue(id));
+      }
     },
     {
-      id: "actions",
+      id: 'actions',
       cell: function Cell({ row }) {
-        const [isUpdatePending, startUpdateTransition] = React.useTransition()
-        const [showUpdateTaskSheet, setShowUpdateTaskSheet] =
-          React.useState(false)
-        const [showDeleteTaskDialog, setShowDeleteTaskDialog] =
-          React.useState(false)
+        const [isUpdatePending, startUpdateTransition] = React.useTransition();
+        const [showUpdateTaskSheet, setShowUpdateTaskSheet] = React.useState(false);
+        const [showDeleteTaskDialog, setShowDeleteTaskDialog] = React.useState(false);
 
         return (
           <>
@@ -157,18 +136,12 @@ export function getColumns(): ColumnDef<any>[] {
             /> */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  aria-label="Open menu"
-                  variant="ghost"
-                  className="flex size-8 p-0 data-[state=open]:bg-muted"
-                >
+                <Button aria-label="Open menu" variant="ghost" className="flex size-8 p-0 data-[state=open]:bg-muted">
                   <DotsHorizontalIcon className="size-4" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-40">
-                <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>
-                  Edit
-                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>Edit</DropdownMenuItem>
                 <DropdownMenuSub>
                   <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
                   <DropdownMenuSubContent>
@@ -182,29 +155,26 @@ export function getColumns(): ColumnDef<any>[] {
                               label: value
                             }),
                             {
-                              loading: "Updating...",
-                              success: "Label updated",
-                              error: (err) => getErrorMessage(err),
+                              loading: 'Updating...',
+                              success: 'Label updated',
+                              error: (err) => getErrorMessage(err)
                             }
-                          )
-                        })
+                          );
+                        });
                       }}
-                    >
-                    </DropdownMenuRadioGroup>
+                    ></DropdownMenuRadioGroup>
                   </DropdownMenuSubContent>
                 </DropdownMenuSub>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onSelect={() => setShowDeleteTaskDialog(true)}
-                >
+                <DropdownMenuItem onSelect={() => setShowDeleteTaskDialog(true)}>
                   Delete
                   <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </>
-        )
-      },
-    },
-  ]
+        );
+      }
+    }
+  ];
 }

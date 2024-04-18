@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
-import { LoginLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
+import { LoginLink } from '@kinde-oss/kinde-auth-nextjs/components';
 
 export default function Admin() {
   const { isAuthenticated, isLoading } = useKindeBrowserClient();
