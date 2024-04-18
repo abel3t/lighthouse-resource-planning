@@ -48,7 +48,11 @@ const FundCard = ({ className, fund }: { className?: string; fund: Fund }) => {
 
       <div className="flex flex-1 flex-col p-1 px-2">
         <p className="text-gray-600">{fund.name}</p>
-        <p className="text-secondary">{fund.amount || 0}</p>
+        <p className="text-secondary">
+          <span className={cn('font-bold capitalize', fund.amount > 0 ? 'text-green-600' : 'text-red-600')}>
+            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(fund.amount)}
+          </span>
+        </p>
       </div>
     </div>
   );

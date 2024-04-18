@@ -7,7 +7,7 @@ export default async function MemberPage() {
   return (
     <div>
       <Funds />
-      <FundRecordTable promiseMembers={getMembers({})} />;
+      <FundRecordTable promiseMembers={getMembers({})} />
     </div>
   );
 }

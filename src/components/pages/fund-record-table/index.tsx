@@ -54,6 +54,14 @@ export default function FundRecordTable({ promiseMembers }: TableProps) {
   const handlePaginationChange = (updater: any) => {
     const nextState = updater(pagination);
 
+    fetchFundRecords({
+      ...queryParams,
+      pagination: {
+        page: nextState.pageIndex + 1,
+        pageSize: nextState.pageSize
+      }
+    });
+
     setPagination(nextState);
     setQueryParams({
       pagination: {
@@ -61,13 +69,18 @@ export default function FundRecordTable({ promiseMembers }: TableProps) {
         pageSize: nextState.pageSize
       }
     });
-
-    fetchFundRecords(queryParams);
-    console.log('handlePaginationChange');
   };
 
   const handleSortChange = (updater: any) => {
     const nextState = updater(sorting);
+
+    fetchFundRecords({
+      ...queryParams,
+      sort: {
+        field: nextState[0].id,
+        order: nextState[0].desc ? 'desc' : 'asc'
+      }
+    });
 
     setSorting(nextState);
     setQueryParams({
@@ -76,18 +89,10 @@ export default function FundRecordTable({ promiseMembers }: TableProps) {
         order: nextState[0].desc ? 'desc' : 'asc'
       }
     });
-
-    fetchFundRecords(queryParams);
-    console.log('handleSortChange');
   };
 
   const handleFilterChange = async (updater: any) => {
     const nextState = updater(columnFilters);
-    setQueryParams({
-      search: nextState[0]?.value
-    });
-
-    setColumnFilters(nextState);
 
     if (!nextState[0]?.value) {
       fetchFundRecords({
@@ -95,6 +100,12 @@ export default function FundRecordTable({ promiseMembers }: TableProps) {
         search: ''
       });
     }
+
+    setQueryParams({
+      search: nextState[0]?.value
+    });
+
+    setColumnFilters(nextState);
   };
 
   const table = useReactTable({

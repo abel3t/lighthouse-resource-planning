@@ -74,8 +74,16 @@ export function getColumns(): ColumnDef<any>[] {
     {
       accessorKey: 'date',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Date" />,
-      cell: ({ row }) => <div className="w-20">{new Date(row.getValue('date')).toISOString()}</div>,
-      enableSorting: false,
+      cell: ({ row }) => {
+        const date = new Date(row.getValue('date'));
+
+        return (
+          <div className="w-20">
+            {new Intl.DateTimeFormat('vi-VN', { month: '2-digit', day: '2-digit', year: 'numeric' }).format(date)}
+          </div>
+        );
+      },
+      enableSorting: true,
       enableHiding: false
     },
     {
@@ -84,14 +92,16 @@ export function getColumns(): ColumnDef<any>[] {
       header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
       cell: ({ row }) => {
         return <div className="flex space-x-2">{row.getValue('name')}</div>;
-      }
+      },
+      enableSorting: false
     },
     {
       accessorKey: 'description',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Description" />,
       cell: ({ row }) => {
         return <div className="flex space-x-2">{row.getValue('description')}</div>;
-      }
+      },
+      enableSorting: false
     },
     {
       accessorKey: 'amount',
@@ -109,7 +119,9 @@ export function getColumns(): ColumnDef<any>[] {
       },
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));
-      }
+      },
+      enableSorting: true,
+      enableHiding: false
     },
     {
       id: 'actions',

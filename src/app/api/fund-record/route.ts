@@ -35,8 +35,9 @@ export async function GET(req: Request, res: Response) {
   type SortType = 'asc' | 'desc';
 
   let [sortField, sortOrder] = (s.get('sort') as string)?.split('.');
-  if (sortField && !['id'].includes(sortField)) {
-    sortField = 'id';
+  if (sortField && !['date', 'amount'].includes(sortField)) {
+    sortField = 'date';
+    sortOrder = 'desc';
   }
 
   const $condition: Record<string, any> = {};
@@ -63,7 +64,7 @@ export async function GET(req: Request, res: Response) {
       }
     },
     orderBy: {
-      date: sortOrder as SortType
+      [sortField]: sortOrder as SortType
     }
   });
   return NextResponse.json(data || []);

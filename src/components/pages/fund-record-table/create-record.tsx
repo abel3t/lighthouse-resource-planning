@@ -3,8 +3,8 @@
 import useFundRecordStore from '@/stores/useFundRecordStore';
 import useFundStore from '@/stores/useFundStore';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CaretSortIcon, CheckIcon, PlusIcon } from '@radix-ui/react-icons';
-import { type Row } from '@tanstack/react-table';
+import { FundRecordType } from '@prisma/client';
+import { PlusIcon } from '@radix-ui/react-icons';
 import axios from 'axios';
 import { CommandList } from 'cmdk';
 import { Check, ChevronsUpDown } from 'lucide-react';
@@ -28,6 +28,7 @@ import {
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 
 import { getErrorMessage } from '@/lib/handle-error';
@@ -39,8 +40,9 @@ interface CreateTaskDialogProps {
 
 const createFundRecordSchema = z.object({
   amount: z.string(),
-  contributorId: z.string(),
-  description: z.string()
+  type: z.nativeEnum(FundRecordType),
+  contributorId: z.string().optional(),
+  description: z.string().optional()
 });
 export type CreateRecordSchema = z.infer<typeof createFundRecordSchema>;
 
@@ -52,6 +54,7 @@ export function CreateFundRecordDialog({ members }: CreateTaskDialogProps) {
     resolver: zodResolver(createFundRecordSchema)
   });
 
+  const queryParams = useFundRecordStore((state) => state.queryParams);
   const fetchFunds = useFundStore((state) => state.fetchFunds);
   const fetchRecords = useFundRecordStore((state) => state.fetchRecords);
 
@@ -60,17 +63,17 @@ export function CreateFundRecordDialog({ members }: CreateTaskDialogProps) {
   function onSubmit(input: CreateRecordSchema) {
     if (!currentFund) {
       toast('Please select a fund to create a record');
-      console.log('error đó');
       return;
     }
 
     startCreateTransition(() => {
+      const amount = parseFloat(input.amount);
+
       toast.promise(
         axios.post('/api/fund-record', {
           ...input,
           fundId: currentFund.id,
-          amount: parseFloat(input.amount),
-          type: 'Income'
+          amount: input.type === FundRecordType.Expense ? -amount : amount
         }),
         {
           loading: 'Creating record...',
@@ -79,7 +82,7 @@ export function CreateFundRecordDialog({ members }: CreateTaskDialogProps) {
             setOpen(false);
 
             fetchFunds();
-            fetchRecords();
+            fetchRecords(queryParams);
 
             return 'Record created';
           },
@@ -107,11 +110,15 @@ export function CreateFundRecordDialog({ members }: CreateTaskDialogProps) {
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
-            <ContributorField form={form} members={members} />
+            <RecordTypeField form={form} />
+
+            <div className="flex items-start gap-2">
+              <AmountField form={form} />
+
+              <ContributorField form={form} members={members} />
+            </div>
 
             <DescriptionField form={form} />
-
-            <AmountField form={form} />
 
             <DialogFooter className="gap-2 pt-2 sm:space-x-0">
               <DialogClose asChild>
@@ -129,48 +136,55 @@ export function CreateFundRecordDialog({ members }: CreateTaskDialogProps) {
 }
 
 const ContributorField = ({ form, members }: any) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+
   return (
     <FormField
       control={form.control}
       name="contributorId"
       render={({ field }) => (
-        <FormItem className="flex flex-col">
-          <FormLabel>Language</FormLabel>
-          <Popover>
+        <FormItem className="flex flex-col space-y-2">
+          <FormLabel>Người Dâng</FormLabel>
+          <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
               <FormControl>
                 <Button
                   variant="outline"
                   role="combobox"
-                  className={cn('w-[200px] justify-between', !field.value && 'text-muted-foreground')}
+                  className={cn('min-w-[200px] justify-between', !field.value && 'text-muted-foreground')}
                 >
                   {field.value ? members.find((member) => member.id === field.value)?.name : 'Select contributor'}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className=" p-0">
               <Command>
                 <CommandInput placeholder="Search Contributor..." />
-                <CommandEmpty>No contributor found.</CommandEmpty>
                 <CommandList>
-                  {members.map((member) => (
-                    <CommandItem
-                      value={member.id}
-                      key={member.id}
-                      onSelect={() => {
-                        form.setValue('contributorId', member.id);
-                      }}
-                    >
-                      <Check className={cn('mr-2 h-4 w-4', member.id === field.value ? 'opacity-100' : 'opacity-0')} />
-                      {member.name}
-                    </CommandItem>
-                  ))}
+                  <CommandEmpty>No contributor found.</CommandEmpty>
+
+                  <CommandGroup>
+                    {members.map((member) => (
+                      <CommandItem
+                        value={member.id}
+                        key={member.id}
+                        onSelect={() => {
+                          form.setValue('contributorId', member.id);
+                          setIsOpen(false);
+                        }}
+                      >
+                        <Check
+                          className={cn('mr-2 h-4 w-4', member.id === field.value ? 'opacity-100' : 'opacity-0')}
+                        />
+                        {member.name}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
                 </CommandList>
               </Command>
             </PopoverContent>
           </Popover>
-          <FormDescription>This is the language that will be used in the dashboard.</FormDescription>
           <FormMessage />
         </FormItem>
       )}
@@ -185,9 +199,9 @@ const DescriptionField = ({ form }: any) => {
       name="description"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Description</FormLabel>
+          <FormLabel>Ghi chú</FormLabel>
           <FormControl>
-            <Textarea placeholder="Enter description" className="resize-none" {...field} />
+            <Textarea placeholder="Thông tin chi tiết..." className="resize-none" {...field} />
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -202,12 +216,44 @@ const AmountField = ({ form }: any) => {
       control={form.control}
       name="amount"
       render={({ field }) => (
-        <FormItem>
-          <FormLabel>Amount</FormLabel>
-          <FormControl>
-            <Input type="number" {...field} />
+        <FormItem className="flex flex-col space-y-2">
+          <FormLabel className="my-0 py-0">Số tiền</FormLabel>
+          <FormControl className="mt-0 py-0">
+            <Input className="mt-0 py-0" type="number" {...field} />
           </FormControl>
-          <FormDescription>This is your public display name.</FormDescription>
+
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+};
+
+const RecordTypeField = ({ form }: any) => {
+  const bgColor: Record<string, string> = {
+    [FundRecordType.Income]: 'bg-green-400',
+    [FundRecordType.Expense]: 'bg-red-400'
+  };
+
+  return (
+    <FormField
+      control={form.control}
+      name="type"
+      render={({ field }) => (
+        <FormItem>
+          <FormControl>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl>
+                <SelectTrigger className={cn(`w-1/2 ${bgColor[field.value]}`, field.value && 'font-bold text-white')}>
+                  <SelectValue placeholder="Thu/Chi" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                <SelectItem value={FundRecordType.Income}>{FundRecordType.Income}</SelectItem>
+                <SelectItem value={FundRecordType.Expense}>{FundRecordType.Expense}</SelectItem>
+              </SelectContent>
+            </Select>
+          </FormControl>
           <FormMessage />
         </FormItem>
       )}
