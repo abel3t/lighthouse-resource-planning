@@ -24,7 +24,7 @@ const useDiscipleshipStore = create<DiscipleshipStore>((set) => ({
       pageSize: pagination.pageSize
     });
 
-    const discipleshipList = await axios.get('/api/discipleshipList/?' + qs).then((res) => res.data);
+    const discipleshipList = await axios.get('/api/discipleship/?' + qs).then((res) => res.data);
     set({ discipleshipList: discipleshipList || [] });
   },
   queryParams: {

@@ -1,10 +1,20 @@
 'use client';
 
-import { CarePriority, CareType, DiscipleshipProcess, FriendType, Gender, PersonalType } from '@/enums';
+import {
+  CarePriority,
+  CareType,
+  DiscipleshipProcess,
+  DiscipleshipType,
+  FriendType,
+  Gender,
+  PersonalType
+} from '@/enums';
 import useAccountStore from '@/stores/useAccountStore';
 import useCareStore from '@/stores/useCareStore';
+import useDiscipleshipStore from '@/stores/useDiscipleshipStore';
 import useFriendStore from '@/stores/useFriendStore';
 import useMemberStore from '@/stores/useMemberStore';
+import usePersonStore from '@/stores/usePersonStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusIcon } from '@radix-ui/react-icons';
 import axios from 'axios';
@@ -41,7 +51,7 @@ import { getErrorMessage } from '@/lib/handle-error';
 import { cn } from '@/lib/utils';
 
 const createFundRecordSchema = z.object({
-  type: z.nativeEnum(CareType),
+  type: z.nativeEnum(DiscipleshipType),
   personId: z.string().optional(),
   date: z.date(),
   description: z.string().optional(),
@@ -49,7 +59,7 @@ const createFundRecordSchema = z.object({
 });
 export type CreateRecordSchema = z.infer<typeof createFundRecordSchema>;
 
-export function CreateFundRecordDialog() {
+export function CreateDiscipleshipDialog() {
   const [open, setOpen] = React.useState(false);
   const [isCreatePending, startCreateTransition] = React.useTransition();
   const [fileUrl, setFileUrl] = useState<string | undefined>();
@@ -59,14 +69,14 @@ export function CreateFundRecordDialog() {
   });
 
   const queryParams = useCareStore((state) => state.queryParams);
-  const fetchMembers = useMemberStore((state) => state.fetchMembers);
-  const fetchCares = useCareStore((state) => state.fetchCares);
+  const fetchPeople = usePersonStore((state) => state.fetchPeople);
+  const fetchDiscipleshipList = useDiscipleshipStore((state) => state.fetchDiscipleshipList);
 
   const fetchAccounts = useAccountStore((state) => state.fetchAccounts);
   const accounts = useAccountStore((state) => state.accounts);
 
   React.useEffect(() => {
-    fetchMembers({});
+    fetchPeople();
     fetchAccounts();
   }, []);
 
@@ -77,7 +87,7 @@ export function CreateFundRecordDialog() {
 
     startCreateTransition(() => {
       toast.promise(
-        axios.post('/api/cares', {
+        axios.post('/api/discipleship', {
           ...input,
           image: fileUrl,
           curatorId: accounts[0]?.id
@@ -88,7 +98,7 @@ export function CreateFundRecordDialog() {
             form.reset();
             setOpen(false);
 
-            fetchCares(queryParams);
+            fetchDiscipleshipList(queryParams);
 
             return 'Care created';
           },
@@ -169,7 +179,7 @@ export function CreateFundRecordDialog() {
 const MemberField = ({ form }: any) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const members = useMemberStore((state) => state.members);
+  const people = usePersonStore((state) => state.people);
 
   return (
     <FormField
@@ -177,7 +187,7 @@ const MemberField = ({ form }: any) => {
       name="personId"
       render={({ field }) => (
         <FormItem className="flex flex-col space-y-2">
-          <FormLabel>Member</FormLabel>
+          <FormLabel>Person</FormLabel>
           <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
               <FormControl>
@@ -186,7 +196,7 @@ const MemberField = ({ form }: any) => {
                   role="combobox"
                   className={cn('min-w-[200px] justify-between', !field.value && 'text-muted-foreground')}
                 >
-                  {field.value ? members.find((member) => member.id === field.value)?.name : 'Select Member'}
+                  {field.value ? people.find((person) => person.id === field.value)?.name : 'Select Member'}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </FormControl>
@@ -198,19 +208,19 @@ const MemberField = ({ form }: any) => {
                   <CommandEmpty>No member found.</CommandEmpty>
 
                   <CommandGroup>
-                    {members.map((member) => (
+                    {people.map((person) => (
                       <CommandItem
-                        value={member.id}
-                        key={member.id}
+                        value={person.id}
+                        key={person.id}
                         onSelect={() => {
-                          form.setValue('personId', member.id);
+                          form.setValue('personId', person.id);
                           setIsOpen(false);
                         }}
                       >
                         <Check
-                          className={cn('mr-2 h-4 w-4', member.id === field.value ? 'opacity-100' : 'opacity-0')}
+                          className={cn('mr-2 h-4 w-4', person.id === field.value ? 'opacity-100' : 'opacity-0')}
                         />
-                        {member.name}
+                        {person.name}
                       </CommandItem>
                     ))}
                   </CommandGroup>
@@ -245,10 +255,9 @@ const DescriptionField = ({ form }: any) => {
 
 const CareTypeField = ({ form }: any) => {
   const bgColor: Record<string, string> = {
-    [CareType.Message]: 'bg-red-400',
-    [CareType.Call]: 'bg-yellow-400',
-    [CareType.FaceToFace]: 'bg-cyan-400',
-    [CareType.Visit]: 'bg-violet-400'
+    [DiscipleshipType.Believe]: 'bg-yellow-400',
+    [DiscipleshipType.ShareGospel]: 'bg-yellow-400',
+    [DiscipleshipType.Disciple]: 'bg-violet-400'
   };
 
   return (
@@ -257,7 +266,7 @@ const CareTypeField = ({ form }: any) => {
       name="type"
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="my-0 py-0">Type</FormLabel>
+          <FormLabel className="my-0 py-0">Discipleship Type</FormLabel>
           <FormControl>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
@@ -268,10 +277,9 @@ const CareTypeField = ({ form }: any) => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value={CareType.Message}>{CareType.Message}</SelectItem>
-                <SelectItem value={CareType.Call}>{CareType.Call}</SelectItem>
-                <SelectItem value={CareType.FaceToFace}>{CareType.FaceToFace}</SelectItem>
-                <SelectItem value={CareType.Visit}>{CareType.Visit}</SelectItem>
+                <SelectItem value={DiscipleshipType.Believe}>{DiscipleshipType.Believe}</SelectItem>
+                <SelectItem value={DiscipleshipType.ShareGospel}>{DiscipleshipType.ShareGospel}</SelectItem>
+                <SelectItem value={DiscipleshipType.Disciple}>{DiscipleshipType.Disciple}</SelectItem>
               </SelectContent>
             </Select>
           </FormControl>

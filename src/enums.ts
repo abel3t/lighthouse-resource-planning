@@ -28,7 +28,7 @@ export enum DateFilterSet {
   LastYear
 }
 
-export enum DiscipleType {
+export enum DiscipleshipType {
   ShareGospel = 'ShareGospel',
   Believe = 'Believe',
   Disciple = 'Disciple'
