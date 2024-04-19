@@ -31,13 +31,13 @@ const sidebarItems: SidebarItems = {
   extras: <div className="flex flex-col gap-2"></div>
 };
 
-export default function Sidebar() {
+export default function Sidebar({ className }: { className?: string }) {
   const isDesktop = useMediaQuery('(min-width: 640px)', {
     initializeWithValue: false
   });
 
   if (isDesktop) {
-    return <SidebarDesktop sidebarItems={sidebarItems} />;
+    return <SidebarDesktop sidebarItems={sidebarItems} className={className} />;
   }
 
   return <SidebarMobile sidebarItems={sidebarItems} />;

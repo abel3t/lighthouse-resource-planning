@@ -7,13 +7,15 @@ import { SheetClose } from '../../ui/sheet';
 
 interface SidebarButtonProps extends ButtonProps {
   icon?: LucideIcon;
+  isExpanded?: boolean;
 }
 
-export function SidebarButton({ icon: Icon, className, children, ...props }: SidebarButtonProps) {
+export function SidebarButton({ icon: Icon, className, children, isExpanded, ...props }: SidebarButtonProps) {
   return (
-    <Button variant="ghost" className={cn('justify-start gap-2', className)} {...props}>
-      {Icon && <Icon size={20} />}
-      <span>{children}</span>
+    <Button variant="outline" className={cn('flex justify-start', className, isExpanded && 'gap-2')} {...props}>
+      <span>{Icon && <Icon size={20} className="" />}</span>
+
+      {isExpanded && <span className="truncate">{children}</span>}
     </Button>
   );
 }

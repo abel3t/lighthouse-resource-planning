@@ -9,9 +9,6 @@ export interface IndexPageProps {
 }
 
 export default async function MemberPage({ searchParams }: IndexPageProps) {
-  const data = getMembers(searchParams);
-
-  console.log('searchParams', searchParams);
   return (
     <div>
       <MemberTable />

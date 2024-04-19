@@ -29,13 +29,9 @@ export default function RootLayout({
       <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
       <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
-        <Sidebar />
-
-        <main className="mx-5 mt-16 sm:ml-[300px] sm:mt-3">
+        <main>
           {children}
           <Toaster />
-
-          <Footer />
         </main>
       </body>
     </html>

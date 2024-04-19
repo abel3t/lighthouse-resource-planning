@@ -29,11 +29,6 @@ export function SidebarMobile(props: SidebarMobileProps) {
       <SheetContent side="left" className="px-3 py-4">
         <SheetHeader className="flex flex-row items-center justify-between space-y-0">
           <span className="mx-3 text-lg font-semibold text-foreground">LRP</span>
-          <SheetClose asChild>
-            <Button className="h-7 w-7 p-0" variant="ghost">
-              <X size={15} />
-            </Button>
-          </SheetClose>
         </SheetHeader>
         <div className="h-full">
           <div className="mt-5 flex w-full flex-col gap-1">
@@ -43,6 +38,7 @@ export function SidebarMobile(props: SidebarMobileProps) {
                   variant={pathname === link.href ? 'secondary' : 'ghost'}
                   icon={link.icon}
                   className="w-full"
+                  isExpanded={true}
                 >
                   {link.label}
                 </SidebarButton>
