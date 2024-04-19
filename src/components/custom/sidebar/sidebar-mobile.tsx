@@ -3,13 +3,15 @@
 import { SidebarItems } from '@/types';
 import { LogOut, Menu, MoreHorizontal, Settings, X } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar';
 import { Button } from '../../ui/button';
 import { Drawer, DrawerContent, DrawerTrigger } from '../../ui/drawer';
 import { Separator } from '../../ui/separator';
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTrigger } from '../../ui/sheet';
+import { Icons } from '../icons';
 import { SidebarButtonSheet as SidebarButton } from './sidebar-button';
 
 interface SidebarMobileProps {
@@ -18,6 +20,9 @@ interface SidebarMobileProps {
 
 export function SidebarMobile(props: SidebarMobileProps) {
   const pathname = usePathname();
+  const [isLogoutLoading, setIsLogoutLoading] = useState(false);
+
+  const router = useRouter();
 
   return (
     <Sheet>
@@ -67,13 +72,26 @@ export function SidebarMobile(props: SidebarMobileProps) {
               <DrawerContent className="mb-2 p-2">
                 <div className="mt-2 flex flex-col space-y-2">
                   <Link href="/">
-                    <SidebarButton size="sm" icon={Settings} className="w-full">
+                    <SidebarButton size="sm" icon={Settings} className="w-full" isExpanded>
                       Account Settings
                     </SidebarButton>
                   </Link>
-                  <SidebarButton size="sm" icon={LogOut} className="w-full">
-                    Log Out
-                  </SidebarButton>
+                  <Button
+                    variant="outline"
+                    className="w-full cursor-pointer"
+                    onClick={() => {
+                      router.push('/api/auth/logout');
+                      setIsLogoutLoading(true);
+                    }}
+                  >
+                    {isLogoutLoading ? (
+                      <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <div className="flex justify-start gap-2 ">
+                        <div>Logout</div>
+                      </div>
+                    )}
+                  </Button>
                 </div>
               </DrawerContent>
             </Drawer>
