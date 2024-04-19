@@ -89,6 +89,8 @@ export function CreateFundRecordDialog() {
             form.reset();
             setOpen(false);
 
+            setFileUrl(undefined);
+
             fetchCares(queryParams);
 
             return 'Care created';
@@ -110,6 +112,7 @@ export function CreateFundRecordDialog() {
 
         if (!open) {
           form.reset();
+          setFileUrl(undefined);
         }
       }}
     >
@@ -155,7 +158,7 @@ export function CreateFundRecordDialog() {
               )}
               {fileUrl && (
                 <AspectRatio ratio={16 / 9}>
-                  <Image src={fileUrl} fill alt="Image" />
+                  <Image className="object-contain" src={fileUrl} fill alt="Image" />
                 </AspectRatio>
               )}
             </div>

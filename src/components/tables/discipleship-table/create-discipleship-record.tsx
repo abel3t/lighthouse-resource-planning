@@ -97,6 +97,7 @@ export function CreateDiscipleshipDialog() {
           success: () => {
             form.reset();
             setOpen(false);
+            setFileUrl(undefined);
 
             fetchDiscipleshipList(queryParams);
 
@@ -119,6 +120,7 @@ export function CreateDiscipleshipDialog() {
 
         if (!open) {
           form.reset();
+          setFileUrl(undefined);
         }
       }}
     >
@@ -164,7 +166,7 @@ export function CreateDiscipleshipDialog() {
               )}
               {fileUrl && (
                 <AspectRatio ratio={16 / 9}>
-                  <Image src={fileUrl} fill alt="Image" />
+                  <Image className="object-contain" src={fileUrl} fill alt="Image" />
                 </AspectRatio>
               )}
             </div>
