@@ -1,4 +1,5 @@
 import { SearchParams } from '@/types';
+import axios from 'axios';
 
 import prisma from './prisma';
 
@@ -84,3 +85,11 @@ export async function getFundRecords() {
     pageCount: 1
   };
 }
+
+export const deleteImageUploadThing = async (url: string) => {
+  await axios.delete('api/uploadthing', {
+    data: {
+      url
+    }
+  });
+};

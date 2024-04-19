@@ -38,6 +38,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { UploadButton, UploadDropzone } from '@/components/uploadthing';
 
+import { deleteImageUploadThing } from '@/lib/api';
 import { getErrorMessage } from '@/lib/handle-error';
 import { cn } from '@/lib/utils';
 
@@ -97,6 +98,12 @@ export function CreateFundRecordDialog() {
           },
           error: (error) => {
             setOpen(false);
+            form.reset();
+            if (fileUrl) {
+              deleteImageUploadThing(fileUrl);
+            }
+            setFileUrl(undefined);
+
             return getErrorMessage(error);
           }
         }
@@ -112,6 +119,11 @@ export function CreateFundRecordDialog() {
 
         if (!open) {
           form.reset();
+
+          if (fileUrl) {
+            deleteImageUploadThing(fileUrl);
+          }
+
           setFileUrl(undefined);
         }
       }}
