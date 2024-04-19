@@ -4,8 +4,11 @@ import { cookies } from 'next/headers';
 import Sidebar from '@/components/custom/sidebar';
 
 export default async function Home() {
-  const { getUser, isAuthenticated } = getKindeServerSession();
-  const user = await getUser();
+  const { isAuthenticated } = getKindeServerSession();
 
-  return <main className="flex min-h-screen flex-col items-center justify-between p-24">hello</main>;
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      Authenticated: {!!(await isAuthenticated())}
+    </main>
+  );
 }

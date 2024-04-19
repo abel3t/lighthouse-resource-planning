@@ -6,7 +6,7 @@ import { LoginLink } from '@kinde-oss/kinde-auth-nextjs/components';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -70,13 +70,16 @@ function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false);
 
+  const ref = useRef<any>(null);
+
   const emailPasswordlessConnectionId = process.env.NEXT_PUBLIC_KINDE_CONNECTION_EMAIL_PASSWORD_LESS || '';
   const googleConnectionId = process.env.NEXT_PUBLIC_KINDE_CONNECTION_GOOGLE || '';
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log('values', values);
-
-    setIsLoading(true);
+    if (ref?.current && values.email) {
+      setIsLoading(true);
+      ref.current.children?.[0]?.click();
+    }
   }
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -109,18 +112,21 @@ function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               </FormItem>
             )}
           />
-          <LoginLink
-            className="flex items-center"
-            authUrlParams={{
-              connection_id: emailPasswordlessConnectionId,
-              login_hint: form.getValues('email')
-            }}
-          >
-            <Button className="mt-3 w-full" disabled={isLoadingGoogle || isLoading}>
-              {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-              Sign In with Email
-            </Button>
-          </LoginLink>
+
+          <div ref={ref}>
+            <LoginLink
+              className="flex items-center"
+              authUrlParams={{
+                connection_id: emailPasswordlessConnectionId,
+                login_hint: form.getValues('email')
+              }}
+            >
+              <Button className="mt-3 w-full" disabled={isLoadingGoogle || isLoading}>
+                {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+                Sign In with Email
+              </Button>
+            </LoginLink>
+          </div>
         </form>
       </Form>
 
@@ -138,14 +144,9 @@ function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         authUrlParams={{
           connection_id: googleConnectionId
         }}
+        onClick={() => setIsLoadingGoogle(true)}
       >
-        <Button
-          className="w-full"
-          variant="outline"
-          type="button"
-          disabled={isLoadingGoogle || isLoading}
-          onClick={() => setIsLoadingGoogle(true)}
-        >
+        <Button className="w-full" variant="outline" type="button" disabled={isLoadingGoogle || isLoading}>
           {isLoadingGoogle ? (
             <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
           ) : (
