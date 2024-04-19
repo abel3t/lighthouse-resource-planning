@@ -12,8 +12,6 @@ export default async function CommonLayout({ children }: { children: React.React
   if (!isAuthenticated) {
     console.log('User is not login');
     redirect('/login');
-  } else {
-    console.log('User is login');
   }
 
   return (
