@@ -2,9 +2,9 @@
 
 import { SidebarItems } from '@/types';
 import { motion } from 'framer-motion';
-import { ChevronLeftIcon, LogOut, MoreHorizontal, Settings } from 'lucide-react';
+import { ChevronLeftIcon, LogOut, LogOutIcon, MoreHorizontal, Settings } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -13,6 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar';
 import { Button } from '../../ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '../../ui/popover';
 import { Separator } from '../../ui/separator';
+import { Icons } from '../icons';
 import { SidebarButton } from './sidebar-button';
 
 interface SidebarDesktopProps {
@@ -23,6 +24,8 @@ interface SidebarDesktopProps {
 export function SidebarDesktop({ sidebarItems, className }: SidebarDesktopProps) {
   const pathname = usePathname();
   const [isExpanded, setIsExpanded] = useState(true);
+  const [isLogoutLoading, setIsLogoutLoading] = useState(false);
+  const router = useRouter();
 
   return (
     <motion.div
@@ -80,13 +83,27 @@ export function SidebarDesktop({ sidebarItems, className }: SidebarDesktopProps)
             <PopoverContent className="mb-2 w-56 rounded-[1rem] p-3">
               <div className="space-y-1">
                 <Link href="/">
-                  <SidebarButton size="sm" icon={Settings} className="w-full">
+                  <SidebarButton size="sm" icon={Settings} className="w-full" isExpanded>
                     Account Settings
                   </SidebarButton>
                 </Link>
-                <SidebarButton size="sm" icon={LogOut} className="w-full">
-                  Log Out
-                </SidebarButton>
+
+                <Button
+                  variant="outline"
+                  className="w-full cursor-pointer"
+                  onClick={() => {
+                    router.push('/api/auth/logout');
+                    setIsLogoutLoading(true);
+                  }}
+                >
+                  {isLogoutLoading ? (
+                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <div className="flex justify-start gap-2 ">
+                      <div>Logout</div>
+                    </div>
+                  )}
+                </Button>
               </div>
             </PopoverContent>
           </Popover>
