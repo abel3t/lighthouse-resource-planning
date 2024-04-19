@@ -79,6 +79,10 @@ function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     if (ref?.current && values.email) {
       setIsLoading(true);
       ref.current.children?.[0]?.click();
+
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 10000);
     }
   }
 
@@ -144,7 +148,13 @@ function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         authUrlParams={{
           connection_id: googleConnectionId
         }}
-        onClick={() => setIsLoadingGoogle(true)}
+        onClick={() => {
+          setIsLoadingGoogle(true);
+
+          setTimeout(() => {
+            setIsLoadingGoogle(false);
+          }, 10000);
+        }}
       >
         <Button className="w-full" variant="outline" type="button" disabled={isLoadingGoogle || isLoading}>
           {isLoadingGoogle ? (
