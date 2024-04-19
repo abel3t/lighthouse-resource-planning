@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   // check if user exists
-  const { getUser, getOrganization } = getKindeServerSession();
+  const { getUser } = getKindeServerSession();
   const user = await getUser();
 
   if (!user || user == null || !user.id) throw new Error('something went wrong with authentication' + user);
@@ -29,5 +29,5 @@ export async function GET() {
     });
   }
 
-  return NextResponse.redirect('http://localhost:3000/');
+  return NextResponse.redirect(process.env.KINDE_SITE_URL || 'https://github.com/abel3t');
 }
