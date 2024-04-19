@@ -19,9 +19,10 @@ import { SidebarButton } from './sidebar-button';
 interface SidebarDesktopProps {
   sidebarItems: SidebarItems;
   className?: string;
+  user: any;
 }
 
-export function SidebarDesktop({ sidebarItems, className }: SidebarDesktopProps) {
+export function SidebarDesktop({ sidebarItems, className, user }: SidebarDesktopProps) {
   const pathname = usePathname();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isLogoutLoading, setIsLogoutLoading] = useState(false);
@@ -71,10 +72,14 @@ export function SidebarDesktop({ sidebarItems, className }: SidebarDesktopProps)
                 <div className="flex w-full items-center justify-between">
                   <div className="flex gap-2">
                     <Avatar className="h-5 w-5">
-                      <AvatarImage src="https://github.com/abel3t.png" />
-                      <AvatarFallback>Abel</AvatarFallback>
+                      <AvatarImage src={user?.picture} />
+                      <AvatarFallback>{user?.given_name || 'A'}</AvatarFallback>
                     </Avatar>
-                    {isExpanded && <span>Abel Tran</span>}
+                    {isExpanded && (
+                      <span>
+                        {user?.given_name || ''} {user?.family_name}
+                      </span>
+                    )}
                   </div>
                   <MoreHorizontal size={20} />
                 </div>

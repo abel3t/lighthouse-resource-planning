@@ -16,9 +16,10 @@ import { SidebarButtonSheet as SidebarButton } from './sidebar-button';
 
 interface SidebarMobileProps {
   sidebarItems: SidebarItems;
+  user: any;
 }
 
-export function SidebarMobile(props: SidebarMobileProps) {
+export function SidebarMobile({ sidebarItems, user }: SidebarMobileProps) {
   const pathname = usePathname();
   const [isLogoutLoading, setIsLogoutLoading] = useState(false);
 
@@ -37,7 +38,7 @@ export function SidebarMobile(props: SidebarMobileProps) {
         </SheetHeader>
         <div className="h-full">
           <div className="mt-5 flex w-full flex-col gap-1">
-            {props.sidebarItems.links.map((link, idx) => (
+            {sidebarItems.links.map((link, idx) => (
               <Link key={idx} href={link.href}>
                 <SidebarButton
                   variant={pathname === link.href ? 'secondary' : 'ghost'}
@@ -49,7 +50,7 @@ export function SidebarMobile(props: SidebarMobileProps) {
                 </SidebarButton>
               </Link>
             ))}
-            {props.sidebarItems.extras}
+            {sidebarItems.extras}
           </div>
           <div className="absolute bottom-4 left-0 w-full px-1">
             <Separator className="absolute -top-3 left-0 w-full" />
@@ -59,11 +60,13 @@ export function SidebarMobile(props: SidebarMobileProps) {
                   <div className="flex w-full items-center justify-between">
                     <div className="flex gap-2">
                       <Avatar className="h-5 w-5">
-                        <AvatarImage src="https://github.com/abel3t.png" />
+                        <AvatarImage src={user?.picture} />
 
-                        <AvatarFallback>Abel</AvatarFallback>
+                        <AvatarFallback>{user?.given_name || 'A'}</AvatarFallback>
                       </Avatar>
-                      <span>Abel Tran</span>
+                      <span>
+                        {user?.given_name || ''} {user?.family_name}
+                      </span>
                     </div>
                     <MoreHorizontal size={20} />
                   </div>

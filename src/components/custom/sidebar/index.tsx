@@ -1,6 +1,7 @@
 'use client';
 
 import { SidebarItems } from '@/types';
+import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 import { BookUser, Church, HandPlatter, Home, User, Users, Wallet2 } from 'lucide-react';
 import { useMediaQuery } from 'usehooks-ts';
 
@@ -32,13 +33,15 @@ const sidebarItems: SidebarItems = {
 };
 
 export default function Sidebar({ className }: { className?: string }) {
+  const { user } = useKindeBrowserClient();
+
   const isDesktop = useMediaQuery('(min-width: 640px)', {
     initializeWithValue: false
   });
 
   if (isDesktop) {
-    return <SidebarDesktop sidebarItems={sidebarItems} className={className} />;
+    return <SidebarDesktop sidebarItems={sidebarItems} className={className} user={user} />;
   }
 
-  return <SidebarMobile sidebarItems={sidebarItems} />;
+  return <SidebarMobile sidebarItems={sidebarItems} user={user} />;
 }
