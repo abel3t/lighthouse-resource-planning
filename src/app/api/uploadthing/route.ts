@@ -1,3 +1,4 @@
+import { NextResponse } from 'next/server';
 import { createRouteHandler } from 'uploadthing/next';
 import { UTApi } from 'uploadthing/server';
 
@@ -17,5 +18,5 @@ export async function DELETE(request: Request) {
   const utapi = new UTApi();
   await utapi.deleteFiles(newUrl);
 
-  return Response.json({ message: 'ok' });
+  return NextResponse.json({ message: 'ok' });
 }
