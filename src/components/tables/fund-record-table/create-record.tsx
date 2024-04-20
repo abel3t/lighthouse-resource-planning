@@ -115,7 +115,7 @@ export function CreateFundRecordDialog() {
           New Record
         </Button>
       </DialogTrigger>
-      <DialogContent className="h-5/6 overflow-y-scroll">
+      <DialogContent className="max-h-screen overflow-y-scroll">
         <DialogHeader>
           <DialogTitle>Create Record</DialogTitle>
           <DialogDescription>Điền thông tin.</DialogDescription>
