@@ -21,6 +21,8 @@ export default async function Home() {
 
   if (isAuthenticated) {
     router.push('/dashboard');
+  } else {
+    router.push('/login');
   }
 
   return (

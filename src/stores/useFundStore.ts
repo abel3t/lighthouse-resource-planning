@@ -1,6 +1,4 @@
 import { Fund } from '@prisma/client';
-import axios from 'axios';
-import { toast } from 'sonner';
 import { create } from 'zustand';
 
 import { client } from '@/lib/client';

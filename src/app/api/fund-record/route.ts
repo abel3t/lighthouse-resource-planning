@@ -62,7 +62,11 @@ export async function POST(req: Request, res: Response) {
 }
 
 export async function GET(req: Request) {
-  const { search, page, pageSize, sortField, sortOrder } = searchParamsParser(req.url);
+  const { search, page, pageSize, sortField, sortOrder, fundId } = searchParamsParser(req.url);
+
+  if (!fundId) {
+    return NextResponse.json({ metadata: {}, data: [] });
+  }
 
   let orderByField: string = sortField || '';
   let orderByType: SortType = (sortOrder || 'desc') as SortType;

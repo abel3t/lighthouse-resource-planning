@@ -1,6 +1,7 @@
 'use client';
 
 import useFundRecordStore from '@/stores/useFundRecordStore';
+import useFundStore from '@/stores/useFundStore';
 import {
   ColumnFiltersState,
   PaginationState,
@@ -17,17 +18,15 @@ import { use, useEffect, useMemo, useState } from 'react';
 import { DataTable } from '@/components/custom/data-table';
 import { DataTableToolbar } from '@/components/custom/data-table/data-table-toolbar';
 
-import { filterFields, getColumns, searchField } from './fund-record-table-columns';
+import { getColumns, searchField } from './fund-record-table-columns';
 import { FundRecordTableToolbarActions } from './fund-record-table-toolbar-actions';
-
-interface TableProps {
-  promiseMembers: any;
-}
 
 export default function FundRecordTable() {
   const fundRecords = useFundRecordStore((state) => state.records);
   const fetchFundRecords = useFundRecordStore((state) => state.fetchRecords);
   const metaData = useFundRecordStore((state) => state.metadata);
+
+  const currentFund = useFundStore((state) => state.currentFund);
 
   // Memoize the columns so they don't re-render on every render
   const columns = useMemo(() => getColumns(), []);
@@ -42,8 +41,8 @@ export default function FundRecordTable() {
   const debouncedSearch = useDebounce(queryParams, 300);
 
   useEffect(() => {
-    fetchFundRecords(debouncedSearch);
-  }, [debouncedSearch.search]);
+    fetchFundRecords(currentFund?.id || '', debouncedSearch);
+  }, [debouncedSearch.search, currentFund?.id]);
 
   const handlePaginationChange = (updater: any) => {
     const nextState = updater(pagination);

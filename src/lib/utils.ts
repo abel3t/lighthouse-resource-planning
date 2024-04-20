@@ -13,7 +13,8 @@ export const searchParamsParser = (url: string) => {
       page: 1,
       pageSize: 10,
       sortField: '',
-      sortOrder: 'desc'
+      sortOrder: 'desc',
+      fundId: ''
     };
   }
 
@@ -27,6 +28,7 @@ export const searchParamsParser = (url: string) => {
     page: (parseInt(s.get('page') || '') as number) || 1,
     pageSize: (parseInt(s.get('pageSize') || '') as number) || 10,
     sortField: sortField as string,
-    sortOrder: (['asc', 'desc'].includes(sortOrder) ? sortOrder : 'desc') as SortType
+    sortOrder: (['asc', 'desc'].includes(sortOrder) ? sortOrder : 'desc') as SortType,
+    fundId: s.get('fundId') || ''
   };
 };

@@ -1,5 +1,4 @@
 import { Fund } from '@prisma/client';
-import axios from 'axios';
 import queryString from 'query-string';
 import { create } from 'zustand';
 
@@ -20,7 +19,7 @@ export type QueryParams = {
 export interface FundStore {
   records: Fund[];
   metadata: any;
-  fetchRecords: (queryParams: QueryParams) => void;
+  fetchRecords: (fundId: string, queryParams: QueryParams) => void;
   queryParams: QueryParams;
   setQueryParams: (params: QueryParams) => void;
 }
@@ -28,14 +27,15 @@ export interface FundStore {
 const useFundRecordStore = create<FundStore>((set) => ({
   records: [],
   metadata: {},
-  fetchRecords: async (queryParams: QueryParams) => {
+  fetchRecords: async (fundId: string, queryParams: QueryParams) => {
     const { sort = { field: 'id', order: 'asc' }, search = '', pagination = { page: 1, pageSize: 10 } } = queryParams;
 
     const qs = queryString.stringify({
       sort: `${sort.field}.${sort.order}`,
       search,
       page: pagination.page,
-      pageSize: pagination.pageSize
+      pageSize: pagination.pageSize,
+      fundId
     });
 
     const data = await client.get('/fund-record/?' + qs).then((res) => res.data);

@@ -88,7 +88,7 @@ export function CreateFundRecordDialog() {
             setOpen(false);
 
             fetchFunds();
-            fetchRecords(queryParams);
+            fetchRecords(currentFund.id, queryParams);
             setIsOnCreating(false);
 
             return 'Record created';
