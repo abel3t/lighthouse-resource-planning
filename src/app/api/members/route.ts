@@ -1,5 +1,6 @@
 import { PersonalType } from '@/enums';
 import { SortType } from '@/types';
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { NextResponse } from 'next/server';
 
 import prisma from '@/lib/prisma';
@@ -34,6 +35,12 @@ export async function POST(req: Request) {
 
 export async function GET(req: Request) {
   const { search, page, pageSize, sortField, sortOrder } = searchParamsParser(req.url);
+
+  const { isAuthenticated, getUser, getUserOrganizations } = getKindeServerSession();
+
+  console.log(await getUser());
+  console.log(await getUserOrganizations());
+  console.log(await isAuthenticated());
 
   let orderByField: string = sortField || '';
   let orderByType: SortType = (sortOrder || 'asc') as SortType;

@@ -3,6 +3,8 @@ import axios from 'axios';
 import { toast } from 'sonner';
 import { create } from 'zustand';
 
+import { client } from '@/lib/client';
+
 export interface FundStore {
   funds: Fund[];
   currentFund: Fund | null;
@@ -17,7 +19,7 @@ const useFundStore = create<FundStore>((set) => ({
   setCurrentFund: (fund: Fund) => set({ currentFund: fund }),
   setFunds: (funds: Fund[]) => set({ funds }),
   fetchFunds: async () => {
-    const funds = await axios.get('/api/funds').then((res) => res.data);
+    const funds = await client.get('/funds').then((res) => res.data);
 
     if (funds?.length) {
       set({ currentFund: funds[0] });
