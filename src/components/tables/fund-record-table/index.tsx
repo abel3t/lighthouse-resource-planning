@@ -17,7 +17,7 @@ import { use, useEffect, useMemo, useState } from 'react';
 import { DataTable } from '@/components/custom/data-table';
 import { DataTableToolbar } from '@/components/custom/data-table/data-table-toolbar';
 
-import { filterFields, getColumns } from './fund-record-table-columns';
+import { filterFields, getColumns, searchField } from './fund-record-table-columns';
 import { FundRecordTableToolbarActions } from './fund-record-table-toolbar-actions';
 
 interface TableProps {
@@ -128,8 +128,8 @@ export default function FundRecordTable() {
   });
 
   return (
-    <div className="w-full space-y-2.5 overflow-auto">
-      <DataTableToolbar table={table} filterFields={filterFields}>
+    <div className="space-y-1overflow-auto w-full">
+      <DataTableToolbar table={table} search={searchField} filterFields={[]}>
         <FundRecordTableToolbarActions table={table} />
       </DataTableToolbar>
 

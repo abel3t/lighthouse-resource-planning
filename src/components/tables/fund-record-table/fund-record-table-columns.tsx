@@ -37,6 +37,11 @@ import {
 import { getErrorMessage } from '@/lib/handle-error';
 import { cn } from '@/lib/utils';
 
+export const searchField = {
+  name: 'name',
+  placeholder: 'Search...'
+};
+
 export const filterFields: DataTableFilterField<any>[] = [
   {
     label: 'Name',

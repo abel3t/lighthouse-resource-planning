@@ -20,7 +20,7 @@ import { DataTable } from '@/components/custom/data-table';
 import { DataTableToolbar } from '@/components/custom/data-table/data-table-toolbar';
 import { Button } from '@/components/ui/button';
 
-import { filterFields, getColumns } from './member-table-columns';
+import { filterFields, getColumns, searchField } from './member-table-columns';
 import { MemberTableToolbarActions } from './member-table-toolbar-actions';
 
 export default function MemberTable() {
@@ -128,8 +128,8 @@ export default function MemberTable() {
   });
 
   return (
-    <div className="w-full space-y-2.5 overflow-auto">
-      <DataTableToolbar table={table} filterFields={filterFields}>
+    <div className="space-y-1overflow-auto w-full">
+      <DataTableToolbar table={table} search={searchField} filterFields={[]}>
         <MemberTableToolbarActions table={table} />
       </DataTableToolbar>
 

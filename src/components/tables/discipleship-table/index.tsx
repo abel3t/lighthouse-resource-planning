@@ -18,7 +18,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { DataTable } from '@/components/custom/data-table';
 import { DataTableToolbar } from '@/components/custom/data-table/data-table-toolbar';
 
-import { filterFields, getColumns } from './discipleship-table-columns';
+import { filterFields, getColumns, searchField } from './discipleship-table-columns';
 import { MemberTableToolbarActions } from './discipleship-table-toolbar-actions';
 
 export default function DiscipleshipTable() {
@@ -124,8 +124,8 @@ export default function DiscipleshipTable() {
   });
 
   return (
-    <div className="w-full space-y-2.5 overflow-auto">
-      <DataTableToolbar table={table} filterFields={filterFields}>
+    <div className="space-y-1overflow-auto w-full">
+      <DataTableToolbar table={table} search={searchField} filterFields={[]}>
         <MemberTableToolbarActions table={table} />
       </DataTableToolbar>
 

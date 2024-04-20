@@ -27,6 +27,11 @@ import {
 
 import { getErrorMessage } from '@/lib/handle-error';
 
+export const searchField = {
+  name: 'name',
+  placeholder: 'Search...'
+};
+
 export const filterFields: DataTableFilterField<any>[] = [
   {
     label: 'Name',
