@@ -46,7 +46,7 @@ export default function FundRecordTable() {
 
   const handlePaginationChange = (updater: any) => {
     const nextState = updater(pagination);
-    fetchFundRecords({
+    fetchFundRecords(currentFund?.id || '', {
       ...queryParams,
       pagination: {
         page: nextState.pageIndex + 1,
@@ -66,7 +66,7 @@ export default function FundRecordTable() {
   const handleSortChange = (updater: any) => {
     const nextState = updater(sorting);
 
-    fetchFundRecords({
+    fetchFundRecords(currentFund?.id || '', {
       ...queryParams,
       sort: {
         field: nextState[0].id,
@@ -87,7 +87,7 @@ export default function FundRecordTable() {
     const nextState = updater(columnFilters);
 
     if (!nextState[0]?.value) {
-      fetchFundRecords({
+      fetchFundRecords(currentFund?.id || '', {
         ...queryParams,
         search: ''
       });
