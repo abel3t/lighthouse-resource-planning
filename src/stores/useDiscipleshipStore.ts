@@ -1,12 +1,14 @@
 import { Discipleship, Person } from '@prisma/client';
-import axios from 'axios';
 import queryString from 'query-string';
 import { create } from 'zustand';
+
+import { client } from '@/lib/client';
 
 import { QueryParams } from './useFundRecordStore';
 
 export interface DiscipleshipStore {
   discipleshipList: Discipleship[];
+  metadata: any;
   fetchDiscipleshipList: (queryParams: QueryParams) => void;
   queryParams: QueryParams;
   setQueryParams: (params: QueryParams) => void;
@@ -14,6 +16,7 @@ export interface DiscipleshipStore {
 
 const useDiscipleshipStore = create<DiscipleshipStore>((set) => ({
   discipleshipList: [],
+  metadata: {},
   fetchDiscipleshipList: async (queryParams: QueryParams) => {
     const { sort = { field: 'id', order: 'asc' }, search = '', pagination = { page: 1, pageSize: 10 } } = queryParams;
 
@@ -24,8 +27,9 @@ const useDiscipleshipStore = create<DiscipleshipStore>((set) => ({
       pageSize: pagination.pageSize
     });
 
-    const discipleshipList = await axios.get('/api/discipleship/?' + qs).then((res) => res.data);
-    set({ discipleshipList: discipleshipList || [] });
+    const data = await client.get('/discipleship/?' + qs).then((res) => res.data);
+    set({ discipleshipList: data?.data || [] });
+    set({ metadata: data?.metadata || {} });
   },
   queryParams: {
     sort: undefined,

@@ -1,12 +1,14 @@
-import { Care, Person } from '@prisma/client';
-import axios from 'axios';
+import { Care } from '@prisma/client';
 import queryString from 'query-string';
 import { create } from 'zustand';
+
+import { client } from '@/lib/client';
 
 import { QueryParams } from './useFundRecordStore';
 
 export interface CareStore {
   cares: Care[];
+  metadata: any;
   fetchCares: (queryParams: QueryParams) => void;
   queryParams: QueryParams;
   setQueryParams: (params: QueryParams) => void;
@@ -14,6 +16,7 @@ export interface CareStore {
 
 const useCareStore = create<CareStore>((set) => ({
   cares: [],
+  metadata: {},
   fetchCares: async (queryParams: QueryParams) => {
     const { sort = { field: 'id', order: 'asc' }, search = '', pagination = { page: 1, pageSize: 10 } } = queryParams;
 
@@ -24,9 +27,10 @@ const useCareStore = create<CareStore>((set) => ({
       pageSize: pagination.pageSize
     });
 
-    const cares = await axios.get('/api/cares/?' + qs).then((res) => res.data);
+    const data = await client.get('/cares/?' + qs).then((res) => res.data);
 
-    set({ cares: cares || [] });
+    set({ cares: data?.data || [] });
+    set({ metadata: data?.metadata || {} });
   },
   queryParams: {
     sort: undefined,

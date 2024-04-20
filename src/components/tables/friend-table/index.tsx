@@ -100,7 +100,7 @@ export default function FriendTable() {
 
   const table = useReactTable({
     data: friends || [],
-    pageCount: metadata?.totalPages || -1,
+    pageCount: metadata.totalPages || -1,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

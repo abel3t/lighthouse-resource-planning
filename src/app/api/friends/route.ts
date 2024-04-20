@@ -3,8 +3,7 @@ import { SortType } from '@/types';
 import { NextResponse } from 'next/server';
 
 import prisma from '@/lib/prisma';
-
-import { searchParamsParser } from '../fund-record/route';
+import { searchParamsParser } from '@/lib/utils';
 
 export async function POST(req: Request) {
   const data = await req.json();

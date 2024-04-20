@@ -1,6 +1,5 @@
 'use client';
 
-import useCareStore from '@/stores/useCareStore';
 import useDiscipleshipStore from '@/stores/useDiscipleshipStore';
 import {
   ColumnFiltersState,
@@ -18,10 +17,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { DataTable } from '@/components/custom/data-table';
 import { DataTableToolbar } from '@/components/custom/data-table/data-table-toolbar';
 
-import { filterFields, getColumns, searchField } from './discipleship-table-columns';
+import { getColumns, searchField } from './discipleship-table-columns';
 import { MemberTableToolbarActions } from './discipleship-table-toolbar-actions';
 
 export default function DiscipleshipTable() {
+  const metadata = useDiscipleshipStore((state) => state.metadata);
   const discipleshipList = useDiscipleshipStore((state) => state.discipleshipList);
   const fetchDiscipleshipList = useDiscipleshipStore((state) => state.fetchDiscipleshipList);
 
@@ -36,10 +36,6 @@ export default function DiscipleshipTable() {
   const setQueryParams = useDiscipleshipStore((state) => state.setQueryParams);
 
   const debouncedSearch = useDebounce(queryParams, 300);
-
-  useEffect(() => {
-    fetchDiscipleshipList({});
-  }, []);
 
   useEffect(() => {
     fetchDiscipleshipList(debouncedSearch);
@@ -104,6 +100,7 @@ export default function DiscipleshipTable() {
 
   const table = useReactTable({
     data: discipleshipList || [],
+    pageCount: metadata.totalPages || -1,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

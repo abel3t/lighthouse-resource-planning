@@ -2,6 +2,7 @@ import { SortType } from '@/types';
 import { NextResponse } from 'next/server';
 
 import prisma from '@/lib/prisma';
+import { searchParamsParser } from '@/lib/utils';
 
 export async function POST(req: Request, res: Response) {
   const data = await req.json();
@@ -50,31 +51,6 @@ export async function POST(req: Request, res: Response) {
 
   return NextResponse.json(data);
 }
-
-export const searchParamsParser = (url: string) => {
-  if (!url) {
-    return {
-      search: '',
-      page: 1,
-      pageSize: 10,
-      sortField: '',
-      sortOrder: 'desc'
-    };
-  }
-
-  const searchParams = new URL(url).searchParams;
-  const s = new URLSearchParams(searchParams);
-
-  const [sortField, sortOrder] = (s.get('sort') as string)?.split('.');
-
-  return {
-    search: s.get('search'),
-    page: (parseInt(s.get('page') || '') as number) || 1,
-    pageSize: (parseInt(s.get('pageSize') || '') as number) || 10,
-    sortField: sortField as string,
-    sortOrder: (['asc', 'desc'].includes(sortOrder) ? sortOrder : 'desc') as SortType
-  };
-};
 
 export async function GET(req: Request, res: Response) {
   const { search, page, pageSize, sortField, sortOrder } = searchParamsParser(req.url);

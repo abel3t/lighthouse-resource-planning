@@ -1,7 +1,6 @@
 'use client';
 
 import useCareStore from '@/stores/useCareStore';
-import useFriendStore from '@/stores/useFriendStore';
 import {
   ColumnFiltersState,
   PaginationState,
@@ -18,10 +17,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { DataTable } from '@/components/custom/data-table';
 import { DataTableToolbar } from '@/components/custom/data-table/data-table-toolbar';
 
-import { filterFields, getColumns, searchField } from './care-table-columns';
+import { getColumns, searchField } from './care-table-columns';
 import { MemberTableToolbarActions } from './care-table-toolbar-actions';
 
 export default function CareTable() {
+  const metadata = useCareStore((state) => state.metadata);
   const cares = useCareStore((state) => state.cares);
   const fetchCares = useCareStore((state) => state.fetchCares);
 
@@ -36,10 +36,6 @@ export default function CareTable() {
   const setQueryParams = useCareStore((state) => state.setQueryParams);
 
   const debouncedSearch = useDebounce(queryParams, 300);
-
-  useEffect(() => {
-    fetchCares({});
-  }, []);
 
   useEffect(() => {
     fetchCares(debouncedSearch);
@@ -104,6 +100,7 @@ export default function CareTable() {
 
   const table = useReactTable({
     data: cares || [],
+    pageCount: metadata.totalPages || -1,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

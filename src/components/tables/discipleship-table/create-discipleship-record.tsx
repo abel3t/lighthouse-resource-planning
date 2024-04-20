@@ -94,7 +94,7 @@ export function CreateDiscipleshipDialog() {
           curatorId: accounts[0]?.id
         }),
         {
-          loading: 'Creating care...',
+          loading: 'Discipleship care...',
           success: () => {
             form.reset();
             setOpen(false);
@@ -102,7 +102,7 @@ export function CreateDiscipleshipDialog() {
 
             fetchDiscipleshipList(queryParams);
 
-            return 'Care created';
+            return 'Discipleship created';
           },
           error: (error) => {
             setOpen(false);

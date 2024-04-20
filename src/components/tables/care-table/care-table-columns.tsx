@@ -28,7 +28,7 @@ import {
 import { getErrorMessage } from '@/lib/handle-error';
 
 export const searchField = {
-  name: 'name',
+  name: 'personName',
   placeholder: 'Search...'
 };
 
@@ -67,18 +67,9 @@ export function getColumns(): ColumnDef<any>[] {
       enableHiding: false
     },
     {
-      accessorKey: 'name',
-      accessorFn: (row) => row.person?.name,
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
-      cell: ({ row }) => {
-        return <div className="w-20">{row.getValue('name')}</div>;
-      },
-      enableSorting: true,
-      enableHiding: false
-    },
-    {
       accessorKey: 'date',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Date" />,
+      meta: 'Ngày',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Ngày" />,
       cell: ({ row }) => {
         const date = new Date(row.getValue('date'));
 
@@ -88,37 +79,45 @@ export function getColumns(): ColumnDef<any>[] {
           </div>
         );
       },
-      enableSorting: true,
-      enableHiding: false
+      enableSorting: true
+    },
+    {
+      accessorKey: 'personName',
+      meta: 'Tên',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Tên" />,
+      cell: ({ row }) => {
+        return <div className="w-20">{row.getValue('personName')}</div>;
+      },
+      enableSorting: true
     },
     {
       accessorKey: 'type',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Type" />,
+      meta: 'Phương Thức',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Phương Thức" />,
       cell: ({ row }) => {
         return <div className="flex space-x-2">{row.getValue('type') || NOT_APPLICABLE}</div>;
       },
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));
       },
-      enableSorting: true,
-      enableHiding: false
+      enableSorting: false
     },
     {
       accessorKey: 'priority',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Priority" />,
+      meta: 'Trạng Thái',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Trạng Thái" />,
       cell: ({ row }) => {
         return <div className="flex space-x-2">{row.getValue('priority') || NOT_APPLICABLE}</div>;
       },
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));
       },
-      enableSorting: true,
-      enableHiding: false
+      enableSorting: false
     },
     {
       accessorKey: 'curatorName',
-      accessorFn: (row) => row.curator?.name,
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
+      meta: 'Người Chăm Sóc',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Người Chăm Sóc" />,
       cell: ({ row }) => {
         return <div className="w-20">{row.getValue('curatorName')}</div>;
       },
