@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
 
+import { Icons } from '@/components/custom/icons';
 import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
 import {
@@ -46,7 +47,8 @@ export type CreateRecordSchema = z.infer<typeof createFundRecordSchema>;
 
 export function CreateFundRecordDialog() {
   const [open, setOpen] = useState(false);
-  const [isCreatePending, startCreateTransition] = useTransition();
+  const [, startCreateTransition] = useTransition();
+  const [isOnCreating, setIsOnCreating] = useState(false);
 
   const form = useForm<CreateRecordSchema>({
     resolver: zodResolver(createFundRecordSchema)
@@ -68,6 +70,7 @@ export function CreateFundRecordDialog() {
       toast('Please select a fund to create a record');
       return;
     }
+    setIsOnCreating(true);
 
     startCreateTransition(() => {
       const amount = parseFloat(input.amount);
@@ -86,11 +89,13 @@ export function CreateFundRecordDialog() {
 
             fetchFunds();
             fetchRecords(queryParams);
+            setIsOnCreating(false);
 
             return 'Record created';
           },
           error: (error) => {
             setOpen(false);
+            setIsOnCreating(false);
             return getErrorMessage(error);
           }
         }
@@ -106,6 +111,7 @@ export function CreateFundRecordDialog() {
 
         if (!open) {
           form.reset();
+          setIsOnCreating(false);
         }
       }}
     >
@@ -134,11 +140,13 @@ export function CreateFundRecordDialog() {
 
             <DialogFooter className="gap-2 pt-2 sm:space-x-0">
               <DialogClose asChild>
-                <Button type="button" variant="outline">
+                <Button type="button" variant="outline" disabled={isOnCreating}>
                   Cancel
                 </Button>
               </DialogClose>
-              <Button disabled={isCreatePending}>Submit</Button>
+              <Button className="flex w-24 justify-center" disabled={isOnCreating}>
+                {isOnCreating ? <Icons.spinner className="h-4 w-4 animate-spin" /> : 'Submit'}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

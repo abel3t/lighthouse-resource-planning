@@ -107,7 +107,7 @@ const CaresTimeline = ({ cares }: { cares: Care[] }) => {
   );
 };
 
-const DiscipleTimeline = async ({ discipleshipList }: { discipleshipList: Discipleship[] }) => {
+const DiscipleTimeline = ({ discipleshipList }: { discipleshipList: Discipleship[] }) => {
   return (
     <div className="flex w-full flex-col">
       <div className="w-full p-5">Discipleship Timeline</div>

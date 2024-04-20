@@ -1,6 +1,28 @@
+'use client';
+
+import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
+import { Icons } from '@/components/custom/icons';
 
 export default async function Home() {
+  const { isAuthenticated, isLoading } = useKindeBrowserClient();
+
+  const router = useRouter();
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen w-screen animate-pulse items-center justify-center">
+        <Icons.spinner className="mr-2 h-12 w-12 animate-spin" />
+      </div>
+    );
+  }
+
+  if (isAuthenticated) {
+    router.push('/dashboard');
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       Authenticated
