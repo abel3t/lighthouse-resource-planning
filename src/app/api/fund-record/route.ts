@@ -80,8 +80,10 @@ export async function GET(req: Request, res: Response) {
   const { search, page, pageSize, sortField, sortOrder } = searchParamsParser(req.url);
 
   let orderByField: string = sortField || '';
+  let orderByType: SortType = (sortOrder || 'desc') as SortType;
   if (sortField && !['date', 'amount'].includes(sortField)) {
     orderByField = 'date';
+    orderByType = 'desc';
   }
 
   const $condition: Record<string, any> = {};
@@ -99,7 +101,7 @@ export async function GET(req: Request, res: Response) {
       skip: (page - 1) * pageSize,
       take: pageSize,
       orderBy: {
-        [orderByField]: sortOrder as SortType
+        [orderByField]: orderByType as SortType
       }
     })
   ]);

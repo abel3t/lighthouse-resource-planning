@@ -1,6 +1,7 @@
 import { Person } from '@prisma/client';
-import axios from 'axios';
 import { create } from 'zustand';
+
+import { client } from '@/lib/client';
 
 export interface PersonStore {
   people: Person[];
@@ -10,7 +11,7 @@ export interface PersonStore {
 const usePersonStore = create<PersonStore>((set) => ({
   people: [],
   fetchPeople: async () => {
-    const people = await axios.get('/api/people').then((res) => res.data);
+    const people = await client.get('/people').then((res) => res.data);
     set({ people });
   }
 }));

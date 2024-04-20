@@ -1,23 +1,12 @@
 'use client';
 
 import type { DataTableFilterField } from '@/types';
-import {
-  ArrowDownIcon,
-  ArrowRightIcon,
-  ArrowUpIcon,
-  CheckCircledIcon,
-  CircleIcon,
-  CrossCircledIcon,
-  DotsHorizontalIcon,
-  QuestionMarkCircledIcon,
-  StopwatchIcon
-} from '@radix-ui/react-icons';
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { type ColumnDef } from '@tanstack/react-table';
 import * as React from 'react';
 import { toast } from 'sonner';
 
 import { DataTableColumnHeader } from '@/components/custom/data-table/data-table-column-header';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -25,7 +14,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuSub,
@@ -78,7 +66,8 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'date',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Date" />,
+      meta: 'Ngày',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Ngày" />,
       cell: ({ row }) => {
         const date = new Date(row.getValue('date'));
 
@@ -88,12 +77,12 @@ export function getColumns(): ColumnDef<any>[] {
           </div>
         );
       },
-      enableSorting: true,
-      enableHiding: false
+      enableSorting: true
     },
     {
       accessorKey: 'contributorName',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Người dâng" />,
+      meta: 'Người Dâng',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Người Dâng" />,
       cell: ({ row }) => {
         return <div className="flex space-x-2">{row.getValue('contributorName')}</div>;
       },
@@ -101,7 +90,8 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'description',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Description" />,
+      meta: 'Ghi Chú',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Ghi Chú" />,
       cell: ({ row }) => {
         return <div className="flex space-x-2">{row.getValue('description')}</div>;
       },
@@ -109,7 +99,8 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'amount',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Amount" />,
+      meta: 'Số Tiền',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Số Tiền" />,
       cell: ({ row }) => {
         const amount = parseFloat(row.getValue('amount')) || 0;
 
@@ -124,8 +115,7 @@ export function getColumns(): ColumnDef<any>[] {
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));
       },
-      enableSorting: true,
-      enableHiding: false
+      enableSorting: true
     },
     {
       id: 'actions',

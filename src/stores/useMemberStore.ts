@@ -9,6 +9,7 @@ import { QueryParams } from './useFundRecordStore';
 
 export interface MemberStore {
   members: Person[];
+  metadata: any;
   fetchMembers: (queryParams: QueryParams) => void;
   fetchAllMembers: () => void;
   queryParams: QueryParams;
@@ -22,6 +23,7 @@ export interface MemberStore {
 const useMemberStore = create<MemberStore>((set) => ({
   members: [],
   allMembers: [],
+  metadata: {},
   fetchMembers: async (queryParams: QueryParams) => {
     const { sort = { field: 'id', order: 'asc' }, search = '', pagination = { page: 1, pageSize: 10 } } = queryParams;
 
@@ -32,8 +34,9 @@ const useMemberStore = create<MemberStore>((set) => ({
       pageSize: pagination.pageSize
     });
 
-    const members = await axios.get('/api/members/?' + qs).then((res) => res.data);
-    set({ members: members || [] });
+    const data = await client.get('/members/?' + qs).then((res) => res.data);
+    set({ members: data?.data || [] });
+    set({ metadata: data?.metadata || {} });
   },
   fetchAllMembers: async () => {
     const members = await client.get('/all-members').then((res) => res.data);

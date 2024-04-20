@@ -1,6 +1,5 @@
 'use client';
 
-import useFundRecordStore from '@/stores/useFundRecordStore';
 import useMemberStore from '@/stores/useMemberStore';
 import {
   ColumnFiltersState,
@@ -13,17 +12,16 @@ import {
   useReactTable
 } from '@tanstack/react-table';
 import { useDebounce } from '@uidotdev/usehooks';
-import { use, useEffect, useMemo, useState } from 'react';
-import { Toaster, toast } from 'sonner';
+import { useEffect, useMemo, useState } from 'react';
 
 import { DataTable } from '@/components/custom/data-table';
 import { DataTableToolbar } from '@/components/custom/data-table/data-table-toolbar';
-import { Button } from '@/components/ui/button';
 
-import { filterFields, getColumns, searchField } from './member-table-columns';
+import { getColumns, searchField } from './member-table-columns';
 import { MemberTableToolbarActions } from './member-table-toolbar-actions';
 
 export default function MemberTable() {
+  const metadata = useMemberStore((state) => state.metadata);
   const members = useMemberStore((state) => state.members);
   const fetchMembers = useMemberStore((state) => state.fetchMembers);
 
@@ -35,18 +33,12 @@ export default function MemberTable() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
   const queryParams = useMemberStore((state) => state.queryParams);
-  const setQueryParams = useFundRecordStore((state) => state.setQueryParams);
+  const setQueryParams = useMemberStore((state) => state.setQueryParams);
 
   const debouncedSearch = useDebounce(queryParams, 300);
 
   useEffect(() => {
-    fetchMembers({});
-  }, []);
-
-  useEffect(() => {
-    console.log('change', debouncedSearch.search);
     fetchMembers(debouncedSearch);
-    console.log(members);
   }, [debouncedSearch.search]);
 
   const handlePaginationChange = (updater: any) => {
@@ -108,6 +100,7 @@ export default function MemberTable() {
 
   const table = useReactTable({
     data: members || [],
+    pageCount: metadata.totalPages || -1,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

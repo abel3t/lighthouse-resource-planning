@@ -421,7 +421,7 @@ const GenderField = ({ form }: any) => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value={Gender.Male}>{Gender.Female}</SelectItem>
+                <SelectItem value={Gender.Male}>{Gender.Male}</SelectItem>
                 <SelectItem value={Gender.Female}>{Gender.Female}</SelectItem>
               </SelectContent>
             </Select>
