@@ -10,7 +10,6 @@ export default async function CommonLayout({ children }: { children: React.React
   const isAuthenticated = await kindle.isAuthenticated();
 
   if (!isAuthenticated) {
-    console.log('User is not login');
     redirect('/login');
   }
 
