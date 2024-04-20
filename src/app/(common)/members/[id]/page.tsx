@@ -1,5 +1,5 @@
 import { NOT_APPLICABLE } from '@/constant';
-import { Care } from '@prisma/client';
+import { Care, Discipleship } from '@prisma/client';
 import { format } from 'date-fns';
 import { notFound } from 'next/navigation';
 
@@ -11,7 +11,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getMemberById, getPersonHaveCares, getPersonHaveDiscipleship } from '@/lib/api';
 
 export default async function MemberDetailPage({ params }: { params: { id: string } }) {
-  const member = await getMemberById(params.id);
+  const [member, discipleshipList, cares] = await Promise.all([
+    getMemberById(params.id),
+    getPersonHaveDiscipleship(params.id),
+    getPersonHaveCares(params.id)
+  ]);
 
   if (!member) {
     notFound();
@@ -77,10 +81,10 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
           </TabsList>
 
           <TabsContent value="care">
-            <CaresTimeline memberId={member.id} />
+            <CaresTimeline cares={cares} />
           </TabsContent>
           <TabsContent value="discipleship">
-            <DiscipleTimeline memberId={member.id} />
+            <DiscipleTimeline discipleshipList={discipleshipList} />
           </TabsContent>
           <TabsContent value="friend">Change your password here.</TabsContent>
         </Tabs>
@@ -89,9 +93,7 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
   );
 }
 
-export const CaresTimeline = async ({ memberId }: { memberId: string }) => {
-  const cares = await getPersonHaveCares(memberId);
-
+const CaresTimeline = ({ cares }: { cares: Care[] }) => {
   return (
     <div className="flex w-full flex-col">
       <div className="w-full p-5">Discipleship Timeline</div>
@@ -105,9 +107,7 @@ export const CaresTimeline = async ({ memberId }: { memberId: string }) => {
   );
 };
 
-export const DiscipleTimeline = async ({ memberId }: { memberId: string }) => {
-  const discipleshipList = await getPersonHaveDiscipleship(memberId);
-
+const DiscipleTimeline = async ({ discipleshipList }: { discipleshipList: Discipleship[] }) => {
   return (
     <div className="flex w-full flex-col">
       <div className="w-full p-5">Discipleship Timeline</div>
@@ -121,7 +121,7 @@ export const DiscipleTimeline = async ({ memberId }: { memberId: string }) => {
   );
 };
 
-export const Timeline = ({ record }: { record: Care }) => {
+const Timeline = ({ record }: { record: Care }) => {
   return (
     <li className="mb-4 ms-6">
       <div className="absolute -start-2 mt-0 h-4 w-4 rounded-full border border-white bg-gray-200 dark:border-gray-900 dark:bg-gray-700" />

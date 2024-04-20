@@ -1,5 +1,5 @@
 import { NOT_APPLICABLE } from '@/constant';
-import { Care } from '@prisma/client';
+import { Care, Discipleship } from '@prisma/client';
 import { format } from 'date-fns';
 import { notFound } from 'next/navigation';
 
@@ -12,6 +12,7 @@ import { getFriendById, getPersonHaveDiscipleship } from '@/lib/api';
 
 export default async function MemberDetailPage({ params }: { params: { id: string } }) {
   const friend = await getFriendById(params.id);
+  const discipleshipList = await getPersonHaveDiscipleship(params.id);
 
   if (!friend) {
     notFound();
@@ -75,7 +76,7 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
             <TabsTrigger value="friend">Friends</TabsTrigger>
           </TabsList>
           <TabsContent value="discipleship">
-            <DiscipleTimeline memberId={friend.id} />
+            <DiscipleTimeline discipleshipList={discipleshipList} />
           </TabsContent>
           <TabsContent value="friend">Change your password here.</TabsContent>
         </Tabs>
@@ -84,9 +85,7 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
   );
 }
 
-export const DiscipleTimeline = async ({ memberId }: { memberId: string }) => {
-  const discipleshipList = await getPersonHaveDiscipleship(memberId);
-
+const DiscipleTimeline = ({ discipleshipList }: { discipleshipList: Discipleship[] }) => {
   return (
     <div className="flex w-full flex-col">
       <div className="w-full p-5">Discipleship Timeline</div>
@@ -100,7 +99,7 @@ export const DiscipleTimeline = async ({ memberId }: { memberId: string }) => {
   );
 };
 
-export const Timeline = ({ record }: { record: Care }) => {
+const Timeline = ({ record }: { record: Care }) => {
   return (
     <li className="mb-4 ms-6">
       <div className="absolute -start-2 mt-0 h-4 w-4 rounded-full border border-white bg-gray-200 dark:border-gray-900 dark:bg-gray-700" />

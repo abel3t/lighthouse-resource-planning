@@ -14,6 +14,7 @@ import Image from 'next/image';
 import * as React from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import * as sharp from 'sharp';
 import { toast } from 'sonner';
 import * as z from 'zod';
 
@@ -36,7 +37,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { UploadButton, UploadDropzone } from '@/components/uploadthing';
+import { UploadButton } from '@/components/uploadthing';
 
 import { deleteImageUploadThing } from '@/lib/api';
 import { getErrorMessage } from '@/lib/handle-error';
@@ -55,6 +56,7 @@ export function CreateFundRecordDialog() {
   const [open, setOpen] = React.useState(false);
   const [isCreatePending, startCreateTransition] = React.useTransition();
   const [fileUrl, setFileUrl] = useState<string | undefined>();
+  const [isUploading, setIsUploading] = useState(false);
 
   const form = useForm<CreateRecordSchema>({
     resolver: zodResolver(createFundRecordSchema)
@@ -156,15 +158,26 @@ export function CreateFundRecordDialog() {
               {!fileUrl && (
                 <UploadButton
                   endpoint="imageUploader"
+                  config={{ appendOnPaste: true }}
                   onClientUploadComplete={(res) => {
                     const file: any = res?.[0];
 
                     setFileUrl(file?.url || '');
-                    console.log('ok', fileUrl);
+                    setIsUploading(false);
+
                     toast('Upload Completed');
                   }}
                   onUploadError={(error: Error) => {
                     alert(`ERROR! ${error.message}`);
+                    setIsUploading(false);
+                  }}
+                  onBeforeUploadBegin={(files) => {
+                    return files.map((f) => {
+                      return new File([f], '' + f.name, { type: f.type });
+                    });
+                  }}
+                  onUploadBegin={(name) => {
+                    setIsUploading(true);
                   }}
                 />
               )}
@@ -179,11 +192,11 @@ export function CreateFundRecordDialog() {
 
             <DialogFooter className="gap-2 pt-2 sm:space-x-0">
               <DialogClose asChild>
-                <Button type="button" variant="outline">
+                <Button disabled={isUploading} type="button" variant="outline">
                   Cancel
                 </Button>
               </DialogClose>
-              <Button disabled={isCreatePending}>Submit</Button>
+              <Button disabled={isUploading || isCreatePending}>Submit</Button>
             </DialogFooter>
           </form>
         </Form>

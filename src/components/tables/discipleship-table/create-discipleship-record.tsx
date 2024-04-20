@@ -64,6 +64,7 @@ export function CreateDiscipleshipDialog() {
   const [open, setOpen] = React.useState(false);
   const [isCreatePending, startCreateTransition] = React.useTransition();
   const [fileUrl, setFileUrl] = useState<string | undefined>();
+  const [isUploading, setIsUploading] = useState(false);
 
   const form = useForm<CreateRecordSchema>({
     resolver: zodResolver(createFundRecordSchema)
@@ -168,11 +169,16 @@ export function CreateDiscipleshipDialog() {
                     const file: any = res?.[0];
 
                     setFileUrl(file?.url || '');
-                    console.log('ok', fileUrl);
+                    setIsUploading(false);
+
                     toast('Upload Completed');
                   }}
                   onUploadError={(error: Error) => {
                     alert(`ERROR! ${error.message}`);
+                    setIsUploading(false);
+                  }}
+                  onUploadBegin={(name) => {
+                    setIsUploading(true);
                   }}
                 />
               )}
