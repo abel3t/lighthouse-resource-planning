@@ -38,7 +38,7 @@ import { getErrorMessage } from '@/lib/handle-error';
 import { cn } from '@/lib/utils';
 
 export const searchField = {
-  name: 'name',
+  name: 'contributorName',
   placeholder: 'Search...'
 };
 
@@ -92,11 +92,10 @@ export function getColumns(): ColumnDef<any>[] {
       enableHiding: false
     },
     {
-      accessorKey: 'name',
-      accessorFn: (row) => row.contributor?.name,
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
+      accessorKey: 'contributorName',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Người dâng" />,
       cell: ({ row }) => {
-        return <div className="flex space-x-2">{row.getValue('name')}</div>;
+        return <div className="flex space-x-2">{row.getValue('contributorName')}</div>;
       },
       enableSorting: false
     },

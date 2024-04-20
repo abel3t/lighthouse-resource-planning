@@ -3,17 +3,25 @@ import axios from 'axios';
 import queryString from 'query-string';
 import { create } from 'zustand';
 
+import { client } from '@/lib/client';
+
 import { QueryParams } from './useFundRecordStore';
 
 export interface MemberStore {
   members: Person[];
   fetchMembers: (queryParams: QueryParams) => void;
+  fetchAllMembers: () => void;
   queryParams: QueryParams;
   setQueryParams: (params: QueryParams) => void;
+  allMembers: {
+    id: string;
+    name: string;
+  }[];
 }
 
 const useMemberStore = create<MemberStore>((set) => ({
   members: [],
+  allMembers: [],
   fetchMembers: async (queryParams: QueryParams) => {
     const { sort = { field: 'id', order: 'asc' }, search = '', pagination = { page: 1, pageSize: 10 } } = queryParams;
 
@@ -26,6 +34,10 @@ const useMemberStore = create<MemberStore>((set) => ({
 
     const members = await axios.get('/api/members/?' + qs).then((res) => res.data);
     set({ members: members || [] });
+  },
+  fetchAllMembers: async () => {
+    const members = await client.get('/all-members').then((res) => res.data);
+    set({ allMembers: members || [] });
   },
   queryParams: {
     sort: undefined,

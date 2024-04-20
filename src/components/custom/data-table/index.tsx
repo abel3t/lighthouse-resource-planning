@@ -58,10 +58,8 @@ export function DataTable<TData>({ table }: DataTableProps<TData>) {
           </TableBody>
         </Table>
       </div>
-      <div className="flex flex-col gap-2.5">
-        <DataTablePagination table={table} />
-        {table.getFilteredSelectedRowModel().rows.length > 0}
-      </div>
+
+      <DataTablePagination table={table} />
     </div>
   );
 }

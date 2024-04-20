@@ -58,12 +58,10 @@ model Account {
 
 model Person {
   id                  String    @id @default(cuid())
-  faithStatus         Int?
   name                String
   firstName           String?
   phone               String?
   image               String?
-  introducedBy        String?
   gender              String?
   birthday            DateTime?
   career              String?
@@ -78,7 +76,6 @@ model Person {
   baptismalDay      DateTime?
   memberDay         DateTime?
 
-  weddingDate   DateTime?
   hometown      String?
   newLifeMentor String?
   role          String?
@@ -128,16 +125,21 @@ model Group {
 }
 
 model Care {
-  id             String       @id @default(cuid())
-  description    String?
-  priority       String
-  type           String
-  image          String?
-  date           DateTime
-  curator        Account      @relation(fields: [curatorId], references: [id])
-  curatorId      String
-  person         Person       @relation(fields: [personId], references: [id])
-  personId       String
+  id          String   @id @default(cuid())
+  description String?
+  priority    String
+  type        String
+  image       String?
+  date        DateTime
+
+  curator     Account @relation(fields: [curatorId], references: [id])
+  curatorId   String
+  curatorName String?
+
+  person     Person  @relation(fields: [personId], references: [id])
+  personId   String
+  personName String?
+
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId String
 
@@ -189,16 +191,21 @@ model Absence {
 }
 
 model Discipleship {
-  id             String       @id @default(cuid())
-  description    String?
-  priority       String
-  type           String
-  image          String?
-  date           DateTime
-  curator        Account      @relation(fields: [curatorId], references: [id])
-  curatorId      String
-  person         Person       @relation(fields: [personId], references: [id])
-  personId       String
+  id          String   @id @default(cuid())
+  description String?
+  priority    String
+  type        String
+  image       String?
+  date        DateTime
+
+  curator     Account @relation(fields: [curatorId], references: [id])
+  curatorId   String
+  curatorName String?
+
+  person     Person  @relation(fields: [personId], references: [id])
+  personId   String
+  personName String?
+
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId String
 
@@ -244,8 +251,9 @@ model FundRecord {
   fund   Fund   @relation(fields: [fundId], references: [id])
   fundId String
 
-  contributor   Person? @relation(fields: [contributorId], references: [id])
-  contributorId String?
+  contributor     Person? @relation(fields: [contributorId], references: [id])
+  contributorId   String?
+  contributorName String?
 
   createdAt DateTime @default(now()) @db.Timestamptz(0)
   createdBy String?

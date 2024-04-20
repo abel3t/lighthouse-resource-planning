@@ -27,6 +27,7 @@ interface TableProps {
 export default function FundRecordTable() {
   const fundRecords = useFundRecordStore((state) => state.records);
   const fetchFundRecords = useFundRecordStore((state) => state.fetchRecords);
+  const metaData = useFundRecordStore((state) => state.metadata);
 
   // Memoize the columns so they don't re-render on every render
   const columns = useMemo(() => getColumns(), []);
@@ -41,17 +42,11 @@ export default function FundRecordTable() {
   const debouncedSearch = useDebounce(queryParams, 300);
 
   useEffect(() => {
-    fetchFundRecords({});
-  }, []);
-
-  useEffect(() => {
-    console.log('change', debouncedSearch.search);
     fetchFundRecords(debouncedSearch);
   }, [debouncedSearch.search]);
 
   const handlePaginationChange = (updater: any) => {
     const nextState = updater(pagination);
-
     fetchFundRecords({
       ...queryParams,
       pagination: {
@@ -108,6 +103,7 @@ export default function FundRecordTable() {
 
   const table = useReactTable({
     data: fundRecords || [],
+    pageCount: metaData.totalPages || -1,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

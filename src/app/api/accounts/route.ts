@@ -2,7 +2,10 @@ import { NextResponse } from 'next/server';
 
 import prisma from '@/lib/prisma';
 
-export async function GET(req: Request, res: Response) {
+export async function GET() {
   const data = await prisma.account.findMany();
-  return NextResponse.json(data);
+  return NextResponse.json({
+    metadata: {},
+    data
+  });
 }

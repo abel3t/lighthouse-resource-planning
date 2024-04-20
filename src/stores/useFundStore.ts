@@ -1,5 +1,6 @@
 import { Fund } from '@prisma/client';
 import axios from 'axios';
+import { toast } from 'sonner';
 import { create } from 'zustand';
 
 export interface FundStore {
@@ -17,6 +18,7 @@ const useFundStore = create<FundStore>((set) => ({
   setFunds: (funds: Fund[]) => set({ funds }),
   fetchFunds: async () => {
     const funds = await axios.get('/api/funds').then((res) => res.data);
+
     if (funds?.length) {
       set({ currentFund: funds[0] });
       set({ funds: funds });

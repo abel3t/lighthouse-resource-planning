@@ -3,6 +3,8 @@ import axios from 'axios';
 import queryString from 'query-string';
 import { create } from 'zustand';
 
+import { client } from '@/lib/client';
+
 export type QueryParams = {
   sort?: {
     field: string;
@@ -17,6 +19,7 @@ export type QueryParams = {
 
 export interface FundStore {
   records: Fund[];
+  metadata: any;
   fetchRecords: (queryParams: QueryParams) => void;
   queryParams: QueryParams;
   setQueryParams: (params: QueryParams) => void;
@@ -24,6 +27,7 @@ export interface FundStore {
 
 const useFundRecordStore = create<FundStore>((set) => ({
   records: [],
+  metadata: {},
   fetchRecords: async (queryParams: QueryParams) => {
     const { sort = { field: 'id', order: 'asc' }, search = '', pagination = { page: 1, pageSize: 10 } } = queryParams;
 
@@ -34,8 +38,9 @@ const useFundRecordStore = create<FundStore>((set) => ({
       pageSize: pagination.pageSize
     });
 
-    const records = await axios.get('/api/fund-record/?' + qs).then((res) => res.data);
-    set({ records: records || [] });
+    const data = await client.get('/fund-record/?' + qs).then((res) => res.data);
+    set({ records: data?.data || [] });
+    set({ metadata: data?.metadata || {} });
   },
   queryParams: {
     sort: undefined,

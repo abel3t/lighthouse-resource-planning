@@ -9,7 +9,7 @@ import { PlusIcon } from '@radix-ui/react-icons';
 import axios from 'axios';
 import { CommandList } from 'cmdk';
 import { Check, ChevronsUpDown } from 'lucide-react';
-import * as React from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
@@ -26,7 +26,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -35,10 +35,6 @@ import { Textarea } from '@/components/ui/textarea';
 
 import { getErrorMessage } from '@/lib/handle-error';
 import { cn } from '@/lib/utils';
-
-interface CreateTaskDialogProps {
-  members: any[];
-}
 
 const createFundRecordSchema = z.object({
   amount: z.string().min(3, 'Số tiền không hợp lệ'),
@@ -49,8 +45,8 @@ const createFundRecordSchema = z.object({
 export type CreateRecordSchema = z.infer<typeof createFundRecordSchema>;
 
 export function CreateFundRecordDialog() {
-  const [open, setOpen] = React.useState(false);
-  const [isCreatePending, startCreateTransition] = React.useTransition();
+  const [open, setOpen] = useState(false);
+  const [isCreatePending, startCreateTransition] = useTransition();
 
   const form = useForm<CreateRecordSchema>({
     resolver: zodResolver(createFundRecordSchema)
@@ -59,19 +55,19 @@ export function CreateFundRecordDialog() {
   const queryParams = useFundRecordStore((state) => state.queryParams);
   const fetchFunds = useFundStore((state) => state.fetchFunds);
   const fetchRecords = useFundRecordStore((state) => state.fetchRecords);
-  const fetchMembers = useMemberStore((state) => state.fetchMembers);
+  const fetchAllMembers = useMemberStore((state) => state.fetchAllMembers);
 
   const currentFund = useFundStore((state) => state.currentFund);
+
+  useEffect(() => {
+    fetchAllMembers();
+  }, [fetchFunds, fetchAllMembers]);
 
   function onSubmit(input: CreateRecordSchema) {
     if (!currentFund) {
       toast('Please select a fund to create a record');
       return;
     }
-
-    React.useEffect(() => {
-      fetchMembers({});
-    }, []);
 
     startCreateTransition(() => {
       const amount = parseFloat(input.amount);
@@ -152,9 +148,9 @@ export function CreateFundRecordDialog() {
 }
 
 const ContributorField = ({ form }: any) => {
-  const members = useMemberStore((state) => state.members);
+  const members = useMemberStore((state) => state.allMembers);
 
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <FormField
