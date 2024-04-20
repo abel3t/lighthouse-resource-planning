@@ -8,6 +8,14 @@ import { searchParamsParser } from '@/lib/utils';
 export async function POST(req: Request) {
   const data = await req.json();
 
+  const organizationId = req.headers.get('x-organizationId');
+
+  if (!organizationId) {
+    return new Response('Invalid', {
+      status: 400
+    });
+  }
+
   if (!data.curatorId || !data.personId) {
     return new Response('Invalid', {
       status: 400
@@ -17,7 +25,8 @@ export async function POST(req: Request) {
   const [curator, person] = await Promise.all([
     prisma.account.findUnique({
       where: {
-        id: data.curatorId
+        id: data.curatorId,
+        organizationId
       },
       select: {
         name: true
@@ -25,7 +34,8 @@ export async function POST(req: Request) {
     }),
     prisma.person.findUnique({
       where: {
-        id: data.personId
+        id: data.personId,
+        organizationId
       },
       select: {
         name: true
@@ -38,7 +48,7 @@ export async function POST(req: Request) {
       ...data,
       curatorName: curator?.name || undefined,
       personName: person?.name || undefined,
-      organizationId: 'org_599bb6459de'
+      organizationId
     }
   });
 

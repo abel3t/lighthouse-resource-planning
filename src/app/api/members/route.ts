@@ -8,6 +8,13 @@ import { searchParamsParser } from '@/lib/utils';
 
 export async function POST(req: Request) {
   const data = await req.json();
+  const organizationId = req.headers.get('x-organizationId');
+
+  if (!organizationId) {
+    return new Response('Invalid', {
+      status: 400
+    });
+  }
 
   const curator = data.curatorId
     ? await prisma.account.findUnique({
@@ -26,7 +33,7 @@ export async function POST(req: Request) {
       ...data,
       firstName: nameLetters[nameLetters.length - 1] || undefined,
       curatorName: curator?.name || undefined,
-      organizationId: 'org_599bb6459de'
+      organizationId
     }
   });
 
@@ -35,12 +42,13 @@ export async function POST(req: Request) {
 
 export async function GET(req: Request) {
   const { search, page, pageSize, sortField, sortOrder } = searchParamsParser(req.url);
+  const organizationId = req.headers.get('x-organizationId');
 
-  const { isAuthenticated, getUser, getUserOrganizations } = getKindeServerSession();
-
-  console.log(await getUser());
-  console.log(await getUserOrganizations());
-  console.log(await isAuthenticated());
+  if (!organizationId) {
+    return new Response('Invalid', {
+      status: 400
+    });
+  }
 
   let orderByField: string = sortField || '';
   let orderByType: SortType = (sortOrder || 'asc') as SortType;
@@ -50,7 +58,8 @@ export async function GET(req: Request) {
   }
 
   const $condition: Record<string, any> = {
-    type: PersonalType.Member
+    type: PersonalType.Member,
+    organizationId
   };
 
   if (search) {

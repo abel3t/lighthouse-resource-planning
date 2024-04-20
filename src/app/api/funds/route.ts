@@ -2,7 +2,15 @@ import { NextResponse } from 'next/server';
 
 import prisma from '@/lib/prisma';
 
-export async function GET(req: Request, res: Response) {
-  const data = await prisma.fund.findMany();
+export async function GET(req: Request) {
+  const organizationId = req.headers.get('x-organizationId');
+
+  if (!organizationId) {
+    return new Response('Invalid', {
+      status: 400
+    });
+  }
+
+  const data = await prisma.fund.findMany({ where: { organizationId } });
   return NextResponse.json(data);
 }

@@ -8,6 +8,14 @@ import { searchParamsParser } from '@/lib/utils';
 export async function POST(req: Request) {
   const data = await req.json();
 
+  const organizationId = req.headers.get('x-organizationId');
+
+  if (!organizationId) {
+    return new Response('Invalid', {
+      status: 400
+    });
+  }
+
   const friend = data.friendId
     ? await prisma.person.findUnique({
         where: {
@@ -25,7 +33,7 @@ export async function POST(req: Request) {
       ...data,
       firstName: nameLetters[nameLetters.length - 1] || undefined,
       friendId: friend?.id || undefined,
-      organizationId: 'org_599bb6459de'
+      organizationId
     }
   });
 
@@ -35,6 +43,14 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   const { search, page, pageSize, sortField, sortOrder } = searchParamsParser(req.url);
 
+  const organizationId = req.headers.get('x-organizationId');
+
+  if (!organizationId) {
+    return new Response('Invalid', {
+      status: 400
+    });
+  }
+
   let orderByField: string = sortField || '';
   let orderByType: SortType = (sortOrder || 'asc') as SortType;
   if (sortField && !['name'].includes(sortField)) {
@@ -43,7 +59,8 @@ export async function GET(req: Request) {
   }
 
   const $condition: Record<string, any> = {
-    type: { not: PersonalType.Member }
+    type: { not: PersonalType.Member },
+    organizationId
   };
 
   if (search) {

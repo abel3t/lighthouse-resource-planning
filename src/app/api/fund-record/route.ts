@@ -6,6 +6,13 @@ import { searchParamsParser } from '@/lib/utils';
 
 export async function POST(req: Request, res: Response) {
   const data = await req.json();
+  const organizationId = req.headers.get('x-organizationId');
+
+  if (!organizationId) {
+    return new Response('Invalid', {
+      status: 400
+    });
+  }
 
   if (!data?.fundId) {
     return NextResponse.json({ error: 'Invalid data' });
@@ -20,7 +27,8 @@ export async function POST(req: Request, res: Response) {
   const contributor = data.contributorId
     ? await prisma.person.findUnique({
         where: {
-          id: data.contributorId
+          id: data.contributorId,
+          organizationId
         },
         select: {
           name: true
@@ -41,7 +49,8 @@ export async function POST(req: Request, res: Response) {
     }),
     prisma.fund.update({
       where: {
-        id: data.fundId
+        id: data.fundId,
+        organizationId
       },
       data: {
         amount: { increment: data.amount }
@@ -52,7 +61,7 @@ export async function POST(req: Request, res: Response) {
   return NextResponse.json(data);
 }
 
-export async function GET(req: Request, res: Response) {
+export async function GET(req: Request) {
   const { search, page, pageSize, sortField, sortOrder } = searchParamsParser(req.url);
 
   let orderByField: string = sortField || '';

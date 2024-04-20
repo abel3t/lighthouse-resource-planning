@@ -12,6 +12,8 @@ const corsOptions = {
 export default withAuth(async function middleware(request: NextRequest) {
   const isAuthenticated = await getKindeServerSession().isAuthenticated();
 
+  const org = await getKindeServerSession().getOrganization();
+
   if (!isAuthenticated) {
     return new Response("You're not authenticated", { status: 401 });
   }
@@ -40,6 +42,8 @@ export default withAuth(async function middleware(request: NextRequest) {
   Object.entries(corsOptions).forEach(([key, value]) => {
     response.headers.set(key, value);
   });
+
+  response.headers.set('x-organizationId', org?.orgCode || '');
 
   return response;
 });
