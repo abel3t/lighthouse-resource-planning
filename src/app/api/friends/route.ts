@@ -19,9 +19,11 @@ export async function POST(req: Request) {
       })
     : null;
 
+  const nameLetters = data.name?.split(' ') || [];
   await prisma.person.create({
     data: {
       ...data,
+      firstName: nameLetters[nameLetters.length - 1] || undefined,
       friendId: friend?.id || undefined,
       organizationId: 'org_599bb6459de'
     }

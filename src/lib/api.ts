@@ -1,3 +1,4 @@
+import { PersonalType } from '@/enums';
 import { SearchParams } from '@/types';
 import axios from 'axios';
 
@@ -90,6 +91,59 @@ export const deleteImageUploadThing = async (url: string) => {
   await axios.delete('api/uploadthing', {
     data: {
       url
+    }
+  });
+};
+
+export const getPersonById = async (id: string) => {
+  return await prisma.person.findUnique({
+    where: {
+      id
+    }
+  });
+};
+
+export const getCareById = async (id: string) => {
+  return await prisma.care.findUnique({
+    where: {
+      id
+    }
+  });
+};
+
+export const getMemberById = async (id: string) => {
+  return await prisma.person.findUnique({
+    where: {
+      id,
+      type: PersonalType.Member
+    },
+    include: { friend: true }
+  });
+};
+
+export const getFriendOfPerson = (personId: string) => {
+  return prisma.person.findMany({
+    where: {
+      friendId: personId
+    }
+  });
+};
+
+export const getPersonHaveCares = (personId: string) => {
+  return prisma.care.findMany({
+    where: {
+      personId
+    }
+  });
+};
+
+export const getPersonHaveDiscipleship = (personId: string) => {
+  return prisma.discipleship.findMany({
+    where: {
+      personId
+    },
+    orderBy: {
+      date: 'desc'
     }
   });
 };

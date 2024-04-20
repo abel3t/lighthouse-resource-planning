@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 
-import Footer from '@/components/custom/footer';
-import Sidebar from '@/components/custom/sidebar';
 import { Toaster } from '@/components/ui/sonner';
 
 import { cn } from '@/lib/utils';
