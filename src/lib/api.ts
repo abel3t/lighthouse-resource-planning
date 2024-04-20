@@ -111,6 +111,16 @@ export const getCareById = async (id: string) => {
   });
 };
 
+export const getFriendById = async (id: string) => {
+  return await prisma.person.findUnique({
+    where: {
+      id,
+      type: { not: PersonalType.Member }
+    },
+    include: { friend: true }
+  });
+};
+
 export const getMemberById = async (id: string) => {
   return await prisma.person.findUnique({
     where: {

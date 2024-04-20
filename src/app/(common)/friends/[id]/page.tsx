@@ -8,12 +8,12 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import { getMemberById, getPersonHaveCares, getPersonHaveDiscipleship } from '@/lib/api';
+import { getFriendById, getPersonHaveDiscipleship } from '@/lib/api';
 
 export default async function MemberDetailPage({ params }: { params: { id: string } }) {
-  const member = await getMemberById(params.id);
+  const friend = await getFriendById(params.id);
 
-  if (!member) {
+  if (!friend) {
     notFound();
   }
 
@@ -23,42 +23,42 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
         <div className="w-full rounded-md p-5  shadow-2xl">
           <div className="flex flex-col items-center justify-center p-4">
             <Avatar>
-              <AvatarImage src={member.image || ''} alt="Avatar" />
-              <AvatarFallback>{member.firstName?.[0] || 'A'}</AvatarFallback>
+              <AvatarImage src={friend.image || ''} alt="Avatar" />
+              <AvatarFallback>{friend.firstName?.[0] || 'A'}</AvatarFallback>
             </Avatar>
 
-            <div className="py-2 font-bold">{member.name}</div>
+            <div className="py-2 font-bold">{friend.name}</div>
 
-            <div>{member.discipleshipProcess}</div>
+            <div>{friend.type}</div>
           </div>
 
           <Separator />
 
           <div>
             <div className="pt-2">
-              <span className="font-bold">Introduced By:</span> {member.friend?.name || NOT_APPLICABLE}
+              <span className="font-bold">Introduced By:</span> {friend.friend?.name || NOT_APPLICABLE}
             </div>
             <div className="pt-2">
-              <span className="font-bold">Gender:</span> {member.gender || NOT_APPLICABLE}
+              <span className="font-bold">Gender:</span> {friend.gender || NOT_APPLICABLE}
             </div>
             <div className="pt-2">
-              <span className="font-bold">Phone:</span> {member.phone || NOT_APPLICABLE}
+              <span className="font-bold">Phone:</span> {friend.phone || NOT_APPLICABLE}
             </div>
             <div className="pt-2">
-              <span className="font-bold">Email:</span> {member.email || NOT_APPLICABLE}
+              <span className="font-bold">Email:</span> {friend.email || NOT_APPLICABLE}
             </div>
             <div className="pt-2">
               <span className="font-bold">Birthday:</span>{' '}
-              {member.birthday ? format(new Date(member.birthday), 'dd/MM/yyyy') : NOT_APPLICABLE}
+              {friend.birthday ? format(new Date(friend.birthday), 'dd/MM/yyyy') : NOT_APPLICABLE}
             </div>
             <div className="pt-2">
-              <span className="font-bold">Address:</span> {member.address || NOT_APPLICABLE}
+              <span className="font-bold">Address:</span> {friend.address || NOT_APPLICABLE}
             </div>
             <div className="pt-2">
-              <span className="font-bold">Hometown:</span> {member.hometown || NOT_APPLICABLE}
+              <span className="font-bold">Hometown:</span> {friend.hometown || NOT_APPLICABLE}
             </div>
             <div className="pt-2">
-              <span className="font-bold">Description:</span> {member.description || NOT_APPLICABLE}
+              <span className="font-bold">Description:</span> {friend.description || NOT_APPLICABLE}
             </div>
           </div>
 
@@ -69,18 +69,13 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
       </div>
 
       <div className="max-h-screen flex-1 overflow-scroll px-5">
-        <Tabs defaultValue="care" className="w-[400px]">
+        <Tabs defaultValue="discipleship" className="w-[400px]">
           <TabsList>
-            <TabsTrigger value="care">Care</TabsTrigger>
-            <TabsTrigger value="discipleship">Discipleship Process</TabsTrigger>
+            <TabsTrigger value="discipleship">Care</TabsTrigger>
             <TabsTrigger value="friend">Friends</TabsTrigger>
           </TabsList>
-
-          <TabsContent value="care">
-            <CaresTimeline memberId={member.id} />
-          </TabsContent>
           <TabsContent value="discipleship">
-            <DiscipleTimeline memberId={member.id} />
+            <DiscipleTimeline memberId={friend.id} />
           </TabsContent>
           <TabsContent value="friend">Change your password here.</TabsContent>
         </Tabs>
@@ -88,22 +83,6 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
     </div>
   );
 }
-
-export const CaresTimeline = async ({ memberId }: { memberId: string }) => {
-  const cares = await getPersonHaveCares(memberId);
-
-  return (
-    <div className="flex w-full flex-col">
-      <div className="w-full p-5">Discipleship Timeline</div>
-
-      {cares.map((care) => (
-        <ol className="relative border-s border-gray-200 dark:border-gray-700" key={care.id}>
-          <Timeline key={care.id} record={care} />
-        </ol>
-      ))}
-    </div>
-  );
-};
 
 export const DiscipleTimeline = async ({ memberId }: { memberId: string }) => {
   const discipleshipList = await getPersonHaveDiscipleship(memberId);
