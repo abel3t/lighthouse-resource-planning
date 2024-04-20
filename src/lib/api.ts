@@ -41,31 +41,20 @@ export async function createFundRecord(data: any) {
     console.log('Invalid data');
     return;
   }
-  console.log('data', data);
 
-  const a = await prisma.fund.update({
-    where: {
-      id: data.fundId
-    },
-    data: {
-      amount: { increment: data.amount }
-    }
-  });
-  console.log(a);
-
-  // await prisma.$transaction([
-  //   prisma.fundRecord.create({
-  //     data
-  //   }),
-  //   prisma.fund.update({
-  //     where: {
-  //       id: data.fundId
-  //     },
-  //     data: {
-  //       amount: { increment: data.amount }
-  //     }
-  //   })
-  // ]);
+  await prisma.$transaction([
+    prisma.fundRecord.create({
+      data
+    }),
+    prisma.fund.update({
+      where: {
+        id: data.fundId
+      },
+      data: {
+        amount: { increment: data.amount }
+      }
+    })
+  ]);
 }
 
 export async function getFunds() {

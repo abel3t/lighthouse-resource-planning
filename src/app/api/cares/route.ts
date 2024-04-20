@@ -58,6 +58,14 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   const { search, page, pageSize, sortField, sortOrder } = searchParamsParser(req.url);
 
+  const organizationId = req.headers.get('x-organizationId');
+
+  if (!organizationId) {
+    return new Response('Invalid', {
+      status: 400
+    });
+  }
+
   let orderByField: string = sortField || '';
   let orderByType: SortType = (sortOrder || 'asc') as SortType;
   if (sortField && !['personName', 'date'].includes(sortField)) {
@@ -65,7 +73,11 @@ export async function GET(req: Request) {
     orderByType = 'desc';
   }
 
-  const $condition: Record<string, any> = {};
+  const $condition: Record<string, any> = {
+    organizationId
+  };
+
+  console.log('ne', $condition);
 
   if (search) {
     $condition.personName = {
@@ -73,7 +85,7 @@ export async function GET(req: Request) {
       mode: 'insensitive'
     };
   }
-  console.log($condition);
+  console.log($condition, 'hihi');
 
   const [total, fundRecords] = await Promise.all([
     prisma.care.count({ where: $condition }),

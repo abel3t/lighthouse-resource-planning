@@ -10,7 +10,7 @@ const corsOptions = {
 };
 
 export default withAuth(async function middleware(request: NextRequest) {
-  const isAuthenticated = await getKindeServerSession().isAuthenticated();
+  const isAuthenticated = await getKindeServerSession()?.isAuthenticated();
 
   const org = await getKindeServerSession().getOrganization();
 
@@ -49,5 +49,16 @@ export default withAuth(async function middleware(request: NextRequest) {
 });
 
 export const config = {
-  matcher: '/((?!api\\/auth\\/|_next\\/static|_next\\/image|favicon.ico).*)'
+  matcher: [
+    '/api/accounts/:path*',
+    '/api/all-members/:path*',
+    '/api/cares/:path*',
+    '/api/discipleship/:path*',
+    '/api/friends/:path*',
+    '/api/fund-record',
+    '/api/funds/:path*',
+    '/api/members/:path*',
+    '/api/people/:path*',
+    '/api/uploadthing/:path*'
+  ]
 };
