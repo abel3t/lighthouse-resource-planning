@@ -75,7 +75,7 @@ export async function GET(req: Request) {
     orderByType = 'desc';
   }
 
-  const $condition: Record<string, any> = {};
+  const $condition: Record<string, any> = { fundId };
   if (search) {
     $condition.contributorName = {
       contains: search,
