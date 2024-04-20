@@ -30,7 +30,7 @@ export default function CareTable() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({ id: false });
 
   const queryParams = useCareStore((state) => state.queryParams);
   const setQueryParams = useCareStore((state) => state.setQueryParams);

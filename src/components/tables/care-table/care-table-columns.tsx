@@ -67,6 +67,12 @@ export function getColumns(): ColumnDef<any>[] {
       enableHiding: false
     },
     {
+      accessorKey: 'id',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="ID" />,
+      enableHiding: false,
+      enableSorting: false
+    },
+    {
       accessorKey: 'date',
       meta: 'Ngày',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Ngày" />,

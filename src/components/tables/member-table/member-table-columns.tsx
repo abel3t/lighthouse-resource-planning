@@ -4,6 +4,7 @@ import { NOT_APPLICABLE } from '@/constant';
 import type { DataTableFilterField } from '@/types';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { type ColumnDef } from '@tanstack/react-table';
+import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { toast } from 'sonner';
 
@@ -42,6 +43,8 @@ export function getColumns(): ColumnDef<any>[] {
   const updateTask = async (data: any) => {
     console.log('update task', data);
   };
+
+  const router = useRouter();
   return [
     {
       id: 'select',
@@ -63,6 +66,12 @@ export function getColumns(): ColumnDef<any>[] {
       ),
       enableSorting: false,
       enableHiding: false
+    },
+    {
+      accessorKey: 'id',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="ID" />,
+      enableHiding: false,
+      enableSorting: false
     },
     {
       accessorKey: 'name',
@@ -133,6 +142,8 @@ export function getColumns(): ColumnDef<any>[] {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-40">
                 <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>Edit</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => router.push(`/members/${row.getValue('id')}`)}>View</DropdownMenuItem>
+
                 <DropdownMenuSub>
                   <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
                   <DropdownMenuSubContent>

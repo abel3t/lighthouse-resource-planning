@@ -34,7 +34,7 @@ export default function FundRecordTable() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({ id: false });
 
   const queryParams = useFundRecordStore((state) => state.queryParams);
   const setQueryParams = useFundRecordStore((state) => state.setQueryParams);

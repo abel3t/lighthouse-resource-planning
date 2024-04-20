@@ -30,7 +30,7 @@ export default function DiscipleshipTable() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({ id: false });
 
   const queryParams = useDiscipleshipStore((state) => state.queryParams);
   const setQueryParams = useDiscipleshipStore((state) => state.setQueryParams);
