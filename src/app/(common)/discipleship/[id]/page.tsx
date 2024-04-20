@@ -7,12 +7,12 @@ import { notFound } from 'next/navigation';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
 
-import { getCareDetailById } from '@/lib/api';
+import { getDiscipleshipDetailById } from '@/lib/api';
 
 export default async function DiscipleDetailPage({ params }: { params: { id: string } }) {
-  const care = await getCareDetailById(params.id);
+  const discipleship = await getDiscipleshipDetailById(params.id);
 
-  if (!care) {
+  if (!discipleship) {
     notFound();
   }
 
@@ -22,23 +22,23 @@ export default async function DiscipleDetailPage({ params }: { params: { id: str
         <div className="w-full rounded-md p-5  shadow-2xl">
           <div>
             <div className="pt-2">
-              <span className="font-bold">Member:</span> {care.personName || NOT_APPLICABLE}
+              <span className="font-bold">Member:</span> {discipleship.personName || NOT_APPLICABLE}
             </div>
             <div className="pt-2">
-              <span className="font-bold">Discipleship Type:</span> {care.type || NOT_APPLICABLE}
+              <span className="font-bold">Discipleship Type:</span> {discipleship.type || NOT_APPLICABLE}
             </div>
             <div className="pt-2">
-              <span className="font-bold">Priority:</span> {care.priority || NOT_APPLICABLE}
+              <span className="font-bold">Priority:</span> {discipleship.priority || NOT_APPLICABLE}
             </div>
             <div className="pt-2">
               <span className="font-bold">Ngày:</span>{' '}
-              {care.date ? format(new Date(care.date), 'dd/MM/yyyy') : NOT_APPLICABLE}
+              {discipleship.date ? format(new Date(discipleship.date), 'dd/MM/yyyy') : NOT_APPLICABLE}
             </div>
             <div className="pt-2">
-              <span className="font-bold">Curator:</span> {care.curatorName || NOT_APPLICABLE}
+              <span className="font-bold">Curator:</span> {discipleship.curatorName || NOT_APPLICABLE}
             </div>
             <div className="pt-2">
-              <span className="font-bold">Description:</span> {care.description || NOT_APPLICABLE}
+              <span className="font-bold">Description:</span> {discipleship.description || NOT_APPLICABLE}
             </div>
           </div>
 
@@ -50,7 +50,7 @@ export default async function DiscipleDetailPage({ params }: { params: { id: str
 
       <div className="max-h-screen flex-1 overflow-scroll px-5">
         <AspectRatio ratio={16 / 9}>
-          <Image className="object-contain" fill src={care.image || ''} alt="Image"></Image>
+          <Image className="object-contain" fill src={discipleship.image || ''} alt="Image"></Image>
         </AspectRatio>
       </div>
     </div>

@@ -157,3 +157,19 @@ export const getPersonHaveDiscipleship = (personId: string) => {
     }
   });
 };
+
+export const getCareDetailById = (id: string) => {
+  return prisma.care.findUnique({
+    where: {
+      id
+    }
+  });
+};
+
+export const getDiscipleshipDetailById = (id: string) => {
+  return prisma.discipleship.findUnique({
+    where: {
+      id
+    }
+  });
+};
