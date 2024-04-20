@@ -2,23 +2,12 @@
 
 import { NOT_APPLICABLE } from '@/constant';
 import type { DataTableFilterField } from '@/types';
-import {
-  ArrowDownIcon,
-  ArrowRightIcon,
-  ArrowUpIcon,
-  CheckCircledIcon,
-  CircleIcon,
-  CrossCircledIcon,
-  DotsHorizontalIcon,
-  QuestionMarkCircledIcon,
-  StopwatchIcon
-} from '@radix-ui/react-icons';
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { type ColumnDef } from '@tanstack/react-table';
 import * as React from 'react';
 import { toast } from 'sonner';
 
 import { DataTableColumnHeader } from '@/components/custom/data-table/data-table-column-header';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -26,7 +15,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuSub,
@@ -36,7 +24,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import { getErrorMessage } from '@/lib/handle-error';
-import { cn } from '@/lib/utils';
 
 export const searchField = {
   name: 'name',
@@ -79,21 +66,21 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'name',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Name" />,
+      meta: 'Tên',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Tên" />,
       cell: ({ row }) => {
         return <div className="w-20">{row.getValue('name')}</div>;
       },
-      enableSorting: true,
-      enableHiding: false
+      enableSorting: true
     },
     {
       accessorKey: 'phone',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Phone" />,
+      meta: 'Số Điện Thoại',
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Số Điện Thoại" />,
       cell: ({ row }) => {
         return <div className="w-20">{row.getValue('phone')}</div>;
       },
-      enableSorting: true,
-      enableHiding: false
+      enableSorting: false
     },
     {
       accessorKey: 'type',
@@ -104,8 +91,7 @@ export function getColumns(): ColumnDef<any>[] {
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));
       },
-      enableSorting: true,
-      enableHiding: false
+      enableSorting: false
     },
     {
       id: 'actions',

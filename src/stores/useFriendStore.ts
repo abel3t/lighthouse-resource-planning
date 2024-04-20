@@ -3,10 +3,13 @@ import axios from 'axios';
 import queryString from 'query-string';
 import { create } from 'zustand';
 
+import { client } from '@/lib/client';
+
 import { QueryParams } from './useFundRecordStore';
 
 export interface FriendStore {
   friends: Person[];
+  metadata: any;
   fetchFriends: (queryParams: QueryParams) => void;
   queryParams: QueryParams;
   setQueryParams: (params: QueryParams) => void;
@@ -14,6 +17,7 @@ export interface FriendStore {
 
 const useFriendStore = create<FriendStore>((set) => ({
   friends: [],
+  metadata: {},
   fetchFriends: async (queryParams: QueryParams) => {
     const { sort = { field: 'id', order: 'asc' }, search = '', pagination = { page: 1, pageSize: 10 } } = queryParams;
 
@@ -24,8 +28,9 @@ const useFriendStore = create<FriendStore>((set) => ({
       pageSize: pagination.pageSize
     });
 
-    const friends = await axios.get('/api/friends/?' + qs).then((res) => res.data);
-    set({ friends: friends || [] });
+    const data = await client.get('/friends/?' + qs).then((res) => res.data);
+    set({ friends: data?.data || [] });
+    set({ metadata: data?.metadata || {} });
   },
   queryParams: {
     sort: undefined,

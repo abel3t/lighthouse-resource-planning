@@ -12,15 +12,16 @@ import {
   useReactTable
 } from '@tanstack/react-table';
 import { useDebounce } from '@uidotdev/usehooks';
-import { use, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { DataTable } from '@/components/custom/data-table';
 import { DataTableToolbar } from '@/components/custom/data-table/data-table-toolbar';
 
-import { filterFields, getColumns, searchField } from './friend-table-columns';
+import { getColumns, searchField } from './friend-table-columns';
 import { MemberTableToolbarActions } from './member-table-toolbar-actions';
 
 export default function FriendTable() {
+  const metadata = useFriendStore((state) => state.metadata);
   const friends = useFriendStore((state) => state.friends);
   const fetchFriends = useFriendStore((state) => state.fetchFriends);
 
@@ -35,10 +36,6 @@ export default function FriendTable() {
   const setQueryParams = useFriendStore((state) => state.setQueryParams);
 
   const debouncedSearch = useDebounce(queryParams, 300);
-
-  useEffect(() => {
-    fetchFriends({});
-  }, []);
 
   useEffect(() => {
     fetchFriends(debouncedSearch);
@@ -103,6 +100,7 @@ export default function FriendTable() {
 
   const table = useReactTable({
     data: friends || [],
+    pageCount: metadata?.totalPages || -1,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
