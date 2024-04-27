@@ -9,7 +9,8 @@ const corsOptions = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization'
 };
 
-export default withAuth(async function middleware(request: NextRequest) {
+export default withAuth(
+  async function middleware(request: NextRequest) {
   const isAuthenticated = await getKindeServerSession()?.isAuthenticated();
 
   const org = await getKindeServerSession().getOrganization();
@@ -44,6 +45,7 @@ export default withAuth(async function middleware(request: NextRequest) {
   });
 
   response.headers.set('x-organizationId', org?.orgCode || '');
+
 
   return response;
 });

@@ -77,15 +77,12 @@ export async function GET(req: Request) {
     organizationId
   };
 
-  console.log('ne', $condition);
-
   if (search) {
     $condition.personName = {
       contains: search,
       mode: 'insensitive'
     };
   }
-  console.log($condition, 'hihi');
 
   const [total, fundRecords] = await Promise.all([
     prisma.care.count({ where: $condition }),
