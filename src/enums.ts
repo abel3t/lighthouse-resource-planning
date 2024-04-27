@@ -34,7 +34,7 @@ export enum DiscipleshipType {
   Disciple = 'Disciple'
 }
 
-export enum DisciplePriority {
+export enum DiscipleshipPriority {
   Good = 'Good',
   Normal = 'Normal',
   Warning = 'Warning'

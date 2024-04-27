@@ -1,6 +1,7 @@
 'use client';
 
-import { NOT_APPLICABLE } from '@/constant';
+import { CarePriorityColor, CareTypeColor, CareTypeText, NOT_APPLICABLE } from '@/constant';
+import { CarePriority, CareType } from '@/enums';
 import type { DataTableFilterField } from '@/types';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { type ColumnDef } from '@tanstack/react-table';
@@ -103,7 +104,13 @@ export function getColumns(): ColumnDef<any>[] {
       meta: 'Phương Thức',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Phương Thức" />,
       cell: ({ row }) => {
-        return <div className="flex space-x-2">{row.getValue('type') || NOT_APPLICABLE}</div>;
+        const type = row.getValue('type') as CareType;
+
+        return (
+          <div className="flex space-x-2">
+            <Badge style={{ backgroundColor: CareTypeColor[type] }}>{CareTypeText[type]}</Badge>
+          </div>
+        );
       },
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));
@@ -115,7 +122,12 @@ export function getColumns(): ColumnDef<any>[] {
       meta: 'Trạng Thái',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Trạng Thái" />,
       cell: ({ row }) => {
-        return <div className="flex space-x-2">{row.getValue('priority') || NOT_APPLICABLE}</div>;
+        const priority = row.getValue('priority') as CarePriority;
+        return (
+          <div className="flex space-x-2">
+            <Badge style={{ backgroundColor: CarePriorityColor[priority] }}>{priority}</Badge>
+          </div>
+        );
       },
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));

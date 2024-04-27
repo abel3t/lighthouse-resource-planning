@@ -1,12 +1,12 @@
 'use client';
 
-import { NOT_APPLICABLE } from '@/constant';
+import { DiscipleshipPriorityColor, DiscipleshipTypeColor, DiscipleshipTypeText, NOT_APPLICABLE } from '@/constant';
+import { DiscipleshipPriority, DiscipleshipType } from '@/enums';
 import type { DataTableFilterField } from '@/types';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { type ColumnDef } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
-import { toast } from 'sonner';
 
 import { DataTableColumnHeader } from '@/components/custom/data-table/data-table-column-header';
 import { Badge } from '@/components/ui/badge';
@@ -16,13 +16,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 
@@ -103,7 +98,12 @@ export function getColumns(): ColumnDef<any>[] {
       meta: 'Hình Thức',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Hình Thức" />,
       cell: ({ row }) => {
-        return <div className="flex space-x-2">{row.getValue('type') || NOT_APPLICABLE}</div>;
+        const type = row.getValue('type') as DiscipleshipType;
+        return (
+          <div className="flex space-x-2">
+            <Badge style={{ backgroundColor: DiscipleshipTypeColor[type] }}>{DiscipleshipTypeText[type]}</Badge>
+          </div>
+        );
       },
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));
@@ -115,7 +115,12 @@ export function getColumns(): ColumnDef<any>[] {
       meta: 'Đáp Ứng',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Đáp Ứng" />,
       cell: ({ row }) => {
-        return <div className="flex space-x-2">{row.getValue('priority') || NOT_APPLICABLE}</div>;
+        const priority = row.getValue('priority') as DiscipleshipPriority;
+        return (
+          <div className="flex space-x-2">
+            <Badge style={{ backgroundColor: DiscipleshipPriorityColor[priority] }}>{priority}</Badge>
+          </div>
+        );
       },
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));

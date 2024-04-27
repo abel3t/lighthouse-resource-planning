@@ -1,6 +1,7 @@
 'use client';
 
-import { NOT_APPLICABLE } from '@/constant';
+import { DiscipleshipProcessColor, NOT_APPLICABLE } from '@/constant';
+import { DiscipleshipProcess } from '@/enums';
 import type { DataTableFilterField } from '@/types';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { type ColumnDef } from '@tanstack/react-table';
@@ -8,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import * as React from 'react';
 
 import { DataTableColumnHeader } from '@/components/custom/data-table/data-table-column-header';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -97,7 +99,19 @@ export function getColumns(): ColumnDef<any>[] {
       meta: 'Discipleship',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Discipleship" />,
       cell: ({ row }) => {
-        return <div className="flex space-x-2">{row.getValue('discipleshipProcess') || NOT_APPLICABLE}</div>;
+        const discipleshipProcess = row.getValue('discipleshipProcess') as DiscipleshipProcess;
+
+        return (
+          <div className="flex space-x-2">
+            {discipleshipProcess ? (
+              <Badge style={{ backgroundColor: DiscipleshipProcessColor[discipleshipProcess] }}>
+                {discipleshipProcess}
+              </Badge>
+            ) : (
+              NOT_APPLICABLE
+            )}
+          </div>
+        );
       },
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));

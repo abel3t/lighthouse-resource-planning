@@ -1,6 +1,7 @@
 'use client';
 
-import { NOT_APPLICABLE } from '@/constant';
+import { FriendTypeColor, NOT_APPLICABLE } from '@/constant';
+import { FriendType } from '@/enums';
 import type { DataTableFilterField } from '@/types';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { type ColumnDef } from '@tanstack/react-table';
@@ -9,6 +10,7 @@ import * as React from 'react';
 import { toast } from 'sonner';
 
 import { DataTableColumnHeader } from '@/components/custom/data-table/data-table-column-header';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -94,7 +96,12 @@ export function getColumns(): ColumnDef<any>[] {
       accessorKey: 'type',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Type" />,
       cell: ({ row }) => {
-        return <div className="flex space-x-2">{row.getValue('type') || NOT_APPLICABLE}</div>;
+        const type = row.getValue('type') as FriendType;
+        return (
+          <div className="flex space-x-2">
+            <Badge style={{ backgroundColor: FriendTypeColor[type] }}>{type}</Badge>
+          </div>
+        );
       },
       filterFn: (row, id, value) => {
         return Array.isArray(value) && value.includes(row.getValue(id));
