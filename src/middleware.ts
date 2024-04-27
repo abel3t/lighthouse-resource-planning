@@ -9,8 +9,7 @@ const corsOptions = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization'
 };
 
-export default withAuth(
-  async function middleware(request: NextRequest) {
+export default withAuth(async function middleware(request: NextRequest) {
   const isAuthenticated = await getKindeServerSession()?.isAuthenticated();
 
   const org = await getKindeServerSession().getOrganization();
@@ -46,7 +45,6 @@ export default withAuth(
 
   response.headers.set('x-organizationId', org?.orgCode || '');
 
-
   return response;
 });
 
@@ -60,7 +58,6 @@ export const config = {
     '/api/fund-record',
     '/api/funds/:path*',
     '/api/members/:path*',
-    '/api/people/:path*',
-    '/api/uploadthing/:path*'
+    '/api/people/:path*'
   ]
 };

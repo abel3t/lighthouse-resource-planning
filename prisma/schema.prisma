@@ -248,6 +248,7 @@ model FundRecord {
   description String?
   date        DateTime       @default(now()) @db.Timestamptz(0)
   type        FundRecordType
+  image       String?
   amount      Float          @default(0)
 
   fund   Fund   @relation(fields: [fundId], references: [id])

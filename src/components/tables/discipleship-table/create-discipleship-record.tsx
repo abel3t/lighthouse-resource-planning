@@ -193,11 +193,11 @@ export function CreateDiscipleshipDialog() {
 
             <DialogFooter className="gap-2 pt-2 sm:space-x-0">
               <DialogClose asChild>
-                <Button type="button" variant="outline">
+                <Button disabled={isUploading} type="button" variant="outline">
                   Cancel
                 </Button>
               </DialogClose>
-              <Button disabled={isCreatePending}>Submit</Button>
+              <Button disabled={isCreatePending || isUploading}>Submit</Button>
             </DialogFooter>
           </form>
         </Form>

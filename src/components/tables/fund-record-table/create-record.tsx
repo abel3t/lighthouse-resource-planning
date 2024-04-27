@@ -9,12 +9,14 @@ import { PlusIcon } from '@radix-ui/react-icons';
 import axios from 'axios';
 import { CommandList } from 'cmdk';
 import { Check, ChevronsUpDown } from 'lucide-react';
+import Image from 'next/image';
 import { useEffect, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
 
 import { Icons } from '@/components/custom/icons';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
 import {
@@ -33,7 +35,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { UploadButton } from '@/components/uploadthing';
 
+import { deleteImageUploadThing } from '@/lib/api';
 import { getErrorMessage } from '@/lib/handle-error';
 import { cn } from '@/lib/utils';
 
@@ -41,7 +45,8 @@ const createFundRecordSchema = z.object({
   amount: z.string().min(3, 'Số tiền không hợp lệ'),
   type: z.nativeEnum(FundRecordType),
   contributorId: z.string().optional(),
-  description: z.string().optional()
+  description: z.string().optional(),
+  image: z.string().optional()
 });
 export type CreateRecordSchema = z.infer<typeof createFundRecordSchema>;
 
@@ -49,6 +54,8 @@ export function CreateFundRecordDialog() {
   const [open, setOpen] = useState(false);
   const [, startCreateTransition] = useTransition();
   const [isOnCreating, setIsOnCreating] = useState(false);
+  const [fileUrl, setFileUrl] = useState<string | undefined>();
+  const [isUploading, setIsUploading] = useState(false);
 
   const form = useForm<CreateRecordSchema>({
     resolver: zodResolver(createFundRecordSchema)
@@ -78,6 +85,7 @@ export function CreateFundRecordDialog() {
       toast.promise(
         axios.post('/api/fund-record', {
           ...input,
+          image: fileUrl,
           fundId: currentFund.id,
           amount: input.type === FundRecordType.Expense ? -amount : amount
         }),
@@ -90,12 +98,19 @@ export function CreateFundRecordDialog() {
             fetchFunds();
             fetchRecords(currentFund.id, queryParams);
             setIsOnCreating(false);
+            setFileUrl(undefined);
 
             return 'Record created';
           },
           error: (error) => {
             setOpen(false);
             setIsOnCreating(false);
+
+            if (fileUrl) {
+              deleteImageUploadThing(fileUrl);
+            }
+            setFileUrl(undefined);
+
             return getErrorMessage(error);
           }
         }
@@ -111,6 +126,7 @@ export function CreateFundRecordDialog() {
 
         if (!open) {
           form.reset();
+          setFileUrl(undefined);
           setIsOnCreating(false);
         }
       }}
@@ -136,15 +152,43 @@ export function CreateFundRecordDialog() {
               <ContributorField form={form} />
             </div>
 
+            <div className="flex items-start gap-2">
+              {!fileUrl && (
+                <UploadButton
+                  endpoint="imageUploader"
+                  onClientUploadComplete={(res) => {
+                    const file: any = res?.[0];
+
+                    setFileUrl(file?.url || '');
+                    setIsUploading(false);
+
+                    toast('Upload Completed');
+                  }}
+                  onUploadError={(error: Error) => {
+                    alert(`ERROR! ${error.message}`);
+                    setIsUploading(false);
+                  }}
+                  onUploadBegin={(name) => {
+                    setIsUploading(true);
+                  }}
+                />
+              )}
+              {fileUrl && (
+                <AspectRatio ratio={16 / 9}>
+                  <Image className="object-contain" src={fileUrl} fill alt="Image" />
+                </AspectRatio>
+              )}
+            </div>
+
             <DescriptionField form={form} />
 
             <DialogFooter className="gap-2 pt-2 sm:space-x-0">
               <DialogClose asChild>
-                <Button type="button" variant="outline" disabled={isOnCreating}>
+                <Button type="button" variant="outline" disabled={isOnCreating || isUploading}>
                   Cancel
                 </Button>
               </DialogClose>
-              <Button className="flex w-24 justify-center" disabled={isOnCreating}>
+              <Button className="flex w-24 justify-center" disabled={isOnCreating || isUploading}>
                 {isOnCreating ? <Icons.spinner className="h-4 w-4 animate-spin" /> : 'Submit'}
               </Button>
             </DialogFooter>

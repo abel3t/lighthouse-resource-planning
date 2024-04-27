@@ -50,10 +50,10 @@ export default async function MemberPage() {
   ]);
 
   return (
-    <div className="grid grid-cols-2 gap-3">
-      <div className=" rounded-md p-5 shadow-lg">
+    <div className="mt-8 grid grid-cols-1 gap-3 text-xs md:mt-0 md:text-sm lg:grid-cols-2">
+      <div className="rounded-md p-5 shadow-lg">
         <div className="flex flex-col">
-          <div className="text-lg font-bold">Over view</div>
+          <div className="text-md font-bold md:text-lg">Over view</div>
         </div>
 
         <div className="flex justify-between py-3">
@@ -64,7 +64,7 @@ export default async function MemberPage() {
 
             <div className="flex flex-col">
               <div className="font-bold">{totalMembers}</div>
-              <div className="text-sm font-bold text-gray-500">Members</div>
+              <div className="text-xs font-bold text-gray-500 md:text-sm">Members</div>
             </div>
           </div>
 
@@ -75,7 +75,7 @@ export default async function MemberPage() {
 
             <div className="flex flex-col">
               <div className="font-bold">{totalFriends}</div>
-              <div className="text-sm font-bold text-gray-500">Friends</div>
+              <div className="text-xs font-bold text-gray-500 md:text-sm">Friends</div>
             </div>
           </div>
 
@@ -86,21 +86,21 @@ export default async function MemberPage() {
 
             <div className="flex flex-col">
               <div className="font-bold">{totalUnbelievers}</div>
-              <div className="text-sm font-bold text-gray-500">Unbelievers</div>
+              <div className="text-xs font-bold text-gray-500 md:text-sm">Unbelievers</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="h-32 rounded-md shadow-lg"></div>
+      <div className="hidden h-32 rounded-md shadow-lg md:block"></div>
 
       <ScrollArea className="h-96 rounded-md p-2 shadow-lg">
-        <div className="text-lg font-bold">Needing More Care</div>
+        <div className="text-md font-bold md:text-lg">Needing More Care</div>
         <NeedingMoreCares cares={cares} />
       </ScrollArea>
 
       <div className="h-96 rounded-md p-2 shadow-lg">
-        <div className="text-lg font-bold">Top Caring People</div>
+        <div className="text-md font-bold md:text-lg">Top Caring People</div>
         <TopCaringPeople accounts={accounts} />
       </div>
     </div>
