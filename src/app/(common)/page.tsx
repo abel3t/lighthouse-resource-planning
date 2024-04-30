@@ -13,7 +13,7 @@ export default async function Home() {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen w-screen animate-pulse items-center justify-center">
+      <div className="flex h-screen w-full animate-pulse items-center justify-center">
         <Icons.spinner className="mr-2 h-12 w-12 animate-spin" />
       </div>
     );
