@@ -2,10 +2,12 @@
 
 import useFundStore from '@/stores/useFundStore';
 import { Fund } from '@prisma/client';
-import { WalletIcon } from 'lucide-react';
+import { PlusIcon, WalletIcon } from 'lucide-react';
 import { useEffect } from 'react';
 
 import { cn } from '@/lib/utils';
+
+import { CreateFundDialog } from '../tables/fund-record-table/create-fund';
 
 export default function Funds() {
   const fetchFunds = useFundStore((state) => state.fetchFunds);
@@ -20,6 +22,8 @@ export default function Funds() {
       {funds.map((fund) => (
         <FundCard key={fund.id} fund={fund} />
       ))}
+
+      <CreateFundDialog />
     </div>
   );
 }

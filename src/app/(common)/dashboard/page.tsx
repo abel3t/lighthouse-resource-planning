@@ -2,7 +2,7 @@ import { CareTypeColor, CareTypeText, NOT_APPLICABLE } from '@/constant';
 import { CarePriority, CareType, PersonalType } from '@/enums';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { Account, Care } from '@prisma/client';
-import { User2Icon, UserIcon } from 'lucide-react';
+import { User2Icon } from 'lucide-react';
 
 import { Timeline, TimelineItem } from '@/components/custom/timeline';
 import { Badge } from '@/components/ui/badge';

@@ -20,7 +20,13 @@ const useFundStore = create<FundStore>((set) => ({
     const funds = await client.get('/funds').then((res) => res.data);
 
     if (funds?.length) {
-      set({ currentFund: funds[0] });
+      set((state) => {
+        if (state.currentFund) {
+          return state;
+        }
+        return { ...state, currentFund: funds[0] };
+      });
+
       set({ funds: funds });
     }
   }
