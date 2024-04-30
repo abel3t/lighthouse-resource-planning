@@ -1,9 +1,11 @@
-import { NOT_APPLICABLE } from '@/constant';
+import { FriendTypeColor, NOT_APPLICABLE } from '@/constant';
+import { FriendType } from '@/enums';
 import { Care, Discipleship } from '@prisma/client';
 import { format } from 'date-fns';
 import { notFound } from 'next/navigation';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -30,7 +32,7 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
 
             <div className="py-2 font-bold">{friend.name}</div>
 
-            <div>{friend.type}</div>
+            <Badge style={{ backgroundColor: FriendTypeColor[friend.type as FriendType] }}>{friend.type}</Badge>
           </div>
 
           <Separator />
@@ -72,13 +74,13 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
       <div className="max-h-screen flex-1 overflow-scroll px-5">
         <Tabs defaultValue="discipleship" className="w-[400px]">
           <TabsList>
-            <TabsTrigger value="discipleship">Care</TabsTrigger>
+            <TabsTrigger value="discipleship">Discipleship</TabsTrigger>
             <TabsTrigger value="friend">Friends</TabsTrigger>
           </TabsList>
           <TabsContent value="discipleship">
             <DiscipleTimeline discipleshipList={discipleshipList} />
           </TabsContent>
-          <TabsContent value="friend">Change your password here.</TabsContent>
+          <TabsContent value="friend">Coming soon</TabsContent>
         </Tabs>
       </div>
     </div>

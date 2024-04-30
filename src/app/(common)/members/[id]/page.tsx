@@ -1,9 +1,11 @@
-import { NOT_APPLICABLE } from '@/constant';
+import { DiscipleshipProcessColor, NOT_APPLICABLE } from '@/constant';
+import { DiscipleshipProcess } from '@/enums';
 import { Care, Discipleship } from '@prisma/client';
 import { format } from 'date-fns';
 import { notFound } from 'next/navigation';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -33,7 +35,11 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
 
             <div className="py-2 font-bold">{member.name}</div>
 
-            <div>{member.discipleshipProcess}</div>
+            <Badge
+              style={{ backgroundColor: DiscipleshipProcessColor[member.discipleshipProcess as DiscipleshipProcess] }}
+            >
+              {member.discipleshipProcess}
+            </Badge>
           </div>
 
           <Separator />
@@ -86,7 +92,7 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
           <TabsContent value="discipleship">
             <DiscipleTimeline discipleshipList={discipleshipList} />
           </TabsContent>
-          <TabsContent value="friend">Change your password here.</TabsContent>
+          <TabsContent value="friend">Coming soon.</TabsContent>
         </Tabs>
       </div>
     </div>
@@ -96,7 +102,7 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
 const CaresTimeline = ({ cares }: { cares: Care[] }) => {
   return (
     <div className="flex w-full flex-col">
-      <div className="w-full p-5">Discipleship Timeline</div>
+      <div className="w-full p-5">Care Timeline</div>
 
       {cares.map((care) => (
         <ol className="relative border-s border-gray-200 dark:border-gray-700" key={care.id}>

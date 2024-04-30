@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "FundRecordType" AS ENUM ('Income', 'Expense');
+
 -- CreateTable
 CREATE TABLE "Organization" (
     "id" TEXT NOT NULL,
@@ -33,12 +36,10 @@ CREATE TABLE "Account" (
 -- CreateTable
 CREATE TABLE "Person" (
     "id" TEXT NOT NULL,
-    "faithStatus" INTEGER,
     "name" TEXT NOT NULL,
     "firstName" TEXT,
     "phone" TEXT,
     "image" TEXT,
-    "introducedBy" TEXT,
     "gender" TEXT,
     "birthday" TIMESTAMP(3),
     "career" TEXT,
@@ -51,13 +52,13 @@ CREATE TABLE "Person" (
     "believeInJesusDay" TIMESTAMP(3),
     "baptismalDay" TIMESTAMP(3),
     "memberDay" TIMESTAMP(3),
-    "weddingDate" TIMESTAMP(3),
     "hometown" TEXT,
     "newLifeMentor" TEXT,
     "role" TEXT,
     "type" TEXT NOT NULL,
     "organizationId" TEXT NOT NULL,
     "curatorId" TEXT,
+    "curatorName" TEXT,
     "friendId" TEXT,
     "createdAt" TIMESTAMPTZ(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "createdBy" TEXT,
@@ -92,7 +93,9 @@ CREATE TABLE "Care" (
     "image" TEXT,
     "date" TIMESTAMP(3) NOT NULL,
     "curatorId" TEXT NOT NULL,
+    "curatorName" TEXT,
     "personId" TEXT NOT NULL,
+    "personName" TEXT,
     "organizationId" TEXT NOT NULL,
     "createdAt" TIMESTAMPTZ(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "createdBy" TEXT,
@@ -135,7 +138,7 @@ CREATE TABLE "Absence" (
 );
 
 -- CreateTable
-CREATE TABLE "Disciple" (
+CREATE TABLE "Discipleship" (
     "id" TEXT NOT NULL,
     "description" TEXT,
     "priority" TEXT NOT NULL,
@@ -143,7 +146,9 @@ CREATE TABLE "Disciple" (
     "image" TEXT,
     "date" TIMESTAMP(3) NOT NULL,
     "curatorId" TEXT NOT NULL,
+    "curatorName" TEXT,
     "personId" TEXT NOT NULL,
+    "personName" TEXT,
     "organizationId" TEXT NOT NULL,
     "createdAt" TIMESTAMPTZ(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "createdBy" TEXT,
@@ -151,7 +156,45 @@ CREATE TABLE "Disciple" (
     "updatedBy" TEXT,
     "isDeleted" BOOLEAN NOT NULL DEFAULT false,
 
-    CONSTRAINT "Disciple_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Discipleship_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Fund" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT,
+    "amount" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "currency" TEXT NOT NULL DEFAULT 'VND',
+    "color" TEXT NOT NULL DEFAULT '#77B6EA',
+    "organizationId" TEXT NOT NULL,
+    "createdAt" TIMESTAMPTZ(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdBy" TEXT,
+    "updatedAt" TIMESTAMPTZ(0) NOT NULL,
+    "updatedBy" TEXT,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "Fund_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "FundRecord" (
+    "id" TEXT NOT NULL,
+    "description" TEXT,
+    "date" TIMESTAMPTZ(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "type" "FundRecordType" NOT NULL,
+    "image" TEXT,
+    "amount" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "fundId" TEXT NOT NULL,
+    "contributorId" TEXT,
+    "contributorName" TEXT,
+    "createdAt" TIMESTAMPTZ(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdBy" TEXT,
+    "updatedAt" TIMESTAMPTZ(0) NOT NULL,
+    "updatedBy" TEXT,
+    "isDeleted" BOOLEAN NOT NULL DEFAULT false,
+
+    CONSTRAINT "FundRecord_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -179,7 +222,7 @@ CREATE INDEX "Care_organizationId_curatorId_personId_date_isDeleted_idx" ON "Car
 CREATE INDEX "Absence_organizationId_personId_date_isDeleted_idx" ON "Absence"("organizationId", "personId", "date", "isDeleted");
 
 -- CreateIndex
-CREATE INDEX "Disciple_organizationId_curatorId_date_isDeleted_idx" ON "Disciple"("organizationId", "curatorId", "date", "isDeleted");
+CREATE INDEX "Discipleship_organizationId_curatorId_date_isDeleted_idx" ON "Discipleship"("organizationId", "curatorId", "date", "isDeleted");
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -221,10 +264,19 @@ ALTER TABLE "Absence" ADD CONSTRAINT "Absence_personId_fkey" FOREIGN KEY ("perso
 ALTER TABLE "Absence" ADD CONSTRAINT "Absence_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Disciple" ADD CONSTRAINT "Disciple_curatorId_fkey" FOREIGN KEY ("curatorId") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Discipleship" ADD CONSTRAINT "Discipleship_curatorId_fkey" FOREIGN KEY ("curatorId") REFERENCES "Account"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Disciple" ADD CONSTRAINT "Disciple_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Discipleship" ADD CONSTRAINT "Discipleship_personId_fkey" FOREIGN KEY ("personId") REFERENCES "Person"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Disciple" ADD CONSTRAINT "Disciple_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Discipleship" ADD CONSTRAINT "Discipleship_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Fund" ADD CONSTRAINT "Fund_organizationId_fkey" FOREIGN KEY ("organizationId") REFERENCES "Organization"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "FundRecord" ADD CONSTRAINT "FundRecord_fundId_fkey" FOREIGN KEY ("fundId") REFERENCES "Fund"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "FundRecord" ADD CONSTRAINT "FundRecord_contributorId_fkey" FOREIGN KEY ("contributorId") REFERENCES "Person"("id") ON DELETE SET NULL ON UPDATE CASCADE;

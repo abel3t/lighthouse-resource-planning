@@ -27,8 +27,6 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 
-import { getErrorMessage } from '@/lib/handle-error';
-
 export const searchField = {
   name: 'personName',
   placeholder: 'Search...'
@@ -95,7 +93,7 @@ export function getColumns(): ColumnDef<any>[] {
       meta: 'Tên',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Tên" />,
       cell: ({ row }) => {
-        return <div className="w-20">{row.getValue('personName')}</div>;
+        return <div className="w-full">{row.getValue('personName')}</div>;
       },
       enableSorting: true
     },

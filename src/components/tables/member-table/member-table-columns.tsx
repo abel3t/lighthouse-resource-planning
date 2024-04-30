@@ -79,7 +79,7 @@ export function getColumns(): ColumnDef<any>[] {
       meta: 'Tên',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Tên" />,
       cell: ({ row }) => {
-        return <div className="w-20">{row.getValue('name')}</div>;
+        return <div className="w-full">{row.getValue('name')}</div>;
       },
       enableSorting: true
     },
@@ -90,7 +90,7 @@ export function getColumns(): ColumnDef<any>[] {
       cell: ({ row }) => {
         const date = new Date(row.getValue('phone'));
 
-        return <div className="w-20">{row.getValue('phone')}</div>;
+        return <div className="w-full">{row.getValue('phone')}</div>;
       },
       enableSorting: false
     },
@@ -123,7 +123,7 @@ export function getColumns(): ColumnDef<any>[] {
       meta: 'Người Chăm Sóc',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Người Chăm Sóc" />,
       cell: ({ row }) => {
-        return <div className="flex space-x-2">{row.getValue('curatorName') || NOT_APPLICABLE}</div>;
+        return <div className="flex w-full space-x-2">{row.getValue('curatorName') || NOT_APPLICABLE}</div>;
       },
       enableSorting: false
     },

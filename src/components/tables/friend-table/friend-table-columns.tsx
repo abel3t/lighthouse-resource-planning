@@ -79,7 +79,7 @@ export function getColumns(): ColumnDef<any>[] {
       meta: 'Tên',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Tên" />,
       cell: ({ row }) => {
-        return <div className="w-20">{row.getValue('name')}</div>;
+        return <div className="w-full">{row.getValue('name')}</div>;
       },
       enableSorting: true
     },
@@ -88,7 +88,7 @@ export function getColumns(): ColumnDef<any>[] {
       meta: 'Số Điện Thoại',
       header: ({ column }) => <DataTableColumnHeader column={column} title="Số Điện Thoại" />,
       cell: ({ row }) => {
-        return <div className="w-20">{row.getValue('phone')}</div>;
+        return <div className="w-full">{row.getValue('phone')}</div>;
       },
       enableSorting: false
     },

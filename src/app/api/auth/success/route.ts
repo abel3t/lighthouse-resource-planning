@@ -32,6 +32,15 @@ export async function GET() {
     })
   ]);
 
+  if (!organization) {
+    organization = await prisma.organization.create({
+      data: {
+        id: org.orgCode,
+        name: org.orgCode
+      }
+    });
+  }
+
   if (!account) {
     account = await prisma.account.create({
       data: {
@@ -40,15 +49,6 @@ export async function GET() {
         email: user.email,
         role: 'user',
         organizationId: org.orgCode
-      }
-    });
-  }
-
-  if (!organization) {
-    organization = await prisma.organization.create({
-      data: {
-        id: org.orgCode,
-        name: org.orgCode
       }
     });
   }
