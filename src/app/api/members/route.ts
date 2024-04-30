@@ -57,6 +57,10 @@ export async function GET(req: Request) {
     orderByType = 'asc';
   }
 
+  if (sortField === 'name') {
+    orderByField = 'firstName';
+  }
+
   const $condition: Record<string, any> = {
     type: PersonalType.Member,
     organizationId
