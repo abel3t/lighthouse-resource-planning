@@ -2,6 +2,8 @@ import { CareTypeColor, CareTypeText, NOT_APPLICABLE } from '@/constant';
 import { CarePriority, CareType, PersonalType } from '@/enums';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { Account, Care } from '@prisma/client';
+import { formatRelative, subMonths } from 'date-fns';
+import { vi } from 'date-fns/locale';
 import { User2Icon } from 'lucide-react';
 
 import { Timeline, TimelineItem } from '@/components/custom/timeline';
@@ -10,6 +12,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 import prisma from '@/lib/prisma';
+import { cn } from '@/lib/utils';
 
 export default async function MemberPage() {
   const organization = await getKindeServerSession()?.getOrganization();
@@ -35,12 +38,15 @@ export default async function MemberPage() {
     })
   ]);
 
+  const twoMonthsAgo = subMonths(new Date(), 2);
   const [cares, accounts] = await Promise.all([
     prisma.care.findMany({
       where: {
         organizationId: organization?.orgCode || '',
-        priority: CarePriority.Warning
-      }
+        priority: { in: [CarePriority.Warning, CarePriority.Normal] },
+        date: { gte: twoMonthsAgo }
+      },
+      orderBy: [{ priority: 'desc' }, { date: 'desc' }]
     }),
     prisma.account.findMany({
       where: {
@@ -107,6 +113,15 @@ export default async function MemberPage() {
   );
 }
 
+const formatRelativeLocale = {
+  lastWeek: "EEEE 'tuần trước' '-' dd/MM/yyyy",
+  yesterday: "'Hôm qua' '-' dd/MM/yyyy",
+  today: "'Hôm nay'",
+  tomorrow: "'Ngày mai'",
+  nextWeek: "EEEE 'tới'",
+  other: 'P'
+};
+
 const NeedingMoreCares = ({ cares }: { cares: Care[] }) => {
   return (
     <div className="ml-2 pt-4">
@@ -114,6 +129,10 @@ const NeedingMoreCares = ({ cares }: { cares: Care[] }) => {
         {cares.map((care) => (
           <TimelineItem
             key={care.id}
+            dotClassName={cn({
+              'bg-red-500': care.priority === CarePriority.Warning,
+              'bg-yellow-500': care.priority === CarePriority.Normal
+            })}
             header={
               <div className="flex items-center space-x-5">
                 <div className="text-sm font-bold">{care.personName || NOT_APPLICABLE}</div>
@@ -127,6 +146,14 @@ const NeedingMoreCares = ({ cares }: { cares: Care[] }) => {
           >
             <div className="text-primary">
               by <span className="font-bold">{care.curatorName || NOT_APPLICABLE}</span>
+              <span className="ml-5">
+                {formatRelative(care.date, new Date(), {
+                  locale: {
+                    ...vi,
+                    formatRelative: (token) => formatRelativeLocale[token]
+                  }
+                })}
+              </span>
             </div>
             <div className="mt-2">
               <pre>{care.description}</pre>
