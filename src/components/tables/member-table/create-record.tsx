@@ -233,7 +233,13 @@ const CuratorField = ({ form }: any) => {
 const IntroducedByField = ({ form }: any) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const members = useMemberStore((state) => state.members);
+  const fetchAllMembers = useMemberStore((state) => state.fetchAllMembers);
+
+  React.useEffect(() => {
+    fetchAllMembers();
+  }, [fetchAllMembers]);
+
+  const members = useMemberStore((state) => state.allMembers);
 
   return (
     <FormField

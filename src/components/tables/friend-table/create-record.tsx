@@ -61,11 +61,11 @@ export function CreateFundRecordDialog() {
   });
 
   const queryParams = useMemberStore((state) => state.queryParams);
-  const fetchMembers = useMemberStore((state) => state.fetchMembers);
+  const fetchAllMembers = useMemberStore((state) => state.fetchAllMembers);
   const fetchFriends = useFriendStore((state) => state.fetchFriends);
 
   React.useEffect(() => {
-    fetchMembers({});
+    fetchAllMembers({});
   }, []);
 
   function onSubmit(input: CreateRecordSchema) {
@@ -156,7 +156,7 @@ export function CreateFundRecordDialog() {
 const IntroducedByField = ({ form }: any) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const members = useMemberStore((state) => state.members);
+  const members = useMemberStore((state) => state.allMembers);
 
   return (
     <FormField
