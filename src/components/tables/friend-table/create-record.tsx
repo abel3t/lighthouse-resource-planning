@@ -65,7 +65,7 @@ export function CreateFundRecordDialog() {
   const fetchFriends = useFriendStore((state) => state.fetchFriends);
 
   React.useEffect(() => {
-    fetchAllMembers({});
+    fetchAllMembers();
   }, []);
 
   function onSubmit(input: CreateRecordSchema) {
