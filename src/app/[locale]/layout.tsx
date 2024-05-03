@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { NextIntlClientProvider, useLocale, useMessages } from 'next-intl';
 import { Inter as FontSans } from 'next/font/google';
-import { notFound } from 'next/navigation';
 
+import { ThemeProvider } from '@/components/providers';
 import { Toaster } from '@/components/ui/sonner';
 
 import { cn } from '@/lib/utils';
@@ -31,7 +31,6 @@ export default function RootLayout({
   const messages = useMessages();
 
   const locale = useLocale();
-  console.log('locale', locale);
 
   // if (params?.locale !== locale) {
   //   notFound();
@@ -43,10 +42,12 @@ export default function RootLayout({
 
       <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
         <NextIntlClientProvider messages={messages}>
-          <main>
-            {children}
-            <Toaster />
-          </main>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <main>
+              {children}
+              <Toaster />
+            </main>
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>

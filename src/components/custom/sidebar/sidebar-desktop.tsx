@@ -4,6 +4,7 @@ import { SidebarItems } from '@/types';
 import { motion } from 'framer-motion';
 import { ChevronLeftIcon, LogOut, LogOutIcon, MoreHorizontal, Settings } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -43,7 +44,9 @@ export function SidebarDesktop({ sidebarItems, className, user }: SidebarDesktop
       <div className="flex h-full flex-col justify-between">
         <div>
           <div className="flex items-start justify-between py-3">
-            <h3 className="mx-3 text-lg font-semibold text-foreground">LRP</h3>
+            <div className="mx-3 text-lg font-semibold text-foreground">
+              <Image src="/images/lec.png" alt={'Logo'} width={40} height={40} />
+            </div>
 
             <div className="relative cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
               <ChevronLeftIcon className="absolute right-0 top-0" />

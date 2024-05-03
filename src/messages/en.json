@@ -33,7 +33,7 @@
   "sonner_creation_message": "Creating",
   "sonner_updating_message": "Updating",
   "basic": "Basic",
-  "commitment": "Cam",
+  "commitment": "Commitment",
   "equipment": "Equipment",
   "empowerment": "Empowerment",
   "name": "Name",
@@ -72,5 +72,9 @@
   "select_member": "Select Member",
   "not_found": "Not found",
   "person": "Person",
-  "search_curator": "Search Curator"
+  "search_curator": "Search Curator",
+  "dark": "Dark",
+  "light": "Light",
+  "system": "System",
+  "toggle_theme": "Toggle theme"
 }

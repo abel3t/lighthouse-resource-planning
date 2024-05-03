@@ -20,8 +20,8 @@
   "caring_ranking_title": "Xếp loại",
   "caring_ranking_amount": "Lượt chăm sóc",
   "table_page": "Trang",
-  "table_row_s": "Số hàng",
-  "table_rows_per_page": "số hàng trên mỗi trang",
+  "table_row_s": "số hàng",
+  "table_rows_per_page": "Số hàng trên mỗi trang",
   "table_no_data": "Không có dữ liệu",
   "table_selected": "đã chọn",
   "table_of": "trên",
@@ -32,7 +32,7 @@
   "sonner_failed_message": "thất bại",
   "sonner_creation_message": "Đang tạo",
   "sonner_updating_message": "Đang cập nhật",
-  "basic": "Cơ bản",
+  "basic": "Nền tảng",
   "commitment": "Cam kết",
   "equipment": "Trang bị",
   "empowerment": "Trao quyền",
@@ -72,5 +72,9 @@
   "select_member": "Chọn thành viên",
   "not_found": "Không tìm thấy",
   "person": "Người",
-  "search_curator": "Tìm người chăm sóc"
+  "search_curator": "Tìm người chăm sóc",
+  "dark": "Tối",
+  "light": "Sáng",
+  "system": "Hệ thống",
+  "toggle_theme": "Chủ đề"
 }

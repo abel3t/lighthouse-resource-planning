@@ -1,6 +1,6 @@
 'use client';
 
-import { FriendTypeColor, NOT_APPLICABLE } from '@/constant';
+import { FriendTypeColor } from '@/constant';
 import { FriendType } from '@/enums';
 import type { DataTableFilterField } from '@/types';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
