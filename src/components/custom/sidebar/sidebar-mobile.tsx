@@ -1,7 +1,8 @@
 'use client';
 
 import { SidebarItems } from '@/types';
-import { LogOut, Menu, MoreHorizontal, Settings, X } from 'lucide-react';
+import { Menu, MoreHorizontal, Settings, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -10,7 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar';
 import { Button } from '../../ui/button';
 import { Drawer, DrawerContent, DrawerTrigger } from '../../ui/drawer';
 import { Separator } from '../../ui/separator';
-import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTrigger } from '../../ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTrigger } from '../../ui/sheet';
 import { Icons } from '../icons';
 import { SidebarButtonSheet as SidebarButton } from './sidebar-button';
 
@@ -24,6 +25,7 @@ export function SidebarMobile({ sidebarItems, user }: SidebarMobileProps) {
   const [isLogoutLoading, setIsLogoutLoading] = useState(false);
 
   const router = useRouter();
+  const t = useTranslations();
 
   return (
     <Sheet>
@@ -46,7 +48,7 @@ export function SidebarMobile({ sidebarItems, user }: SidebarMobileProps) {
                   className="w-full"
                   isExpanded={true}
                 >
-                  {link.label}
+                  {t(link.label)}
                 </SidebarButton>
               </Link>
             ))}

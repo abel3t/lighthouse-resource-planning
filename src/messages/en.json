@@ -4,5 +4,19 @@
   "confirm_policy_text": "By clicking continue, you agree to our Terms of Service and Privacy Policy.",
   "sign_in_with_email": "Sign In with Email",
   "sign_in_with_google": "Sign In with Google",
-  "or_continue_with": "Or continue with"
+  "or_continue_with": "Or continue with",
+  "dashboard": "Dashboard",
+  "members": "Members",
+  "friends": "Friends",
+  "cares": "Cares",
+  "discipleship": "Discipleship",
+  "funds": "Funds",
+  "overview": "Overview",
+  "dashboard_friends": "Friends",
+  "dashboard_unbelievers": "Unbelievers",
+  "needing_more_cares": "Needing More Cares",
+  "caring_ranking": "Caring Rankings",
+  "caring_ranking_name": "Name",
+  "caring_ranking_title": "Rank",
+  "caring_ranking_amount": "Amount"
 }

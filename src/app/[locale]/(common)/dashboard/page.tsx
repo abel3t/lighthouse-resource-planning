@@ -5,6 +5,7 @@ import { Account, Care } from '@prisma/client';
 import { formatRelative, subMonths } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { User2Icon } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
 import { Timeline, TimelineItem } from '@/components/custom/timeline';
 import { Badge } from '@/components/ui/badge';
@@ -14,7 +15,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import prisma from '@/lib/prisma';
 import { cn } from '@/lib/utils';
 
-export default async function MemberPage() {
+export default async function MemberPage({ params: { locale } }: { params: { locale: string } }) {
   const organization = await getKindeServerSession()?.getOrganization();
 
   const [totalMembers, totalFriends, totalUnbelievers] = await Promise.all([
@@ -55,11 +56,13 @@ export default async function MemberPage() {
     })
   ]);
 
+  const t = await getTranslations({ locale });
+
   return (
     <div className="mt-8 grid grid-cols-1 gap-3 text-xs md:mt-0 md:text-sm lg:grid-cols-2">
       <div className="rounded-md p-5 shadow-lg">
         <div className="flex flex-col">
-          <div className="text-md font-bold md:text-lg">Over view</div>
+          <div className="text-md font-bold md:text-lg">{t('overview')}</div>
         </div>
 
         <div className="flex justify-between py-3">
@@ -70,7 +73,7 @@ export default async function MemberPage() {
 
             <div className="flex flex-col">
               <div className="font-bold">{totalMembers}</div>
-              <div className="text-xs font-bold text-gray-500 md:text-sm">Thành viên</div>
+              <div className="text-xs font-bold text-gray-500 md:text-sm">{t('members')}</div>
             </div>
           </div>
 
@@ -81,7 +84,7 @@ export default async function MemberPage() {
 
             <div className="flex flex-col">
               <div className="font-bold">{totalFriends}</div>
-              <div className="text-xs font-bold text-gray-500 md:text-sm">Bạn hữu</div>
+              <div className="text-xs font-bold text-gray-500 md:text-sm">{t('dashboard_friends')}</div>
             </div>
           </div>
 
@@ -92,7 +95,7 @@ export default async function MemberPage() {
 
             <div className="flex flex-col">
               <div className="font-bold">{totalUnbelievers}</div>
-              <div className="text-xs font-bold text-gray-500 md:text-sm">Thân hữu</div>
+              <div className="text-xs font-bold text-gray-500 md:text-sm">{t('dashboard_unbelievers')}</div>
             </div>
           </div>
         </div>
@@ -101,13 +104,13 @@ export default async function MemberPage() {
       <div className="hidden h-32 rounded-md shadow-lg md:block"></div>
 
       <ScrollArea className="h-96 rounded-md p-2 shadow-lg">
-        <div className="text-md font-bold md:text-lg">Cần quan tâm nhiều hơn</div>
+        <div className="text-md font-bold md:text-lg">{t('needing_more_cares')}</div>
         <NeedingMoreCares cares={cares} />
       </ScrollArea>
 
       <div className="h-96 rounded-md p-2 shadow-lg">
-        <div className="text-md font-bold md:text-lg">Bảng xếp hạng chăm sóc</div>
-        <TopCaringPeople accounts={accounts} />
+        <div className="text-md font-bold md:text-lg">{t('caring_ranking')}</div>
+        <TopCaringPeople accounts={accounts} t={t} />
       </div>
     </div>
   );
@@ -165,15 +168,15 @@ const NeedingMoreCares = ({ cares }: { cares: Care[] }) => {
   );
 };
 
-const TopCaringPeople = ({ accounts }: { accounts: Account[] }) => {
+const TopCaringPeople = ({ accounts, t }: { accounts: Account[]; t: any }) => {
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">ID</TableHead>
-          <TableHead>Tên</TableHead>
-          <TableHead>Xếp loại</TableHead>
-          <TableHead className="text-right">Lượt chăm sóc</TableHead>
+          <TableHead>{t('caring_ranking_name')}</TableHead>
+          <TableHead>{t('caring_ranking_title')}</TableHead>
+          <TableHead className="text-right">{t('caring_ranking_amount')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

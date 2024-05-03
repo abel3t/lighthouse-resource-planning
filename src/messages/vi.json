@@ -4,5 +4,19 @@
   "confirm_policy_text": "Bằng cách đăng nhập, bạn đồng ý với các điều khoản và điều kiện của chúng tôi.",
   "sign_in_with_email": "Đăng nhập bằng Email",
   "sign_in_with_google": "Đăng nhập bằng Google",
-  "or_continue_with": "Hoặc tiếp tục với"
+  "or_continue_with": "Hoặc tiếp tục với",
+  "dashboard": "Thống kê",
+  "members": "Thành viên",
+  "friends": "Bạn hữu/Thân hữu",
+  "cares": "Chăm sóc",
+  "discipleship": "Môn đồ hóa",
+  "funds": "Quỹ",
+  "overview": "Tổng quan",
+  "dashboard_friends": "Bạn hữu",
+  "dashboard_unbelievers": "Thân hữu",
+  "needing_more_cares": "Cần quan tâm nhiều hơn",
+  "caring_ranking": "Bảng xếp hạng chăm sóc",
+  "caring_ranking_name": "Tên",
+  "caring_ranking_title": "Xếp loại",
+  "caring_ranking_amount": "Lượt chăm sóc"
 }

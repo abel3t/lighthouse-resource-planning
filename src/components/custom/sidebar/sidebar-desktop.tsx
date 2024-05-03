@@ -3,6 +3,7 @@
 import { SidebarItems } from '@/types';
 import { motion } from 'framer-motion';
 import { ChevronLeftIcon, LogOut, LogOutIcon, MoreHorizontal, Settings } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -27,6 +28,8 @@ export function SidebarDesktop({ sidebarItems, className, user }: SidebarDesktop
   const [isExpanded, setIsExpanded] = useState(true);
   const [isLogoutLoading, setIsLogoutLoading] = useState(false);
   const router = useRouter();
+
+  const t = useTranslations();
 
   return (
     <motion.div
@@ -56,7 +59,7 @@ export function SidebarDesktop({ sidebarItems, className, user }: SidebarDesktop
                   className="w-full"
                   isExpanded={isExpanded}
                 >
-                  {link.label}
+                  {t(link.label)}
                 </SidebarButton>
               </Link>
             ))}
