@@ -45,7 +45,16 @@ export default function RootLayout({
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <main>
               {children}
-              <Toaster />
+              <Toaster
+                toastOptions={{
+                  classNames: {
+                    error: 'text-red-500',
+                    success: 'text-green-500',
+                    warning: 'text-yellow-400',
+                    info: 'text-blue-400'
+                  }
+                }}
+              />
             </main>
           </ThemeProvider>
         </NextIntlClientProvider>

@@ -81,14 +81,20 @@ const AvatarIcon = ({ user }: { user: any }) => {
 
         <Separator />
 
-        <div className="flex cursor-pointer py-2 hover:bg-gray-100 hover:opacity-80" onClick={handleOnclick}>
+        <div
+          className="flex cursor-pointer py-2 hover:bg-gray-100 hover:opacity-80 dark:hover:bg-gray-700"
+          onClick={handleOnclick}
+        >
           <div className="px-3">
             <UserIcon />
           </div>
           <div className="px-2">{t('profile')}</div>
         </div>
 
-        <div className="flex cursor-pointer py-2  hover:bg-gray-100 hover:opacity-80" onClick={handleOnclick}>
+        <div
+          className="dark:bg-bg-transparent flex cursor-pointer  py-2 hover:bg-gray-100 hover:opacity-80  dark:hover:bg-gray-700"
+          onClick={handleOnclick}
+        >
           <div className="px-3">
             <SettingsIcon />
           </div>
@@ -97,14 +103,14 @@ const AvatarIcon = ({ user }: { user: any }) => {
 
         <Separator />
 
-        <div className="flex cursor-pointer items-center py-3 hover:bg-gray-100 hover:opacity-80">
+        <div className="flex cursor-pointer items-center py-3 hover:bg-gray-100 hover:opacity-80  dark:hover:bg-gray-700">
           <div className="px-3">
             <ExternalLink />
           </div>
           <div className="px-2">
             <Button
               variant={'outline'}
-              className="w-full cursor-pointer border-none bg-transparent p-0 ring-offset-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="w-full cursor-pointer border-none bg-transparent p-0 ring-offset-transparent focus-visible:ring-0 focus-visible:ring-offset-0  dark:hover:bg-gray-700"
               onClick={() => {
                 router.push('/api/auth/logout');
                 setIsLogoutLoading(true);
