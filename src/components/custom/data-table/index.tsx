@@ -23,7 +23,7 @@ interface DataTableProps<TData> {
 
 export function DataTable<TData>({ table }: DataTableProps<TData>) {
   return (
-    <div className="space-y-1overflow-auto w-screen">
+    <div className="w-full space-y-1 overflow-auto px-0">
       <div className="rounded-md border">
         <Table>
           <TableHeader>

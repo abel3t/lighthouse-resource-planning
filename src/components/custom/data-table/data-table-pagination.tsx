@@ -15,12 +15,12 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
   const t = useTranslations();
 
   return (
-    <div className="mt-2 flex w-screen items-center justify-between px-2">
+    <div className="mt-2 flex w-full items-center justify-between px-2">
       <div className="flex-1 text-sm text-muted-foreground">
         {table.getFilteredSelectedRowModel().rows.length} {t('table_of')} {table.getFilteredRowModel().rows.length}{' '}
         {t('table_row_s')} {t('table_selected')}.
       </div>
-      <div className="flex items-center space-x-6 lg:space-x-8">
+      <div className="flex items-center space-x-2 md:space-x-6 lg:space-x-8">
         <div className="flex items-center space-x-2">
           <p className="text-sm font-medium">{t('table_rows_per_page')}</p>
           <Select
@@ -29,7 +29,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
               table.setPageSize(Number(value));
             }}
           >
-            <SelectTrigger className="h-8 w-[70px]">
+            <SelectTrigger className="h-8 w-[60px]">
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
