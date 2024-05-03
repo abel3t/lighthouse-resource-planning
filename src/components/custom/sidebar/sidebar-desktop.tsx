@@ -56,7 +56,14 @@ export function SidebarDesktop({ sidebarItems, className, user }: SidebarDesktop
 
           <div className="flex flex-col gap-1">
             {sidebarItems.links.map((link, index) => (
-              <Link key={index} href={`/${locale}${link.href}`}>
+              <Link
+                key={index}
+                href={`/${locale}${link.href}`}
+                className={cn({
+                  'rounded-md bg-gray-100 opacity-80 dark:bg-gray-700':
+                    link.href !== '/' && pathname.includes(link.href)
+                })}
+              >
                 <SidebarButton
                   variant={pathname === link.href ? 'secondary' : 'ghost'}
                   icon={link.icon}

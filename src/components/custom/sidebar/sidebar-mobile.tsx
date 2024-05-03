@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { cn } from '@/lib/utils';
+
 import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar';
 import { Button } from '../../ui/button';
 import { Drawer, DrawerContent, DrawerTrigger } from '../../ui/drawer';
@@ -42,7 +44,14 @@ export function SidebarMobile({ sidebarItems, user }: SidebarMobileProps) {
         <div className="h-full">
           <div className="mt-5 flex w-full flex-col gap-1">
             {sidebarItems.links.map((link, idx) => (
-              <Link key={idx} href={`/${locale}${link.href}`}>
+              <Link
+                key={idx}
+                href={`/${locale}${link.href}`}
+                className={cn({
+                  'rounded-md bg-gray-100 opacity-80 dark:bg-gray-700':
+                    link.href !== '/' && pathname.includes(link.href)
+                })}
+              >
                 <SidebarButton
                   variant={pathname === link.href ? 'secondary' : 'ghost'}
                   icon={link.icon}

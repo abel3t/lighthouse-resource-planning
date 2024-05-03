@@ -10,7 +10,7 @@ import { SidebarMobile } from './sidebar-mobile';
 
 export const sidebarItems: SidebarItems = {
   links: [
-    { label: 'dashboard', href: '/', icon: Home },
+    { label: 'dashboard', href: '/dashboard', icon: Home },
     { label: 'members', href: '/members', icon: Users },
     { label: 'friends', href: '/friends', icon: BookUser },
     {
