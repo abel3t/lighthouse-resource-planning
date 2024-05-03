@@ -15,7 +15,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
   const t = useTranslations();
 
   return (
-    <div className="mt-2 flex items-center justify-between px-2">
+    <div className="mt-2 flex w-screen items-center justify-between px-2">
       <div className="flex-1 text-sm text-muted-foreground">
         {table.getFilteredSelectedRowModel().rows.length} {t('table_of')} {table.getFilteredRowModel().rows.length}{' '}
         {t('table_row_s')} {t('table_selected')}.
