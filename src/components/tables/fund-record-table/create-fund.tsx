@@ -4,6 +4,7 @@ import useFundStore from '@/stores/useFundStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusIcon } from '@radix-ui/react-icons';
 import axios from 'axios';
+import { useTranslations } from 'next-intl';
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -36,6 +37,8 @@ export function CreateFundDialog() {
   const [open, setOpen] = useState(false);
   const [, startCreateTransition] = useTransition();
   const [isOnCreating, setIsOnCreating] = useState(false);
+
+  const t = useTranslations();
 
   const form = useForm<CreateFundSchema>({
     resolver: zodResolver(createFundSchema)
@@ -96,7 +99,7 @@ export function CreateFundDialog() {
             <p className="md:text-md align-center flex justify-center text-sm text-gray-600 lg:text-base">
               <PlusIcon />
             </p>
-            <p className="text-secondary">Tạo Quỹ </p>
+            <p className="text-secondary">Tạo Quỹ</p>
           </div>
         </div>
       </DialogTrigger>
@@ -114,11 +117,11 @@ export function CreateFundDialog() {
             <DialogFooter className="gap-2 pt-2 sm:space-x-0">
               <DialogClose asChild>
                 <Button type="button" variant="outline" disabled={isOnCreating}>
-                  Cancel
+                  {t('cancel')}
                 </Button>
               </DialogClose>
               <Button className="flex w-24 justify-center" disabled={isOnCreating}>
-                {isOnCreating ? <Icons.spinner className="h-4 w-4 animate-spin" /> : 'Submit'}
+                {isOnCreating ? <Icons.spinner className="h-4 w-4 animate-spin" /> : t('submit')}
               </Button>
             </DialogFooter>
           </form>

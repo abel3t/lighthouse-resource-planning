@@ -2,6 +2,7 @@
 
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Table } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -38,11 +39,13 @@ export function DataTableToolbar<TData>({
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
+  const t = useTranslations();
+
   return (
     <div className={cn('flex items-center justify-between space-x-2 overflow-auto p-1', className)} {...props}>
       <div className="flex flex-1 items-center space-x-2">
         <Input
-          placeholder={search.placeholder}
+          placeholder={t(search.placeholder)}
           value={(table.getColumn(search.name)?.getFilterValue() as string) ?? ''}
           onChange={(event) => table.getColumn(search.name)?.setFilterValue(event.target.value)}
           className="h-8 w-[150px] lg:w-[250px]"
@@ -61,7 +64,7 @@ export function DataTableToolbar<TData>({
 
         {isFiltered && (
           <Button variant="ghost" onClick={() => table.resetColumnFilters()} className="h-8 px-2 lg:px-3">
-            Reset
+            {t('clear_filters')}
             <Cross2Icon className="ml-2 h-4 w-4" />
           </Button>
         )}

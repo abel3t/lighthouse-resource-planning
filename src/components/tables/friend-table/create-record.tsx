@@ -1,7 +1,6 @@
 'use client';
 
-import { DiscipleshipProcess, FriendType, Gender, PersonalType } from '@/enums';
-import useAccountStore from '@/stores/useAccountStore';
+import { FriendType, Gender } from '@/enums';
 import useFriendStore from '@/stores/useFriendStore';
 import useMemberStore from '@/stores/useMemberStore';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,6 +9,7 @@ import axios from 'axios';
 import { CommandList } from 'cmdk';
 import { format } from 'date-fns';
 import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -28,10 +28,10 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -54,6 +54,8 @@ export type CreateRecordSchema = z.infer<typeof createFundRecordSchema>;
 export function CreateFundRecordDialog() {
   const [open, setOpen] = React.useState(false);
   const [isCreatePending, startCreateTransition] = React.useTransition();
+
+  const t = useTranslations();
 
   const form = useForm<CreateRecordSchema>({
     resolver: zodResolver(createFundRecordSchema)
@@ -101,49 +103,48 @@ export function CreateFundRecordDialog() {
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <PlusIcon className="mr-2 size-4" aria-hidden="true" />
-          New Record
+          {t('new_record')}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-screen overflow-y-scroll">
         <DialogHeader>
-          <DialogTitle>Create Record</DialogTitle>
-          <DialogDescription>Điền thông tin.</DialogDescription>
+          <DialogTitle>{t('new_record')}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
             <div className="flex items-start gap-2">
-              <NameField form={form} />
-              <FriendTypeField form={form} />
+              <NameField form={form} t={t} />
+              <FriendTypeField form={form} t={t} />
             </div>
 
             <div className="flex items-start gap-2">
-              <IntroducedByField form={form} />
-              <PhoneField form={form} />
+              <IntroducedByField form={form} t={t} />
+              <PhoneField form={form} t={t} />
             </div>
 
             <div className="flex items-start gap-2">
-              <EmailField form={form} />
-              <BirthdayField form={form} />
+              <EmailField form={form} t={t} />
+              <BirthdayField form={form} t={t} />
             </div>
 
             <div className="flex items-start gap-2">
-              <HometownField form={form} />
-              <AddressField form={form} />
+              <HometownField form={form} t={t} />
+              <AddressField form={form} t={t} />
             </div>
 
             <div className="flex items-start gap-2">
-              <GenderField form={form} />
+              <GenderField form={form} t={t} />
             </div>
 
-            <DescriptionField form={form} />
+            <DescriptionField form={form} t={t} />
 
             <DialogFooter className="gap-2 pt-2 sm:space-x-0">
               <DialogClose asChild>
                 <Button type="button" variant="outline">
-                  Cancel
+                  {t('cancel')}
                 </Button>
               </DialogClose>
-              <Button disabled={isCreatePending}>Submit</Button>
+              <Button disabled={isCreatePending}>{t('submit')}</Button>
             </DialogFooter>
           </form>
         </Form>
@@ -152,7 +153,7 @@ export function CreateFundRecordDialog() {
   );
 }
 
-const IntroducedByField = ({ form }: any) => {
+const IntroducedByField = ({ form, t }: any) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const members = useMemberStore((state) => state.allMembers);
@@ -163,7 +164,7 @@ const IntroducedByField = ({ form }: any) => {
       name="friendId"
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
-          <FormLabel>Introduced by</FormLabel>
+          <FormLabel>{t('introduced_by')}</FormLabel>
           <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
               <FormControl>
@@ -179,10 +180,10 @@ const IntroducedByField = ({ form }: any) => {
             </PopoverTrigger>
             <PopoverContent className=" p-0">
               <Command>
-                <CommandInput placeholder="Search Contributor..." />
+                <CommandInput placeholder={t('search_member')} />
                 <CommandList>
                   <ScrollArea className="h-72">
-                    <CommandEmpty>No member found.</CommandEmpty>
+                    <CommandEmpty>{t('not_found')}</CommandEmpty>
 
                     <CommandGroup>
                       {members.map((member) => (
@@ -213,16 +214,16 @@ const IntroducedByField = ({ form }: any) => {
   );
 };
 
-const NameField = ({ form }: any) => {
+const NameField = ({ form, t }: any) => {
   return (
     <FormField
       control={form.control}
       name="name"
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
-          <FormLabel>Tên</FormLabel>
+          <FormLabel>{t('name')}</FormLabel>
           <FormControl>
-            <Input placeholder="Tên" className="resize-none" {...field} />
+            <Input placeholder={t('name')} className="resize-none" {...field} />
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -231,16 +232,16 @@ const NameField = ({ form }: any) => {
   );
 };
 
-const PhoneField = ({ form }: any) => {
+const PhoneField = ({ form, t }: any) => {
   return (
     <FormField
       control={form.control}
       name="phone"
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
-          <FormLabel>Phone</FormLabel>
+          <FormLabel>{t('phone')}</FormLabel>
           <FormControl>
-            <Input placeholder="Phone" className="resize-none" {...field} />
+            <Input placeholder={t('phone')} className="resize-none" {...field} />
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -249,16 +250,16 @@ const PhoneField = ({ form }: any) => {
   );
 };
 
-const EmailField = ({ form }: any) => {
+const EmailField = ({ form, t }: any) => {
   return (
     <FormField
       control={form.control}
       name="email"
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
-          <FormLabel>Email</FormLabel>
+          <FormLabel>{t('phone')}</FormLabel>
           <FormControl>
-            <Input placeholder="Email" className="resize-none" {...field} />
+            <Input placeholder={t('phone')} className="resize-none" {...field} />
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -267,16 +268,16 @@ const EmailField = ({ form }: any) => {
   );
 };
 
-const AddressField = ({ form }: any) => {
+const AddressField = ({ form, t }: any) => {
   return (
     <FormField
       control={form.control}
       name="address"
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
-          <FormLabel>Address</FormLabel>
+          <FormLabel>{t('address')}</FormLabel>
           <FormControl>
-            <Input placeholder="Address" className="resize-none" {...field} />
+            <Input placeholder={t('address')} className="resize-none" {...field} />
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -285,16 +286,16 @@ const AddressField = ({ form }: any) => {
   );
 };
 
-const HometownField = ({ form }: any) => {
+const HometownField = ({ form, t }: any) => {
   return (
     <FormField
       control={form.control}
       name="hometown"
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
-          <FormLabel>Hometown</FormLabel>
+          <FormLabel>{t('hometown')}</FormLabel>
           <FormControl>
-            <Input placeholder="hometown" className="resize-none" {...field} />
+            <Input placeholder={t('hometown')} className="resize-none" {...field} />
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -303,16 +304,16 @@ const HometownField = ({ form }: any) => {
   );
 };
 
-const DescriptionField = ({ form }: any) => {
+const DescriptionField = ({ form, t }: any) => {
   return (
     <FormField
       control={form.control}
       name="description"
       render={({ field }) => (
         <FormItem className="flex w-full flex-col">
-          <FormLabel>Ghi chú</FormLabel>
+          <FormLabel>{t('note')}</FormLabel>
           <FormControl>
-            <Textarea placeholder="Thông tin chi tiết..." className="resize-none" {...field} />
+            <Textarea placeholder={t('note')} className="resize-none" {...field} />
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -321,7 +322,7 @@ const DescriptionField = ({ form }: any) => {
   );
 };
 
-const GenderField = ({ form }: any) => {
+const GenderField = ({ form, t }: any) => {
   const bgColor: Record<string, string> = {
     [Gender.Male]: 'bg-yellow-400',
     [Gender.Female]: 'bg-purple-400'
@@ -335,10 +336,10 @@ const GenderField = ({ form }: any) => {
         <FormItem className="flex w-1/2 flex-col">
           <FormControl>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <FormLabel>Giới tính</FormLabel>
+              <FormLabel>{t('gender')}</FormLabel>
               <FormControl>
                 <SelectTrigger className={cn(`${bgColor[field.value]}`, field.value && 'font-bold text-white')}>
-                  <SelectValue placeholder="Gender" />
+                  <SelectValue placeholder={t('gender')} />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
@@ -354,7 +355,7 @@ const GenderField = ({ form }: any) => {
   );
 };
 
-const FriendTypeField = ({ form }: any) => {
+const FriendTypeField = ({ form, t }: any) => {
   const bgColor: Record<string, string> = {
     [FriendType.Friend]: 'bg-yellow-400',
     [FriendType.Unsure]: 'bg-gray-400',
@@ -368,12 +369,12 @@ const FriendTypeField = ({ form }: any) => {
       name="type"
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
-          <FormLabel className="my-0 py-0">Type</FormLabel>
+          <FormLabel className="my-0 py-0">{t('friend_type')}</FormLabel>
           <FormControl>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger className={cn(`${bgColor[field.value]}`, field.value && 'font-bold text-white')}>
-                  <SelectValue placeholder="Type" />
+                  <SelectValue placeholder={t('friend_type')} />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
@@ -391,14 +392,14 @@ const FriendTypeField = ({ form }: any) => {
   );
 };
 
-const BirthdayField = ({ form }: any) => {
+const BirthdayField = ({ form, t }: any) => {
   return (
     <FormField
       control={form.control}
       name="birthday"
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
-          <FormLabel>Date of birth</FormLabel>
+          <FormLabel>{t('date_of_birth')}</FormLabel>
           <Popover modal>
             <PopoverTrigger asChild>
               <FormControl>
@@ -406,7 +407,7 @@ const BirthdayField = ({ form }: any) => {
                   variant={'outline'}
                   className={cn(' pl-3 text-left font-normal', !field.value && 'text-muted-foreground')}
                 >
-                  {field.value ? format(field.value, 'dd/MM/yyyy') : <span>Pick a date</span>}
+                  {field.value ? format(field.value, 'dd/MM/yyyy') : <span>{t('pick_a_date')}</span>}
                   <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                 </Button>
               </FormControl>

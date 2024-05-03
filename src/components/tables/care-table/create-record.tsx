@@ -10,6 +10,7 @@ import axios from 'axios';
 import { CommandList } from 'cmdk';
 import { format } from 'date-fns';
 import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import * as React from 'react';
 import { useState } from 'react';
@@ -57,6 +58,8 @@ export function CreateFundRecordDialog() {
   const [isCreatePending, startCreateTransition] = React.useTransition();
   const [fileUrl, setFileUrl] = useState<string | undefined>();
   const [isUploading, setIsUploading] = useState(false);
+
+  const t = useTranslations();
 
   const form = useForm<CreateRecordSchema>({
     resolver: zodResolver(createFundRecordSchema)
@@ -133,25 +136,24 @@ export function CreateFundRecordDialog() {
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <PlusIcon className="mr-2 size-4" aria-hidden="true" />
-          New Record
+          {t('new_record')}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-screen overflow-y-scroll">
         <DialogHeader>
-          <DialogTitle>Create Record</DialogTitle>
-          <DialogDescription>Điền thông tin.</DialogDescription>
+          <DialogTitle>{t('new_record')}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
             <div className="flex w-full items-start gap-2">
-              <MemberField form={form} />
-              <CareTypeField form={form} />
+              <MemberField form={form} t={t} />
+              <CareTypeField form={form} t={t} />
             </div>
 
             <div className="flex items-start gap-2">
-              <CarePriorityField form={form} />
+              <CarePriorityField form={form} t={t} />
 
-              <DateField form={form} />
+              <DateField form={form} t={t} />
             </div>
 
             <div className="flex items-start gap-2">
@@ -188,15 +190,15 @@ export function CreateFundRecordDialog() {
               )}
             </div>
 
-            <DescriptionField form={form} />
+            <DescriptionField form={form} t={t} />
 
             <DialogFooter className="gap-2 pt-2 sm:space-x-0">
               <DialogClose asChild>
                 <Button disabled={isUploading} type="button" variant="outline">
-                  Cancel
+                  {t('cancel')}
                 </Button>
               </DialogClose>
-              <Button disabled={isUploading || isCreatePending}>Submit</Button>
+              <Button disabled={isUploading || isCreatePending}>{t('submit')}</Button>
             </DialogFooter>
           </form>
         </Form>
@@ -205,7 +207,7 @@ export function CreateFundRecordDialog() {
   );
 }
 
-const MemberField = ({ form }: any) => {
+const MemberField = ({ form, t }: any) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const members = useMemberStore((state) => state.members);
@@ -216,7 +218,7 @@ const MemberField = ({ form }: any) => {
       name="personId"
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col space-y-2">
-          <FormLabel>Member</FormLabel>
+          <FormLabel>{t('member')}</FormLabel>
           <Popover open={isOpen} onOpenChange={setIsOpen} modal={true}>
             <PopoverTrigger asChild>
               <FormControl>
@@ -232,10 +234,10 @@ const MemberField = ({ form }: any) => {
             </PopoverTrigger>
             <PopoverContent className=" p-0">
               <Command>
-                <CommandInput placeholder="Search Contributor..." />
+                <CommandInput placeholder={t('search_member')} />
                 <ScrollArea className="h-72">
                   <CommandList>
-                    <CommandEmpty>No member found.</CommandEmpty>
+                    <CommandEmpty>{t('not_found')}.</CommandEmpty>
 
                     <CommandGroup>
                       {members.map((member) => (
@@ -266,16 +268,16 @@ const MemberField = ({ form }: any) => {
   );
 };
 
-const DescriptionField = ({ form }: any) => {
+const DescriptionField = ({ form, t }: any) => {
   return (
     <FormField
       control={form.control}
       name="description"
       render={({ field }) => (
         <FormItem className="flex w-full flex-col">
-          <FormLabel>Ghi chú</FormLabel>
+          <FormLabel>{t('note')}</FormLabel>
           <FormControl>
-            <Textarea placeholder="Thông tin chi tiết..." className="resize-none" {...field} />
+            <Textarea placeholder={t('note')} className="resize-none" {...field} />
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -284,7 +286,7 @@ const DescriptionField = ({ form }: any) => {
   );
 };
 
-const CareTypeField = ({ form }: any) => {
+const CareTypeField = ({ form, t }: any) => {
   const bgColor: Record<string, string> = {
     [CareType.Message]: 'bg-red-400',
     [CareType.Call]: 'bg-yellow-400',
@@ -298,12 +300,12 @@ const CareTypeField = ({ form }: any) => {
       name="type"
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
-          <FormLabel className="my-0 py-0">Type</FormLabel>
+          <FormLabel className="my-0 py-0">{t('care_type')}</FormLabel>
           <FormControl>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger className={cn(`${bgColor[field.value]}`, field.value && 'font-bold text-white')}>
-                  <SelectValue placeholder="Type" />
+                  <SelectValue placeholder={t('care_type')} />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
@@ -321,7 +323,7 @@ const CareTypeField = ({ form }: any) => {
   );
 };
 
-const CarePriorityField = ({ form }: any) => {
+const CarePriorityField = ({ form, t }: any) => {
   const bgColor: Record<string, string> = {
     [CarePriority.Warning]: 'bg-red-400',
     [CarePriority.Normal]: 'bg-yellow-400',
@@ -334,12 +336,12 @@ const CarePriorityField = ({ form }: any) => {
       name="priority"
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
-          <FormLabel className="my-0 py-0">Type</FormLabel>
+          <FormLabel className="my-0 py-0">{t('care_priority')}</FormLabel>
           <FormControl>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger className={cn(`${bgColor[field.value]}`, field.value && 'font-bold text-white')}>
-                  <SelectValue placeholder="Type" />
+                  <SelectValue placeholder={t('care_priority')} />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
@@ -356,14 +358,14 @@ const CarePriorityField = ({ form }: any) => {
   );
 };
 
-const DateField = ({ form }: any) => {
+const DateField = ({ form, t }: any) => {
   return (
     <FormField
       control={form.control}
       name="date"
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
-          <FormLabel>Date</FormLabel>
+          <FormLabel>{t('date')}</FormLabel>
           <Popover modal>
             <PopoverTrigger asChild>
               <FormControl>
@@ -371,7 +373,7 @@ const DateField = ({ form }: any) => {
                   variant={'outline'}
                   className={cn('pl-3 text-left font-normal', !field.value && 'text-muted-foreground')}
                 >
-                  {field.value ? format(field.value, 'dd/MM/yyyy') : <span>Pick a date</span>}
+                  {field.value ? format(field.value, 'dd/MM/yyyy') : <span>{t('pick_a_date')}</span>}
                   <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                 </Button>
               </FormControl>

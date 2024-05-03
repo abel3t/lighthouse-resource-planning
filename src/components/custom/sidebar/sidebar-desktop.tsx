@@ -3,7 +3,7 @@
 import { SidebarItems } from '@/types';
 import { motion } from 'framer-motion';
 import { ChevronLeftIcon, LogOut, LogOutIcon, MoreHorizontal, Settings } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -30,6 +30,7 @@ export function SidebarDesktop({ sidebarItems, className, user }: SidebarDesktop
   const router = useRouter();
 
   const t = useTranslations();
+  const locale = useLocale();
 
   return (
     <motion.div
@@ -52,7 +53,7 @@ export function SidebarDesktop({ sidebarItems, className, user }: SidebarDesktop
 
           <div className="flex flex-col gap-1">
             {sidebarItems.links.map((link, index) => (
-              <Link key={index} href={link.href}>
+              <Link key={index} href={`/${locale}${link.href}`}>
                 <SidebarButton
                   variant={pathname === link.href ? 'secondary' : 'ghost'}
                   icon={link.icon}

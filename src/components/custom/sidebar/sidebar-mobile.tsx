@@ -2,7 +2,7 @@
 
 import { SidebarItems } from '@/types';
 import { Menu, MoreHorizontal, Settings, X } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -26,6 +26,7 @@ export function SidebarMobile({ sidebarItems, user }: SidebarMobileProps) {
 
   const router = useRouter();
   const t = useTranslations();
+  const locale = useLocale();
 
   return (
     <Sheet>
@@ -41,7 +42,7 @@ export function SidebarMobile({ sidebarItems, user }: SidebarMobileProps) {
         <div className="h-full">
           <div className="mt-5 flex w-full flex-col gap-1">
             {sidebarItems.links.map((link, idx) => (
-              <Link key={idx} href={link.href}>
+              <Link key={idx} href={`/${locale}${link.href}`}>
                 <SidebarButton
                   variant={pathname === link.href ? 'secondary' : 'ghost'}
                   icon={link.icon}

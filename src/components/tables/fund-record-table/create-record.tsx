@@ -9,6 +9,7 @@ import { PlusIcon } from '@radix-ui/react-icons';
 import axios from 'axios';
 import { CommandList } from 'cmdk';
 import { Check, ChevronsUpDown } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useEffect, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
@@ -56,6 +57,8 @@ export function CreateFundRecordDialog() {
   const [isOnCreating, setIsOnCreating] = useState(false);
   const [fileUrl, setFileUrl] = useState<string | undefined>();
   const [isUploading, setIsUploading] = useState(false);
+
+  const t = useTranslations();
 
   const form = useForm<CreateRecordSchema>({
     resolver: zodResolver(createFundRecordSchema)
@@ -134,22 +137,21 @@ export function CreateFundRecordDialog() {
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <PlusIcon className="mr-2 size-4" aria-hidden="true" />
-          New Record
+          {t('new_record')}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-screen overflow-y-scroll">
         <DialogHeader>
-          <DialogTitle>Create Record</DialogTitle>
-          <DialogDescription>Điền thông tin.</DialogDescription>
+          <DialogTitle>{t('new_record')}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
-            <RecordTypeField form={form} />
+            <RecordTypeField form={form} t={t} />
 
             <div className="flex items-start gap-2">
-              <AmountField form={form} />
+              <AmountField form={form} t={t} />
 
-              <ContributorField form={form} />
+              <ContributorField form={form} t={t} />
             </div>
 
             <div className="flex items-start gap-2">
@@ -185,11 +187,11 @@ export function CreateFundRecordDialog() {
             <DialogFooter className="gap-2 pt-2 sm:space-x-0">
               <DialogClose asChild>
                 <Button type="button" variant="outline" disabled={isOnCreating || isUploading}>
-                  Cancel
+                  {t('cancel')}
                 </Button>
               </DialogClose>
               <Button className="flex w-24 justify-center" disabled={isOnCreating || isUploading}>
-                {isOnCreating ? <Icons.spinner className="h-4 w-4 animate-spin" /> : 'Submit'}
+                {isOnCreating ? <Icons.spinner className="h-4 w-4 animate-spin" /> : t('submit')}
               </Button>
             </DialogFooter>
           </form>
@@ -199,7 +201,7 @@ export function CreateFundRecordDialog() {
   );
 }
 
-const ContributorField = ({ form }: any) => {
+const ContributorField = ({ form, t }: any) => {
   const members = useMemberStore((state) => state.allMembers);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -210,7 +212,7 @@ const ContributorField = ({ form }: any) => {
       name="contributorId"
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
-          <FormLabel>Người Dâng</FormLabel>
+          <FormLabel>{t('search_giver')}</FormLabel>
           <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
               <FormControl>
@@ -226,10 +228,10 @@ const ContributorField = ({ form }: any) => {
             </PopoverTrigger>
             <PopoverContent className=" p-0">
               <Command>
-                <CommandInput placeholder="Search Contributor..." />
+                <CommandInput placeholder={t('search_giver')} />
                 <CommandList>
                   <ScrollArea className="h-72">
-                    <CommandEmpty>No contributor found.</CommandEmpty>
+                    <CommandEmpty>{t('not_found')}</CommandEmpty>
 
                     <CommandGroup>
                       {members.map((member) => (

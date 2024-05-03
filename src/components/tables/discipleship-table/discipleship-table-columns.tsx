@@ -25,7 +25,7 @@ import { getErrorMessage } from '@/lib/handle-error';
 
 export const searchField = {
   name: 'personName',
-  placeholder: 'Tìm tên người được môn đồ hóa'
+  placeholder: 'search_discipleship_person'
 };
 
 export const filterFields: DataTableFilterField<any>[] = [
@@ -36,7 +36,7 @@ export const filterFields: DataTableFilterField<any>[] = [
   }
 ];
 
-export function getColumns(): ColumnDef<any>[] {
+export function getColumns(t: Function): ColumnDef<any>[] {
   const router = useRouter();
   const updateTask = async (data: any) => {
     console.log('update task', data);
@@ -72,7 +72,7 @@ export function getColumns(): ColumnDef<any>[] {
     {
       accessorKey: 'personName',
       meta: 'Tên',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Tên" />,
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('name')} />,
       cell: ({ row }) => {
         return <div className="w-20">{row.getValue('personName')}</div>;
       },
@@ -80,8 +80,8 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'date',
-      meta: 'Ngày',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Ngày" />,
+      meta: t('date'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('date')} />,
       cell: ({ row }) => {
         const date = new Date(row.getValue('date'));
 
@@ -95,8 +95,8 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'type',
-      meta: 'Hình Thức',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Hình Thức" />,
+      meta: t('discipleship_type'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('discipleship_type')} />,
       cell: ({ row }) => {
         const type = row.getValue('type') as DiscipleshipType;
         return (
@@ -112,8 +112,8 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'priority',
-      meta: 'Đáp Ứng',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Đáp Ứng" />,
+      meta: t('discipleship_priority'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('discipleship_priority')} />,
       cell: ({ row }) => {
         const priority = row.getValue('priority') as DiscipleshipPriority;
         return (
@@ -129,8 +129,8 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'curatorName',
-      meta: 'Người Chăm Sóc',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Người Chăm Sóc" />,
+      meta: t('curator'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('curator')} />,
       cell: ({ row }) => {
         return <div className="w-20">{row.getValue('curatorName')}</div>;
       },

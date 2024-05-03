@@ -20,10 +20,10 @@ export const CareTypeColor = {
 };
 
 export const CareTypeText = {
-  [CareType.Message]: 'Message',
-  [CareType.FaceToFace]: 'Face to Face',
-  [CareType.Call]: 'Call',
-  [CareType.Visit]: 'Visit'
+  [CareType.Message]: 'message',
+  [CareType.FaceToFace]: 'face_to_face',
+  [CareType.Call]: 'call',
+  [CareType.Visit]: 'visit'
 };
 
 export const CarePriorityColor = {
@@ -55,6 +55,13 @@ export const DiscipleshipProcessColor = {
   [DiscipleshipProcess.Commitment]: '#22c55e',
   [DiscipleshipProcess.Equipment]: '#06b6d4',
   [DiscipleshipProcess.Empowerment]: '#6d28d9'
+};
+
+export const DiscipleshipProcessText = {
+  [DiscipleshipProcess.Basic]: 'basic',
+  [DiscipleshipProcess.Commitment]: 'commitment',
+  [DiscipleshipProcess.Equipment]: 'equipment',
+  [DiscipleshipProcess.Empowerment]: 'empowerment'
 };
 
 export const FriendTypeColor = {

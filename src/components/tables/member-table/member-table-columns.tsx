@@ -5,6 +5,7 @@ import { DiscipleshipProcess } from '@/enums';
 import type { DataTableFilterField } from '@/types';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { type ColumnDef } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 
@@ -23,23 +24,24 @@ import {
 
 export const searchField = {
   name: 'name',
-  placeholder: 'Tìm thành viên'
+  placeholder: 'search_member'
 };
 
 export const filterFields: DataTableFilterField<any>[] = [
   {
     label: 'Name',
     value: 'name',
-    placeholder: 'Filter name...'
+    placeholder: 'search_member'
   }
 ];
 
-export function getColumns(): ColumnDef<any>[] {
+export function getColumns(t: Function): ColumnDef<any>[] {
   const updateTask = async (data: any) => {
     console.log('update task', data);
   };
 
   const router = useRouter();
+
   return [
     {
       id: 'select',
@@ -70,8 +72,8 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'name',
-      meta: 'Tên',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Tên" />,
+      meta: t('name'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('name')} />,
       cell: ({ row }) => {
         return <div className="w-full">{row.getValue('name')}</div>;
       },
@@ -79,19 +81,17 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'phone',
-      meta: 'Số Điện Thoại',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Số Điện Thoại" />,
+      meta: t('phone'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('phone')} />,
       cell: ({ row }) => {
-        const date = new Date(row.getValue('phone'));
-
         return <div className="w-full">{row.getValue('phone')}</div>;
       },
       enableSorting: false
     },
     {
       accessorKey: 'discipleshipProcess',
-      meta: 'Discipleship',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Tiến Trình Môn Đồ Hóa" />,
+      meta: t('discipleship_process'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('discipleship_process')} />,
       cell: ({ row }) => {
         const discipleshipProcess = row.getValue('discipleshipProcess') as DiscipleshipProcess;
 
@@ -114,8 +114,8 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'curatorName',
-      meta: 'Người Chăm Sóc',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Người Chăm Sóc" />,
+      meta: t('curator'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('curator')} />,
       cell: ({ row }) => {
         return <div className="flex w-full space-x-2">{row.getValue('curatorName') || NOT_APPLICABLE}</div>;
       },

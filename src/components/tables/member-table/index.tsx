@@ -12,6 +12,7 @@ import {
   useReactTable
 } from '@tanstack/react-table';
 import { useDebounce } from '@uidotdev/usehooks';
+import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 
 import { DataTable } from '@/components/custom/data-table';
@@ -24,9 +25,10 @@ export default function MemberTable() {
   const metadata = useMemberStore((state) => state.metadata);
   const members = useMemberStore((state) => state.members);
   const fetchMembers = useMemberStore((state) => state.fetchMembers);
+  const t = useTranslations();
 
   // Memoize the columns so they don't re-render on every render
-  const columns = useMemo(() => getColumns(), []);
+  const columns = useMemo(() => getColumns(t), []);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });

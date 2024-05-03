@@ -21,11 +21,9 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 
-import { getErrorMessage } from '@/lib/handle-error';
-
 export const searchField = {
   name: 'name',
-  placeholder: 'Tìm bạn hữu/thân hữu'
+  placeholder: 'search_friend'
 };
 
 export const filterFields: DataTableFilterField<any>[] = [
@@ -36,7 +34,7 @@ export const filterFields: DataTableFilterField<any>[] = [
   }
 ];
 
-export function getColumns(): ColumnDef<any>[] {
+export function getColumns(t: Function): ColumnDef<any>[] {
   const router = useRouter();
   const updateTask = async (data: any) => {
     console.log('update task', data);
@@ -71,8 +69,8 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'name',
-      meta: 'Tên',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Tên" />,
+      meta: t('name'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('name')} />,
       cell: ({ row }) => {
         return <div className="w-full">{row.getValue('name')}</div>;
       },
@@ -80,8 +78,8 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'phone',
-      meta: 'Số Điện Thoại',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Số Điện Thoại" />,
+      meta: t('phone'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('phone')} />,
       cell: ({ row }) => {
         return <div className="w-full">{row.getValue('phone')}</div>;
       },
@@ -89,7 +87,8 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'type',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Nhóm" />,
+      meta: t('friend_type'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('friend_type')} />,
       cell: ({ row }) => {
         const type = row.getValue('type') as FriendType;
         return (
