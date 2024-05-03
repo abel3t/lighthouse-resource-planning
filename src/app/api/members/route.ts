@@ -1,6 +1,5 @@
 import { PersonalType } from '@/enums';
 import { SortType } from '@/types';
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { NextResponse } from 'next/server';
 
 import prisma from '@/lib/prisma';
