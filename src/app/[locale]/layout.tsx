@@ -38,7 +38,7 @@ export default function RootLayout({
 
   return (
     <html lang={params?.locale}>
-      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
       <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
         <NextIntlClientProvider messages={messages}>

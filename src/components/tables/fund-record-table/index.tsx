@@ -126,7 +126,7 @@ export default function FundRecordTable() {
   });
 
   return (
-    <div className="space-y-1overflow-auto w-full pt-3">
+    <div className="max-w-screen w-screen space-y-1 px-1 pt-3">
       <DataTableToolbar table={table} search={searchField} filterFields={[]}>
         <FundRecordTableToolbarActions table={table} />
       </DataTableToolbar>

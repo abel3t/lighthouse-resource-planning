@@ -124,7 +124,7 @@ export default function CareTable() {
   });
 
   return (
-    <div className="space-y-1overflow-auto w-full">
+    <div className="w-screen space-y-1 px-1">
       <DataTableToolbar table={table} search={searchField} filterFields={[]}>
         <MemberTableToolbarActions table={table} />
       </DataTableToolbar>
