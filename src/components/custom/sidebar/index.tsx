@@ -8,7 +8,7 @@ import { useMediaQuery } from 'usehooks-ts';
 import { SidebarDesktop } from './sidebar-desktop';
 import { SidebarMobile } from './sidebar-mobile';
 
-const sidebarItems: SidebarItems = {
+export const sidebarItems: SidebarItems = {
   links: [
     { label: 'dashboard', href: '/', icon: Home },
     { label: 'members', href: '/members', icon: Users },

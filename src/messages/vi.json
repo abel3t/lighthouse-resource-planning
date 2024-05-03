@@ -76,5 +76,8 @@
   "dark": "Tối",
   "light": "Sáng",
   "system": "Hệ thống",
-  "toggle_theme": "Chủ đề"
+  "toggle_theme": "Chủ đề",
+  "profile": "Hồ sơ",
+  "settings": "Cài đặt",
+  "logout": "Đăng Xuất"
 }

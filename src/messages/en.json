@@ -76,5 +76,8 @@
   "dark": "Dark",
   "light": "Light",
   "system": "System",
-  "toggle_theme": "Toggle theme"
+  "toggle_theme": "Toggle theme",
+  "profile": "Profile",
+  "settings": "Settings",
+  "logout": "Logout"
 }
