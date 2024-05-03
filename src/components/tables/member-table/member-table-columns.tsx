@@ -16,20 +16,14 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 
-import { getErrorMessage } from '@/lib/handle-error';
-
 export const searchField = {
   name: 'name',
-  placeholder: 'Search...'
+  placeholder: 'Tìm thành viên'
 };
 
 export const filterFields: DataTableFilterField<any>[] = [
@@ -97,7 +91,7 @@ export function getColumns(): ColumnDef<any>[] {
     {
       accessorKey: 'discipleshipProcess',
       meta: 'Discipleship',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Discipleship" />,
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Tiến Trình Môn Đồ Hóa" />,
       cell: ({ row }) => {
         const discipleshipProcess = row.getValue('discipleshipProcess') as DiscipleshipProcess;
 

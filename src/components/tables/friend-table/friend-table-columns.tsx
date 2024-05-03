@@ -7,7 +7,6 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { type ColumnDef } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
-import { toast } from 'sonner';
 
 import { DataTableColumnHeader } from '@/components/custom/data-table/data-table-column-header';
 import { Badge } from '@/components/ui/badge';
@@ -17,12 +16,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 
@@ -30,7 +25,7 @@ import { getErrorMessage } from '@/lib/handle-error';
 
 export const searchField = {
   name: 'name',
-  placeholder: 'Search...'
+  placeholder: 'Tìm bạn hữu/thân hữu'
 };
 
 export const filterFields: DataTableFilterField<any>[] = [
@@ -94,7 +89,7 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'type',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Type" />,
+      header: ({ column }) => <DataTableColumnHeader column={column} title="Nhóm" />,
       cell: ({ row }) => {
         const type = row.getValue('type') as FriendType;
         return (

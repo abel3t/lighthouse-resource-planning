@@ -91,7 +91,7 @@ export function SidebarMobile({ sidebarItems, user }: SidebarMobileProps) {
                       <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                     ) : (
                       <div className="flex justify-start gap-2 ">
-                        <div>Logout</div>
+                        <div>Đăng Xuất</div>
                       </div>
                     )}
                   </Button>

@@ -25,7 +25,7 @@ import { getErrorMessage } from '@/lib/handle-error';
 
 export const searchField = {
   name: 'personName',
-  placeholder: 'Search...'
+  placeholder: 'Tìm tên người được môn đồ hóa'
 };
 
 export const filterFields: DataTableFilterField<any>[] = [

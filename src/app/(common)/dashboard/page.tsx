@@ -70,7 +70,7 @@ export default async function MemberPage() {
 
             <div className="flex flex-col">
               <div className="font-bold">{totalMembers}</div>
-              <div className="text-xs font-bold text-gray-500 md:text-sm">Members</div>
+              <div className="text-xs font-bold text-gray-500 md:text-sm">Thành viên</div>
             </div>
           </div>
 
@@ -81,7 +81,7 @@ export default async function MemberPage() {
 
             <div className="flex flex-col">
               <div className="font-bold">{totalFriends}</div>
-              <div className="text-xs font-bold text-gray-500 md:text-sm">Friends</div>
+              <div className="text-xs font-bold text-gray-500 md:text-sm">Bạn hữu</div>
             </div>
           </div>
 
@@ -92,7 +92,7 @@ export default async function MemberPage() {
 
             <div className="flex flex-col">
               <div className="font-bold">{totalUnbelievers}</div>
-              <div className="text-xs font-bold text-gray-500 md:text-sm">Unbelievers</div>
+              <div className="text-xs font-bold text-gray-500 md:text-sm">Thân hữu</div>
             </div>
           </div>
         </div>
@@ -101,12 +101,12 @@ export default async function MemberPage() {
       <div className="hidden h-32 rounded-md shadow-lg md:block"></div>
 
       <ScrollArea className="h-96 rounded-md p-2 shadow-lg">
-        <div className="text-md font-bold md:text-lg">Needing More Care</div>
+        <div className="text-md font-bold md:text-lg">Cần quan tâm nhiều hơn</div>
         <NeedingMoreCares cares={cares} />
       </ScrollArea>
 
       <div className="h-96 rounded-md p-2 shadow-lg">
-        <div className="text-md font-bold md:text-lg">Top Caring People</div>
+        <div className="text-md font-bold md:text-lg">Bảng xếp hạng chăm sóc</div>
         <TopCaringPeople accounts={accounts} />
       </div>
     </div>
@@ -171,9 +171,9 @@ const TopCaringPeople = ({ accounts }: { accounts: Account[] }) => {
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">ID</TableHead>
-          <TableHead>Name</TableHead>
-          <TableHead>Title</TableHead>
-          <TableHead className="text-right">Care</TableHead>
+          <TableHead>Tên</TableHead>
+          <TableHead>Xếp loại</TableHead>
+          <TableHead className="text-right">Lượt chăm sóc</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

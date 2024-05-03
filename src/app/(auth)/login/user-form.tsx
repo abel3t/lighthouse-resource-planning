@@ -81,7 +81,7 @@ export default function UserAuthForm({ className, ...props }: UserAuthFormProps)
             >
               <Button className="mt-3 w-full" disabled={isLoadingGoogle || isLoading}>
                 {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-                Sign In with Email
+                Đăng nhập bằng Email
               </Button>
             </LoginLink>
           </div>
@@ -93,7 +93,7 @@ export default function UserAuthForm({ className, ...props }: UserAuthFormProps)
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
+          <span className="bg-background px-2 text-muted-foreground">Hoặc đăng nhập bằng</span>
         </div>
       </div>
 
@@ -116,7 +116,7 @@ export default function UserAuthForm({ className, ...props }: UserAuthFormProps)
           ) : (
             <Image src="/images/google-icon.png" className="mr-2" alt="google" width={20} height={20} />
           )}
-          Sign In with Google
+          Đăng nhập bằng Google
         </Button>
       </LoginLink>
     </div>

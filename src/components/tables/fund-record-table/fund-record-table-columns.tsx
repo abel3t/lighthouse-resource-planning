@@ -27,7 +27,7 @@ import { cn } from '@/lib/utils';
 
 export const searchField = {
   name: 'contributorName',
-  placeholder: 'Search...'
+  placeholder: 'Tìm người dâng'
 };
 
 export const filterFields: DataTableFilterField<any>[] = [

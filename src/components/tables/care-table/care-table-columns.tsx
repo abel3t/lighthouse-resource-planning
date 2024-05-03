@@ -29,7 +29,7 @@ import {
 
 export const searchField = {
   name: 'personName',
-  placeholder: 'Search...'
+  placeholder: 'Tìm người được chăm sóc'
 };
 
 export const filterFields: DataTableFilterField<any>[] = [
