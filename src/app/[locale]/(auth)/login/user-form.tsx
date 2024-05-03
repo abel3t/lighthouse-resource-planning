@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { LoginLink } from '@kinde-oss/kinde-auth-nextjs/components';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -23,6 +24,7 @@ const formSchema = z.object({
 export default function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingGoogle, setIsLoadingGoogle] = useState<boolean>(false);
+  const t = useTranslations();
 
   const ref = useRef<any>(null);
 
@@ -81,7 +83,7 @@ export default function UserAuthForm({ className, ...props }: UserAuthFormProps)
             >
               <Button className="mt-3 w-full" disabled={isLoadingGoogle || isLoading}>
                 {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-                Đăng nhập bằng Email
+                {t('sign_in_with_email')}
               </Button>
             </LoginLink>
           </div>
@@ -93,7 +95,7 @@ export default function UserAuthForm({ className, ...props }: UserAuthFormProps)
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">Hoặc đăng nhập bằng</span>
+          <span className="bg-background px-2 text-muted-foreground">{t('or_continue_with')}</span>
         </div>
       </div>
 
@@ -116,7 +118,7 @@ export default function UserAuthForm({ className, ...props }: UserAuthFormProps)
           ) : (
             <Image src="/images/google-icon.png" className="mr-2" alt="google" width={20} height={20} />
           )}
-          Đăng nhập bằng Google
+          {t('sign_in_with_google')}
         </Button>
       </LoginLink>
     </div>

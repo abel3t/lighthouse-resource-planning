@@ -1,6 +1,9 @@
 import { withAuth } from '@kinde-oss/kinde-auth-nextjs/middleware';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
+import createMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
+
+import { locales } from './constant';
 
 const allowedOrigins = ['https://nguonsang.vercel.app', 'http://localhost:3000'];
 
@@ -9,7 +12,7 @@ const corsOptions = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization'
 };
 
-export default withAuth(async function middleware(request: NextRequest) {
+const authMiddleware = withAuth(async function middleware(request: NextRequest) {
   const isAuthenticated = await getKindeServerSession()?.isAuthenticated();
 
   const org = await getKindeServerSession().getOrganization();
@@ -48,6 +51,32 @@ export default withAuth(async function middleware(request: NextRequest) {
   return response;
 });
 
+const intlMiddleware = createMiddleware({
+  // A list of all locales that are supported
+  locales: locales,
+
+  // Used when no locale matches
+  defaultLocale: 'en',
+  localeDetection: false
+});
+
+export default function middleware(req: NextRequest) {
+  console.log('Request URL nè:', req.nextUrl.pathname);
+
+  // Define a regex pattern for private URLs
+  const excludePattern = '^(/(' + locales.join('|') + '))?/api/?.*?$';
+  const publicPathnameRegex = RegExp(excludePattern, 'i');
+  const isPublicPage = !publicPathnameRegex.test(req.nextUrl.pathname);
+
+  if (isPublicPage) {
+    // Apply Next-Intl middleware for public pages
+    return intlMiddleware(req);
+  } else {
+    // Apply Auth middleware for private pages
+    return (authMiddleware as any)(req);
+  }
+}
+
 export const config = {
   matcher: [
     '/api/accounts/:path*',
@@ -58,6 +87,9 @@ export const config = {
     '/api/fund-record',
     '/api/funds/:path*',
     '/api/members/:path*',
-    '/api/people/:path*'
+    '/api/people/:path*',
+    '/',
+    '/(en|es|fr|ja|pt|th|vi|zh)/:path*',
+    '/((?!_next|_vercel|api|.*\\..*).*)'
   ]
 };
