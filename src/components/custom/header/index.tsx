@@ -1,3 +1,4 @@
+import LanguageSwitcher from './language-switcher';
 import MainNav from './main-nav';
 import { ModeToggle } from './mode-toggle';
 
@@ -8,6 +9,7 @@ export default function Header() {
         <MainNav />
         {/* <MobileNav /> */}
 
+        <LanguageSwitcher />
         <ModeToggle />
       </div>
     </header>
