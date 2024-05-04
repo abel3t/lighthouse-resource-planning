@@ -75,7 +75,7 @@ export function getColumns(t: Function): ColumnDef<any>[] {
       meta: t('name'),
       header: ({ column }) => <DataTableColumnHeader column={column} title={t('name')} />,
       cell: ({ row }) => {
-        return <div className="w-full">{row.getValue('name')}</div>;
+        return <div className="w-32">{row.getValue('name')}</div>;
       },
       enableSorting: true
     },
@@ -84,7 +84,7 @@ export function getColumns(t: Function): ColumnDef<any>[] {
       meta: t('phone'),
       header: ({ column }) => <DataTableColumnHeader column={column} title={t('phone')} />,
       cell: ({ row }) => {
-        return <div className="w-full">{row.getValue('phone')}</div>;
+        return <div className="w-32">{row.getValue('phone')}</div>;
       },
       enableSorting: false
     },
@@ -117,7 +117,7 @@ export function getColumns(t: Function): ColumnDef<any>[] {
       meta: t('curator'),
       header: ({ column }) => <DataTableColumnHeader column={column} title={t('curator')} />,
       cell: ({ row }) => {
-        return <div className="flex w-full space-x-2">{row.getValue('curatorName') || NOT_APPLICABLE}</div>;
+        return <div className="flex w-32  space-x-2">{row.getValue('curatorName') || NOT_APPLICABLE}</div>;
       },
       enableSorting: false
     },

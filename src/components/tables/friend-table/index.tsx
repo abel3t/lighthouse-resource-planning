@@ -124,7 +124,7 @@ export default function FriendTable() {
   });
 
   return (
-    <div className="w-screen space-y-1  px-1">
+    <div className="w-screen  space-y-1 px-1  sm:w-full">
       <DataTableToolbar table={table} search={searchField} filterFields={[]}>
         <MemberTableToolbarActions table={table} />
       </DataTableToolbar>

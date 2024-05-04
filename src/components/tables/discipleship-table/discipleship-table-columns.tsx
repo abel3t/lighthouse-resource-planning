@@ -100,7 +100,7 @@ export function getColumns(t: Function): ColumnDef<any>[] {
       cell: ({ row }) => {
         const type = row.getValue('type') as DiscipleshipType;
         return (
-          <div className="flex space-x-2">
+          <div className="flex w-32 space-x-2">
             <Badge style={{ backgroundColor: DiscipleshipTypeColor[type] }}>{DiscipleshipTypeText[type]}</Badge>
           </div>
         );

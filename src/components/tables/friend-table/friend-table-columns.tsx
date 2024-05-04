@@ -72,7 +72,7 @@ export function getColumns(t: Function): ColumnDef<any>[] {
       meta: t('name'),
       header: ({ column }) => <DataTableColumnHeader column={column} title={t('name')} />,
       cell: ({ row }) => {
-        return <div className="w-full">{row.getValue('name')}</div>;
+        return <div className="w-32">{row.getValue('name')}</div>;
       },
       enableSorting: true
     },
@@ -81,7 +81,7 @@ export function getColumns(t: Function): ColumnDef<any>[] {
       meta: t('phone'),
       header: ({ column }) => <DataTableColumnHeader column={column} title={t('phone')} />,
       cell: ({ row }) => {
-        return <div className="w-full">{row.getValue('phone')}</div>;
+        return <div className="w-32">{row.getValue('phone')}</div>;
       },
       enableSorting: false
     },
