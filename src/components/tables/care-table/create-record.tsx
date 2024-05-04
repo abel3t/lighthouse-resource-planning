@@ -167,24 +167,6 @@ export function CreateCareDialog() {
               {!fileUrl && (
                 <UploadButton
                   endpoint="imageUploader"
-                  content={{
-                    button({ ready }) {
-                      if (ready) return <div>{t('choose_image')}</div>;
-
-                      return t('getting_ready');
-                    },
-                    allowedContent({ ready, isUploading }) {
-                      if (!ready) {
-                        return t('wait_a_moment');
-                      }
-
-                      if (isUploading) {
-                        return t('uploading_image');
-                      }
-
-                      return t('max_image_size', { size: '8MB' });
-                    }
-                  }}
                   config={{ appendOnPaste: true }}
                   onClientUploadComplete={(res) => {
                     const file: any = res?.[0];
