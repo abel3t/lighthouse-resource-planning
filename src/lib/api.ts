@@ -79,7 +79,7 @@ export async function getFundRecords() {
 
 export const deleteImageUploadThing = async (url: string) => {
   if (url) {
-    await client.delete('api/uploadthing', {
+    await client.delete('/uploadthing', {
       data: {
         url
       }
