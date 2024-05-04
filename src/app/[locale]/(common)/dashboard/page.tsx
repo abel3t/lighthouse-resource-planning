@@ -3,7 +3,7 @@ import { CarePriority, CareType, PersonalType } from '@/enums';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { Account, Care } from '@prisma/client';
 import { formatRelative, subMonths } from 'date-fns';
-import { vi } from 'date-fns/locale';
+import { enUS, vi } from 'date-fns/locale';
 import { User2Icon } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
@@ -105,7 +105,7 @@ export default async function MemberPage({ params: { locale } }: { params: { loc
 
       <ScrollArea className="h-96 rounded-md p-2 shadow-lg">
         <div className="text-md font-bold md:text-lg">{t('needing_more_cares')}</div>
-        <NeedingMoreCares cares={cares} t={t} />
+        <NeedingMoreCares cares={cares} t={t} locale={locale} />
       </ScrollArea>
 
       <div className="h-96 rounded-md p-2 shadow-lg">
@@ -117,15 +117,25 @@ export default async function MemberPage({ params: { locale } }: { params: { loc
 }
 
 const formatRelativeLocale = {
-  lastWeek: "EEEE 'tuần trước' '-' dd/MM/yyyy",
-  yesterday: "'Hôm qua' '-' dd/MM/yyyy",
-  today: "'Hôm nay'",
-  tomorrow: "'Ngày mai'",
-  nextWeek: "EEEE 'tới'",
-  other: 'P'
+  vi: {
+    lastWeek: "EEEE 'tuần trước' '-' dd/MM/yyyy",
+    yesterday: "'Hôm qua' '-' dd/MM/yyyy",
+    today: "'Hôm nay'",
+    tomorrow: "'Ngày mai'",
+    nextWeek: "EEEE 'tới'",
+    other: 'P'
+  },
+  en: {
+    lastWeek: "EEEE 'last week' '-' dd/MM/yyyy",
+    yesterday: "'Yesterday' '-' dd/MM/yyyy",
+    today: "'Today'",
+    tomorrow: "'Tomorrow'",
+    nextWeek: "EEEE 'next week'",
+    other: 'P'
+  }
 };
 
-const NeedingMoreCares = ({ cares, t }: { cares: Care[]; t: Function }) => {
+const NeedingMoreCares = ({ cares, t, locale }: { cares: Care[]; t: Function; locale: string }) => {
   return (
     <div className="ml-2 pt-4">
       <Timeline>
@@ -141,7 +151,7 @@ const NeedingMoreCares = ({ cares, t }: { cares: Care[]; t: Function }) => {
                 <div className="text-sm font-bold">{care.personName || NOT_APPLICABLE}</div>
                 {care.type && (
                   <Badge style={{ backgroundColor: CareTypeColor[care.type as CareType] }}>
-                    {CareTypeText[care.type as CareType]}
+                    {t(CareTypeText[care.type as CareType])}
                   </Badge>
                 )}
               </div>
@@ -152,8 +162,9 @@ const NeedingMoreCares = ({ cares, t }: { cares: Care[]; t: Function }) => {
               <span className="ml-5">
                 {formatRelative(care.date, new Date(), {
                   locale: {
-                    ...vi,
-                    formatRelative: (token) => formatRelativeLocale[token]
+                    ...(locale === 'vi' ? vi : enUS),
+                    formatRelative: (token) =>
+                      formatRelativeLocale[locale as keyof typeof formatRelativeLocale]?.[token]
                   }
                 })}
               </span>
