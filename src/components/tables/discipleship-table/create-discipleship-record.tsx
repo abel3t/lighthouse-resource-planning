@@ -56,7 +56,7 @@ import { cn } from '@/lib/utils';
 
 const createFundRecordSchema = z.object({
   type: z.nativeEnum(DiscipleshipType),
-  personId: z.string().optional(),
+  personId: z.string(),
   date: z.date(),
   description: z.string().optional(),
   priority: z.nativeEnum(CarePriority)

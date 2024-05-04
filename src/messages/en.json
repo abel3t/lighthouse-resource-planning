@@ -132,5 +132,12 @@
   "delete_record_successfully": "Delete {name} successfully",
   "delete_record_failed": "Delete {name} failed",
   "dialog_friend": "Friend",
-  "dialog_friends": "Friends"
+  "dialog_friends": "Friends",
+  "required": "Required",
+  "field_must_contain_at_least_n_character_s": "{field} must contain at least {amount} character(s)",
+  "field_is_invalid": "{field} is invalid",
+  "please_enter_an_amount": "Please enter an amount",
+  "fund_name": "Fund's Name",
+  "create_fund": "Create Fund",
+  "initial_balance": "Initial Balance"
 }

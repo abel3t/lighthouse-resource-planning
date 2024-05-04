@@ -24,14 +24,13 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { CurrencyInput, Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -42,15 +41,6 @@ import { deleteImageUploadThing } from '@/lib/api';
 import { getErrorMessage } from '@/lib/handle-error';
 import { cn } from '@/lib/utils';
 
-const createFundRecordSchema = z.object({
-  amount: z.string().min(3, 'Số tiền không hợp lệ'),
-  type: z.nativeEnum(FundRecordType),
-  contributorId: z.string().optional(),
-  description: z.string().optional(),
-  image: z.string().optional()
-});
-export type CreateRecordSchema = z.infer<typeof createFundRecordSchema>;
-
 export function CreateFundRecordDialog() {
   const [open, setOpen] = useState(false);
   const [, startCreateTransition] = useTransition();
@@ -60,8 +50,20 @@ export function CreateFundRecordDialog() {
 
   const t = useTranslations();
 
+  const createFundRecordSchema = z.object({
+    amount: z.number().min(1000, { message: t('field_is_invalid', { field: t('amount') }) }),
+    type: z.nativeEnum(FundRecordType),
+    contributorId: z.string().optional(),
+    description: z.string().optional(),
+    image: z.string().optional()
+  });
+  type CreateRecordSchema = z.infer<typeof createFundRecordSchema>;
+
   const form = useForm<CreateRecordSchema>({
-    resolver: zodResolver(createFundRecordSchema)
+    resolver: zodResolver(createFundRecordSchema),
+    defaultValues: {
+      amount: 0
+    }
   });
 
   const queryParams = useFundRecordStore((state) => state.queryParams);
@@ -83,7 +85,7 @@ export function CreateFundRecordDialog() {
     setIsOnCreating(true);
 
     startCreateTransition(() => {
-      const amount = parseFloat(input.amount);
+      const amount = input.amount;
 
       toast.promise(
         axios.post('/api/fund-records', {
@@ -309,7 +311,7 @@ const AmountField = ({ form, t }: any) => {
         <FormItem className="flex w-1/2 flex-col">
           <FormLabel className="my-0 py-0">{t('amount')}</FormLabel>
           <FormControl className="mt-0 py-0">
-            <Input className="mt-0 py-0" type="number" {...field} />
+            <CurrencyInput className="mt-0 py-0" {...field} />
           </FormControl>
 
           <FormMessage />

@@ -29,7 +29,7 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Input, PhoneInput } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -38,19 +38,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { getErrorMessage } from '@/lib/handle-error';
 import { cn } from '@/lib/utils';
 
-const createFriendSchema = z.object({
-  name: z.string().min(3),
-  type: z.nativeEnum(FriendType),
-  friendId: z.string().optional(),
-  phone: z.string().optional(),
-  email: z.string().optional(),
-  birthday: z.date().optional(),
-  hometown: z.string().optional(),
-  gender: z.nativeEnum(Gender).optional(),
-  description: z.string().optional()
-});
-export type CreateRecordSchema = z.infer<typeof createFriendSchema>;
-
 export function CreateFriendDialog() {
   const [open, setOpen] = React.useState(false);
   const [isUploading, setIsUploading] = React.useState(false);
@@ -58,6 +45,21 @@ export function CreateFriendDialog() {
   const [isCreatePending, startCreateTransition] = React.useTransition();
 
   const t = useTranslations();
+
+  const createFriendSchema = z.object({
+    name: z
+      .string()
+      .min(3, { message: t('field_must_contain_at_least_n_character_s', { field: t('name'), amount: 3 }) }),
+    type: z.nativeEnum(FriendType),
+    friendId: z.string().optional(),
+    phone: z.string().optional(),
+    email: z.string().optional(),
+    birthday: z.date().optional(),
+    hometown: z.string().optional(),
+    gender: z.nativeEnum(Gender).optional(),
+    description: z.string().optional()
+  });
+  type CreateRecordSchema = z.infer<typeof createFriendSchema>;
 
   const form = useForm<CreateRecordSchema>({
     resolver: zodResolver(createFriendSchema)
@@ -251,7 +253,7 @@ const PhoneField = ({ form, t }: any) => {
         <FormItem className="flex w-1/2 flex-col">
           <FormLabel>{t('phone')}</FormLabel>
           <FormControl>
-            <Input placeholder={t('phone')} className="resize-none" {...field} />
+            <PhoneInput className="resize-none" {...field} />
           </FormControl>
           <FormMessage />
         </FormItem>
@@ -267,9 +269,9 @@ const EmailField = ({ form, t }: any) => {
       name="email"
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
-          <FormLabel>{t('phone')}</FormLabel>
+          <FormLabel>{t('email')}</FormLabel>
           <FormControl>
-            <Input placeholder={t('phone')} className="resize-none" {...field} />
+            <Input placeholder={t('email')} className="resize-none" {...field} />
           </FormControl>
           <FormMessage />
         </FormItem>

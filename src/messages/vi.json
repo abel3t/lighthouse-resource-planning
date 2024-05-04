@@ -133,5 +133,12 @@
   "delete_record_successfully": "Xóa {name} thành công",
   "delete_record_failed": "Xóa {name} thất bại",
   "dialog_friend": "Bạn hữu/Thân hữu",
-  "dialog_friends": "Bạn hữu/Thân hữu"
+  "dialog_friends": "Bạn hữu/Thân hữu",
+  "required": "Bắt buộc",
+  "field_must_contain_at_least_n_character_s": "{field} phải chứa ít nhất {amount} ký tự",
+  "field_is_invalid": "{field} không hợp lệ",
+  "please_enter_an_amount": "Vui lòng nhập số tiền",
+  "fund_name": "Tên Quỹ",
+  "create_fund": "Tạo Quỹ",
+  "initial_balance": "Số tiền ban đầu"
 }

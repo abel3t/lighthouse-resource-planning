@@ -27,7 +27,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -47,7 +46,7 @@ import { cn } from '@/lib/utils';
 
 const createCareSchema = z.object({
   type: z.nativeEnum(CareType),
-  personId: z.string().optional(),
+  personId: z.string(),
   date: z.date(),
   description: z.string().optional(),
   priority: z.nativeEnum(CarePriority)

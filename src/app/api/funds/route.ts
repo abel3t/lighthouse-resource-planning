@@ -42,7 +42,7 @@ export async function GET(req: Request) {
     });
   }
 
-  const data = await prisma.fund.findMany({ where: { organizationId } });
+  const data = await prisma.fund.findMany({ where: { organizationId }, orderBy: { createdAt: 'asc' } });
   return NextResponse.json(data);
 }
 
