@@ -52,6 +52,7 @@
   "giver": "Người dâng",
   "note": "Ghi chú",
   "gender": "Giới tính",
+  "description": "Mô tả",
   "amount": "Số tiền",
   "income": "Thu",
   "expense": "Chi",
@@ -111,5 +112,7 @@
   "believe_in_Jesus": "Tiếp nhận Chúa",
   "discipleship_priority_good": "Tốt",
   "discipleship_priority_normal": "Bình thường",
-  "discipleship_priority_warning": "Không tốt"
+  "discipleship_priority_warning": "Không tốt",
+  "relation_friends": "Bạn bè",
+  "care_by": "bởi"
 }

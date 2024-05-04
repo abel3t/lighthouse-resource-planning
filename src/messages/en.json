@@ -52,6 +52,7 @@
   "giver": "Giver",
   "note": "Note",
   "gender": "Gender",
+  "description": "Description",
   "amount": "Amount",
   "income": "Income",
   "expense": "Expense",
@@ -110,5 +111,7 @@
   "believe_in_Jesus": "Believe in Jesus",
   "discipleship_priority_good": "Good",
   "discipleship_priority_normal": "Normal",
-  "discipleship_priority_warning": "Warning"
+  "discipleship_priority_warning": "Warning",
+  "relation_friends": "Friends",
+  "care_by": "by"
 }

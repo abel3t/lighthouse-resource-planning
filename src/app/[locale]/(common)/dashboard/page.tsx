@@ -105,7 +105,7 @@ export default async function MemberPage({ params: { locale } }: { params: { loc
 
       <ScrollArea className="h-96 rounded-md p-2 shadow-lg">
         <div className="text-md font-bold md:text-lg">{t('needing_more_cares')}</div>
-        <NeedingMoreCares cares={cares} />
+        <NeedingMoreCares cares={cares} t={t} />
       </ScrollArea>
 
       <div className="h-96 rounded-md p-2 shadow-lg">
@@ -125,7 +125,7 @@ const formatRelativeLocale = {
   other: 'P'
 };
 
-const NeedingMoreCares = ({ cares }: { cares: Care[] }) => {
+const NeedingMoreCares = ({ cares, t }: { cares: Care[]; t: Function }) => {
   return (
     <div className="ml-2 pt-4">
       <Timeline>
@@ -148,7 +148,7 @@ const NeedingMoreCares = ({ cares }: { cares: Care[] }) => {
             }
           >
             <div className="text-primary">
-              by <span className="font-bold">{care.curatorName || NOT_APPLICABLE}</span>
+              {t('care_by')} <span className="font-bold">{care.curatorName || NOT_APPLICABLE}</span>
               <span className="ml-5">
                 {formatRelative(care.date, new Date(), {
                   locale: {
