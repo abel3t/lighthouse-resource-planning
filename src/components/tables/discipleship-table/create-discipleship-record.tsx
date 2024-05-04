@@ -176,31 +176,13 @@ export function CreateDiscipleshipDialog() {
               {!fileUrl && (
                 <UploadButton
                   endpoint="imageUploader"
-                  content={{
-                    button({ ready }) {
-                      if (ready) return <div>{t('choose_image')}</div>;
-
-                      return t('getting_ready');
-                    },
-                    allowedContent({ ready, isUploading }) {
-                      if (!ready) {
-                        return t('wait_a_moment');
-                      }
-
-                      if (isUploading) {
-                        return t('uploading_image');
-                      }
-
-                      return t('max_image_size', { size: '8MB' });
-                    }
-                  }}
                   onClientUploadComplete={(res) => {
                     const file: any = res?.[0];
 
                     setFileUrl(file?.url || '');
                     setIsUploading(false);
 
-                    toast('Upload Completed');
+                    toast.success(t('upload_image_successfully'));
                   }}
                   onUploadError={(error: Error) => {
                     alert(`ERROR! ${error.message}`);
@@ -213,7 +195,7 @@ export function CreateDiscipleshipDialog() {
               )}
               {fileUrl && (
                 <AspectRatio ratio={16 / 9}>
-                  <Image className="object-contain" src={fileUrl} fill alt="Image" />
+                  <Image className="rounded-md object-contain" src={fileUrl} fill alt="Image" />
                 </AspectRatio>
               )}
             </div>

@@ -192,7 +192,7 @@ export function CreateCareDialog() {
                     setFileUrl(file?.url || '');
                     setIsUploading(false);
 
-                    toast('Upload Completed');
+                    toast.success(t('upload_image_successfully'));
                   }}
                   onUploadError={(error: Error) => {
                     alert(`ERROR! ${error.message}`);
