@@ -15,6 +15,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
 
+import { Icons } from '@/components/custom/icons';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
@@ -34,10 +35,11 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 
+import { client } from '@/lib/client';
 import { getErrorMessage } from '@/lib/handle-error';
 import { cn } from '@/lib/utils';
 
-const createFundRecordSchema = z.object({
+const createMemberSchema = z.object({
   name: z.string().min(3),
   discipleshipProcess: z.nativeEnum(DiscipleshipProcess),
   curatorId: z.string().optional(),
@@ -50,15 +52,17 @@ const createFundRecordSchema = z.object({
   gender: z.nativeEnum(Gender).optional(),
   description: z.string().optional()
 });
-export type CreateRecordSchema = z.infer<typeof createFundRecordSchema>;
+export type CreateRecordSchema = z.infer<typeof createMemberSchema>;
 
-export function CreateFundRecordDialog() {
+export function CreateMemberDialog() {
   const [open, setOpen] = React.useState(false);
-  const [isCreatePending, startCreateTransition] = React.useTransition();
+  const [isUploading, setIsUploading] = React.useState(false);
+  const [isOnCreating, setIsOnCreating] = React.useState(false);
+  const [, startCreateTransition] = React.useTransition();
   const t = useTranslations();
 
   const form = useForm<CreateRecordSchema>({
-    resolver: zodResolver(createFundRecordSchema)
+    resolver: zodResolver(createMemberSchema)
   });
 
   const queryParams = useMemberStore((state) => state.queryParams);
@@ -71,27 +75,33 @@ export function CreateFundRecordDialog() {
   }, []);
 
   function onSubmit(input: CreateRecordSchema) {
+    setIsOnCreating(true);
+
     startCreateTransition(() => {
       const type = PersonalType.Member;
 
       toast.promise(
-        axios.post('/api/members', {
+        client.post('/members', {
           ...input,
           type
         }),
         {
-          loading: 'Creating member...',
+          loading: t('create_record_processing', { name: t('member').toLowerCase() }),
           success: () => {
             form.reset();
             setOpen(false);
+            setIsOnCreating(false);
 
             fetchMembers(queryParams);
 
-            return 'Member created';
+            return t('create_record_successfully', { name: t('member').toLowerCase() });
           },
           error: (error) => {
             setOpen(false);
-            return getErrorMessage(error);
+            setIsOnCreating(false);
+            console.log(getErrorMessage(error));
+
+            return t('create_record_failed', { name: t('member').toLowerCase() });
           }
         }
       );
@@ -152,13 +162,15 @@ export function CreateFundRecordDialog() {
 
             <DescriptionField form={form} t={t} />
 
-            <DialogFooter className="gap-2 pt-2 sm:space-x-0">
+            <DialogFooter className="flex flex-row justify-end gap-2 pt-2 sm:space-x-0">
               <DialogClose asChild>
-                <Button type="button" variant="outline">
+                <Button className="w-24" type="button" variant="outline" disabled={isOnCreating || isUploading}>
                   {t('cancel')}
                 </Button>
               </DialogClose>
-              <Button disabled={isCreatePending}>{t('submit')}</Button>
+              <Button className="flex w-24 justify-center" disabled={isOnCreating || isUploading}>
+                {isOnCreating ? <Icons.spinner className="h-4 w-4 animate-spin" /> : t('submit')}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

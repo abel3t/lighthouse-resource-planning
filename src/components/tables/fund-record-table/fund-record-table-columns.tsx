@@ -119,7 +119,7 @@ export function getColumns(t: Function): ColumnDef<any>[] {
     },
     {
       id: 'actions',
-      cell: function Cell({ row }) {
+      cell: function Cell({ row, table }) {
         const [isUpdatePending, startUpdateTransition] = React.useTransition();
         const [showUpdateTaskSheet, setShowUpdateTaskSheet] = React.useState(false);
         const [showDeleteTaskDialog, setShowDeleteTaskDialog] = React.useState(false);

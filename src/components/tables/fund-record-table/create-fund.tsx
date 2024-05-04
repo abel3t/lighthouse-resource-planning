@@ -37,7 +37,6 @@ export function CreateFundDialog() {
   const [open, setOpen] = useState(false);
   const [, startCreateTransition] = useTransition();
   const [isOnCreating, setIsOnCreating] = useState(false);
-
   const t = useTranslations();
 
   const form = useForm<CreateFundSchema>({
@@ -59,7 +58,7 @@ export function CreateFundDialog() {
           amount
         }),
         {
-          loading: 'Creating record...',
+          loading: t('create_record_processing', { name: t('fund').toLowerCase() }),
           success: () => {
             form.reset();
             setOpen(false);
@@ -67,13 +66,14 @@ export function CreateFundDialog() {
             fetchFunds();
             setIsOnCreating(false);
 
-            return 'Record created';
+            return t('create_record_successfully', { name: t('fund').toLowerCase() });
           },
           error: (error) => {
             setOpen(false);
             setIsOnCreating(false);
 
-            return getErrorMessage(error);
+            console.log(getErrorMessage(error));
+            return t('create_record_failed', { name: t('fund').toLowerCase() });
           }
         }
       );
@@ -114,9 +114,9 @@ export function CreateFundDialog() {
 
             <AmountField form={form} />
 
-            <DialogFooter className="gap-2 pt-2 sm:space-x-0">
+            <DialogFooter className="flex flex-row justify-end gap-2 pt-2 sm:space-x-0">
               <DialogClose asChild>
-                <Button type="button" variant="outline" disabled={isOnCreating}>
+                <Button className="w-24" type="button" variant="outline" disabled={isOnCreating}>
                   {t('cancel')}
                 </Button>
               </DialogClose>

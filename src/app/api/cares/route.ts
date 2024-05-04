@@ -1,5 +1,6 @@
 import { PersonalType } from '@/enums';
 import { SortType } from '@/types';
+import { is } from 'date-fns/locale';
 import { NextResponse } from 'next/server';
 
 import prisma from '@/lib/prisma';
@@ -74,7 +75,8 @@ export async function GET(req: Request) {
   }
 
   const $condition: Record<string, any> = {
-    organizationId
+    organizationId,
+    isDeleted: false
   };
 
   if (search) {
@@ -105,4 +107,31 @@ export async function GET(req: Request) {
     },
     data: fundRecords
   });
+}
+
+export async function DELETE(req: Request) {
+  const searchParams = new URL(req.url)?.searchParams;
+  const ids = searchParams.get('ids');
+
+  const organizationId = req.headers.get('x-organizationId');
+
+  if (!organizationId) {
+    return new Response('Invalid', {
+      status: 400
+    });
+  }
+
+  const careIds = ids?.split(',') || [];
+
+  if (!careIds.length) {
+    return new Response('Invalid', {
+      status: 400
+    });
+  }
+
+  await prisma.$transaction(
+    careIds.map((id) => prisma.care.update({ where: { id, organizationId }, data: { isDeleted: true } }))
+  );
+
+  return NextResponse.json({ ids });
 }

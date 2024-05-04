@@ -5,6 +5,63 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { searchParamsParser } from '@/lib/utils';
 
+export async function GET(req: Request) {
+  const { search, page, pageSize, sortField, sortOrder } = searchParamsParser(req.url);
+  const organizationId = req.headers.get('x-organizationId');
+
+  if (!organizationId) {
+    return new Response('Invalid', {
+      status: 400
+    });
+  }
+
+  let orderByField: string = sortField || '';
+  let orderByType: SortType = (sortOrder || 'asc') as SortType;
+  if (sortField && !['name'].includes(sortField)) {
+    orderByField = 'name';
+    orderByType = 'asc';
+  }
+
+  if (sortField === 'name') {
+    orderByField = 'firstName';
+  }
+
+  const $condition: Record<string, any> = {
+    isDeleted: false,
+    type: PersonalType.Member,
+    organizationId
+  };
+
+  if (search) {
+    $condition.name = {
+      contains: search,
+      mode: 'insensitive'
+    };
+  }
+
+  const [total, fundRecords] = await Promise.all([
+    prisma.person.count({ where: $condition }),
+    prisma.person.findMany({
+      where: $condition,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      orderBy: {
+        [orderByField]: orderByType as SortType
+      }
+    })
+  ]);
+
+  return NextResponse.json({
+    metadata: {
+      totalPages: Math.ceil(total / pageSize),
+      pageSize,
+      page,
+      total
+    },
+    data: fundRecords
+  });
+}
+
 export async function POST(req: Request) {
   const data = await req.json();
   const organizationId = req.headers.get('x-organizationId');
@@ -39,8 +96,14 @@ export async function POST(req: Request) {
   return NextResponse.json(data);
 }
 
-export async function GET(req: Request) {
-  const { search, page, pageSize, sortField, sortOrder } = searchParamsParser(req.url);
+export async function PUT(req: Request) {
+  return NextResponse.json({});
+}
+
+export async function DELETE(req: Request) {
+  const searchParams = new URL(req.url)?.searchParams;
+  const ids = searchParams.get('ids');
+
   const organizationId = req.headers.get('x-organizationId');
 
   if (!organizationId) {
@@ -49,48 +112,17 @@ export async function GET(req: Request) {
     });
   }
 
-  let orderByField: string = sortField || '';
-  let orderByType: SortType = (sortOrder || 'asc') as SortType;
-  if (sortField && !['name'].includes(sortField)) {
-    orderByField = 'name';
-    orderByType = 'asc';
+  const memberIds = ids?.split(',') || [];
+
+  if (!memberIds.length) {
+    return new Response('Invalid', {
+      status: 400
+    });
   }
 
-  if (sortField === 'name') {
-    orderByField = 'firstName';
-  }
+  await prisma.$transaction(
+    memberIds.map((id) => prisma.person.update({ where: { id, organizationId }, data: { isDeleted: true } }))
+  );
 
-  const $condition: Record<string, any> = {
-    type: PersonalType.Member,
-    organizationId
-  };
-
-  if (search) {
-    $condition.name = {
-      contains: search,
-      mode: 'insensitive'
-    };
-  }
-
-  const [total, fundRecords] = await Promise.all([
-    prisma.person.count({ where: $condition }),
-    prisma.person.findMany({
-      where: $condition,
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-      orderBy: {
-        [orderByField]: orderByType as SortType
-      }
-    })
-  ]);
-
-  return NextResponse.json({
-    metadata: {
-      totalPages: Math.ceil(total / pageSize),
-      pageSize,
-      page,
-      total
-    },
-    data: fundRecords
-  });
+  return NextResponse.json({ ids });
 }

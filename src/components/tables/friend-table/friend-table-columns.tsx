@@ -21,6 +21,8 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 
+import DeleteFriendsDialog from './delete-dialog';
+
 export const searchField = {
   name: 'name',
   placeholder: 'search_friend'
@@ -109,7 +111,7 @@ export function getColumns(t: Function): ColumnDef<any>[] {
       cell: function Cell({ row }) {
         const [isUpdatePending, startUpdateTransition] = React.useTransition();
         const [showUpdateTaskSheet, setShowUpdateTaskSheet] = React.useState(false);
-        const [showDeleteTaskDialog, setShowDeleteTaskDialog] = React.useState(false);
+        const [showDeleteFriendDialog, setShowDeleteFriendDialog] = React.useState(false);
 
         return (
           <>
@@ -124,6 +126,13 @@ export function getColumns(t: Function): ColumnDef<any>[] {
               tasks={[row]}
               showTrigger={false}
             /> */}
+
+            <DeleteFriendsDialog
+              open={showDeleteFriendDialog}
+              onOpenChange={setShowDeleteFriendDialog}
+              friends={[row]}
+            />
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button aria-label="Open menu" variant="ghost" className="flex size-8 p-0 data-[state=open]:bg-muted">
@@ -137,7 +146,7 @@ export function getColumns(t: Function): ColumnDef<any>[] {
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={() => setShowDeleteTaskDialog(true)}>
+                <DropdownMenuItem onSelect={() => setShowDeleteFriendDialog(true)}>
                   {t('delete')}
                   <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
                 </DropdownMenuItem>

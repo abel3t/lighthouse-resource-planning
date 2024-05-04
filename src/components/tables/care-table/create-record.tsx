@@ -20,6 +20,7 @@ import * as sharp from 'sharp';
 import { toast } from 'sonner';
 import * as z from 'zod';
 
+import { Icons } from '@/components/custom/icons';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -42,6 +43,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { UploadButton } from '@/components/uploadthing';
 
 import { deleteImageUploadThing } from '@/lib/api';
+import { client } from '@/lib/client';
 import { getErrorMessage } from '@/lib/handle-error';
 import { cn } from '@/lib/utils';
 
@@ -58,7 +60,8 @@ export function CreateFundRecordDialog() {
   const [open, setOpen] = React.useState(false);
   const [isCreatePending, startCreateTransition] = React.useTransition();
   const [fileUrl, setFileUrl] = useState<string | undefined>();
-  const [isUploading, setIsUploading] = useState(false);
+  const [isUploading, setIsUploading] = React.useState(false);
+  const [isOnCreating, setIsOnCreating] = React.useState(false);
 
   const t = useTranslations();
 
@@ -83,34 +86,40 @@ export function CreateFundRecordDialog() {
       return;
     }
 
+    setIsOnCreating(true);
+
     startCreateTransition(() => {
       toast.promise(
-        axios.post('/api/cares', {
+        client.post('/cares', {
           ...input,
           image: fileUrl,
           curatorId: accounts[0]?.id
         }),
         {
-          loading: 'Creating care...',
+          loading: t('create_record_processing', { name: t('care').toLowerCase() }),
           success: () => {
             form.reset();
             setOpen(false);
+            setIsOnCreating(false);
 
             setFileUrl(undefined);
 
             fetchCares(queryParams);
 
-            return 'Care created';
+            return t('create_record_successfully', { name: t('care').toLowerCase() });
           },
           error: (error) => {
             setOpen(false);
+            setIsOnCreating(false);
             form.reset();
             if (fileUrl) {
               deleteImageUploadThing(fileUrl);
             }
             setFileUrl(undefined);
 
-            return getErrorMessage(error);
+            console.log(getErrorMessage(error));
+
+            return t('create_record_failed', { name: t('care').toLowerCase() });
           }
         }
       );
@@ -211,13 +220,15 @@ export function CreateFundRecordDialog() {
 
             <DescriptionField form={form} t={t} />
 
-            <DialogFooter className="gap-2 pt-2 sm:space-x-0">
+            <DialogFooter className="flex flex-row justify-end gap-2 pt-2 sm:space-x-0">
               <DialogClose asChild>
-                <Button disabled={isUploading} type="button" variant="outline">
+                <Button className="w-24" type="button" variant="outline" disabled={isOnCreating || isUploading}>
                   {t('cancel')}
                 </Button>
               </DialogClose>
-              <Button disabled={isUploading || isCreatePending}>{t('submit')}</Button>
+              <Button className="flex w-24 justify-center" disabled={isOnCreating || isUploading}>
+                {isOnCreating ? <Icons.spinner className="h-4 w-4 animate-spin" /> : t('submit')}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

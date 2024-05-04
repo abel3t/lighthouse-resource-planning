@@ -21,6 +21,8 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 
+import DeleteMembersDialog from './delete-dialog';
+
 export const searchField = {
   name: 'name',
   placeholder: 'search_member'
@@ -122,10 +124,12 @@ export function getColumns(t: Function): ColumnDef<any>[] {
     },
     {
       id: 'actions',
-      cell: function Cell({ row }) {
+      cell: function Cell({ row, table }) {
+        const selectedRows = table.getFilteredSelectedRowModel().rows.length;
+
         const [isUpdatePending, startUpdateTransition] = React.useTransition();
         const [showUpdateTaskSheet, setShowUpdateTaskSheet] = React.useState(false);
-        const [showDeleteTaskDialog, setShowDeleteTaskDialog] = React.useState(false);
+        const [showDeleteMemberDialog, setShowDeleteMemberDialog] = React.useState(false);
 
         return (
           <>
@@ -140,9 +144,19 @@ export function getColumns(t: Function): ColumnDef<any>[] {
               tasks={[row]}
               showTrigger={false}
             /> */}
+            <DeleteMembersDialog
+              open={showDeleteMemberDialog}
+              onOpenChange={setShowDeleteMemberDialog}
+              members={[row]}
+            />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button aria-label="Open menu" variant="ghost" className="flex size-8 p-0 data-[state=open]:bg-muted">
+                <Button
+                  disabled={selectedRows > 1}
+                  aria-label="Open menu"
+                  variant="ghost"
+                  className="flex size-8 p-0 data-[state=open]:bg-muted"
+                >
                   <DotsHorizontalIcon className="size-4" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
@@ -153,7 +167,7 @@ export function getColumns(t: Function): ColumnDef<any>[] {
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={() => setShowDeleteTaskDialog(true)}>
+                <DropdownMenuItem onSelect={() => setShowDeleteMemberDialog(true)}>
                   {t('delete')}
                   <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
                 </DropdownMenuItem>

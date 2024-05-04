@@ -14,6 +14,7 @@ export async function POST(req: Request) {
 
   const fund = await prisma.fund.findFirst({
     where: {
+      isDeleted: false,
       name: data?.name || ''
     }
   });
@@ -43,4 +44,31 @@ export async function GET(req: Request) {
 
   const data = await prisma.fund.findMany({ where: { organizationId } });
   return NextResponse.json(data);
+}
+
+export async function DELETE(req: Request) {
+  const searchParams = new URL(req.url)?.searchParams;
+  const ids = searchParams.get('ids');
+
+  const organizationId = req.headers.get('x-organizationId');
+
+  if (!organizationId) {
+    return new Response('Invalid', {
+      status: 400
+    });
+  }
+
+  const fundIds = ids?.split(',') || [];
+
+  if (!fundIds.length) {
+    return new Response('Invalid', {
+      status: 400
+    });
+  }
+
+  await prisma.$transaction(
+    fundIds.map((id) => prisma.fund.update({ where: { id, organizationId }, data: { isDeleted: true } }))
+  );
+
+  return NextResponse.json({ ids });
 }

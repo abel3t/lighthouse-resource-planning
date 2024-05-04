@@ -75,7 +75,7 @@ export async function GET(req: Request) {
     orderByType = 'desc';
   }
 
-  const $condition: Record<string, any> = { fundId };
+  const $condition: Record<string, any> = { fundId, isDeleted: false };
   if (search) {
     $condition.contributorName = {
       contains: search,
@@ -104,4 +104,50 @@ export async function GET(req: Request) {
     },
     data: fundRecords
   });
+}
+
+export async function DELETE(req: Request) {
+  const searchParams = new URL(req.url)?.searchParams;
+  const ids = searchParams.get('ids');
+  const fundId = searchParams.get('fundId');
+
+  const organizationId = req.headers.get('x-organizationId');
+
+  if (!organizationId) {
+    return new Response('Invalid', {
+      status: 400
+    });
+  }
+  if (!fundId) {
+    return new Response('Invalid', {
+      status: 400
+    });
+  }
+
+  const fundRecordIds = ids?.split(',') || [];
+
+  if (!fundRecordIds.length) {
+    return new Response('Invalid', {
+      status: 400
+    });
+  }
+
+  const fund = await prisma.fund.findUnique({
+    where: {
+      id: fundId
+    },
+    select: { id: true }
+  });
+
+  if (!fund) {
+    return new Response('Fund not found', {
+      status: 400
+    });
+  }
+
+  await prisma.$transaction(
+    fundRecordIds.map((id) => prisma.fundRecord.update({ where: { id, fundId }, data: { isDeleted: true } }))
+  );
+
+  return NextResponse.json({ ids });
 }

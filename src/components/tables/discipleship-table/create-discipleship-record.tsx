@@ -28,6 +28,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
 
+import { Icons } from '@/components/custom/icons';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -66,7 +67,8 @@ export function CreateDiscipleshipDialog() {
   const [open, setOpen] = React.useState(false);
   const [isCreatePending, startCreateTransition] = React.useTransition();
   const [fileUrl, setFileUrl] = useState<string | undefined>();
-  const [isUploading, setIsUploading] = useState(false);
+  const [isUploading, setIsUploading] = React.useState(false);
+  const [isOnCreating, setIsOnCreating] = React.useState(false);
 
   const t = useTranslations();
 
@@ -91,6 +93,8 @@ export function CreateDiscipleshipDialog() {
       return;
     }
 
+    setIsOnCreating(true);
+
     startCreateTransition(() => {
       toast.promise(
         axios.post('/api/discipleship', {
@@ -99,25 +103,29 @@ export function CreateDiscipleshipDialog() {
           curatorId: accounts[0]?.id
         }),
         {
-          loading: 'Discipleship care...',
+          loading: t('create_record_processing', { name: t('discipleship').toLowerCase() }),
           success: () => {
             form.reset();
             setOpen(false);
+            setIsOnCreating(false);
             setFileUrl(undefined);
 
             fetchDiscipleshipList(queryParams);
 
-            return 'Discipleship created';
+            return t('create_record_successfully', { name: t('discipleship').toLowerCase() });
           },
           error: (error) => {
             setOpen(false);
+            setIsOnCreating(false);
             form.reset();
             if (fileUrl) {
               deleteImageUploadThing(fileUrl);
             }
             setFileUrl(undefined);
 
-            return getErrorMessage(error);
+            console.log(getErrorMessage(error));
+
+            return t('create_record_failed', { name: t('discipleship').toLowerCase() });
           }
         }
       );
@@ -212,13 +220,15 @@ export function CreateDiscipleshipDialog() {
 
             <DescriptionField form={form} t={t} />
 
-            <DialogFooter className="gap-2 pt-2 sm:space-x-0">
+            <DialogFooter className="flex flex-row justify-end gap-2 pt-2 sm:space-x-0">
               <DialogClose asChild>
-                <Button disabled={isUploading} type="button" variant="outline">
+                <Button className="w-24" type="button" variant="outline" disabled={isOnCreating || isUploading}>
                   {t('cancel')}
                 </Button>
               </DialogClose>
-              <Button disabled={isCreatePending || isUploading}>{t('submit')}</Button>
+              <Button className="flex w-24 justify-center" disabled={isOnCreating || isUploading}>
+                {isOnCreating ? <Icons.spinner className="h-4 w-4 animate-spin" /> : t('submit')}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

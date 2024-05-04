@@ -93,7 +93,7 @@ export function CreateFundRecordDialog() {
           amount: input.type === FundRecordType.Expense ? -amount : amount
         }),
         {
-          loading: 'Creating record...',
+          loading: t('create_record_processing', { name: t('fund_record').toLowerCase() }),
           success: () => {
             form.reset();
             setOpen(false);
@@ -103,7 +103,7 @@ export function CreateFundRecordDialog() {
             setIsOnCreating(false);
             setFileUrl(undefined);
 
-            return 'Record created';
+            return t('create_record_successfully', { name: t('fund_record').toLowerCase() });
           },
           error: (error) => {
             setOpen(false);
@@ -114,7 +114,9 @@ export function CreateFundRecordDialog() {
             }
             setFileUrl(undefined);
 
-            return getErrorMessage(error);
+            console.log(getErrorMessage(error));
+
+            return t('create_record_failed', { name: t('fund_record').toLowerCase() });
           }
         }
       );
@@ -200,11 +202,11 @@ export function CreateFundRecordDialog() {
               )}
             </div>
 
-            <DescriptionField form={form} />
+            <DescriptionField form={form} t={t} />
 
-            <DialogFooter className="gap-2 pt-2 sm:space-x-0">
+            <DialogFooter className="flex flex-row justify-end gap-2 pt-2 sm:space-x-0">
               <DialogClose asChild>
-                <Button type="button" variant="outline" disabled={isOnCreating || isUploading}>
+                <Button className="w-24" type="button" variant="outline" disabled={isOnCreating || isUploading}>
                   {t('cancel')}
                 </Button>
               </DialogClose>
@@ -230,7 +232,7 @@ const ContributorField = ({ form, t }: any) => {
       name="contributorId"
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
-          <FormLabel>{t('search_giver')}</FormLabel>
+          <FormLabel>{t('giver')}</FormLabel>
           <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
               <FormControl>
@@ -239,7 +241,7 @@ const ContributorField = ({ form, t }: any) => {
                   role="combobox"
                   className={cn('justify-between', !field.value && 'text-muted-foreground')}
                 >
-                  {field.value ? members.find((member) => member.id === field.value)?.name : 'Select contributor'}
+                  {field.value ? members.find((member) => member.id === field.value)?.name : t('search_giver')}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </FormControl>
@@ -280,14 +282,14 @@ const ContributorField = ({ form, t }: any) => {
   );
 };
 
-const DescriptionField = ({ form }: any) => {
+const DescriptionField = ({ form, t }: any) => {
   return (
     <FormField
       control={form.control}
       name="description"
       render={({ field }) => (
         <FormItem className="flex w-full flex-col">
-          <FormLabel>Ghi chú</FormLabel>
+          <FormLabel>{t('note')}</FormLabel>
           <FormControl>
             <Textarea placeholder="Thông tin chi tiết..." className="resize-none" {...field} />
           </FormControl>
@@ -298,14 +300,14 @@ const DescriptionField = ({ form }: any) => {
   );
 };
 
-const AmountField = ({ form }: any) => {
+const AmountField = ({ form, t }: any) => {
   return (
     <FormField
       control={form.control}
       name="amount"
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
-          <FormLabel className="my-0 py-0">Số tiền</FormLabel>
+          <FormLabel className="my-0 py-0">{t('amount')}</FormLabel>
           <FormControl className="mt-0 py-0">
             <Input className="mt-0 py-0" type="number" {...field} />
           </FormControl>
@@ -317,7 +319,7 @@ const AmountField = ({ form }: any) => {
   );
 };
 
-const RecordTypeField = ({ form }: any) => {
+const RecordTypeField = ({ form, t }: any) => {
   const bgColor: Record<string, string> = {
     [FundRecordType.Income]: 'bg-green-400',
     [FundRecordType.Expense]: 'bg-red-400'
@@ -333,12 +335,12 @@ const RecordTypeField = ({ form }: any) => {
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger className={cn(`${bgColor[field.value]}`, field.value && 'font-bold text-white')}>
-                  <SelectValue placeholder="Thu/Chi" />
+                  <SelectValue placeholder={`${t('income')}/${t('expense')}`} />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value={FundRecordType.Income}>{FundRecordType.Income}</SelectItem>
-                <SelectItem value={FundRecordType.Expense}>{FundRecordType.Expense}</SelectItem>
+                <SelectItem value={FundRecordType.Income}>{t(FundRecordType.Income.toLowerCase())}</SelectItem>
+                <SelectItem value={FundRecordType.Expense}>{t(FundRecordType.Expense.toLowerCase())}</SelectItem>
               </SelectContent>
             </Select>
           </FormControl>

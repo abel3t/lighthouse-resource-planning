@@ -21,6 +21,8 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 
+import DeleteCaresDialog from './delete-dialog';
+
 export const searchField = {
   name: 'personName',
   placeholder: 'search_caring_person'
@@ -141,7 +143,7 @@ export function getColumns(t: Function): ColumnDef<any>[] {
       cell: function Cell({ row }) {
         const [isUpdatePending, startUpdateTransition] = React.useTransition();
         const [showUpdateTaskSheet, setShowUpdateTaskSheet] = React.useState(false);
-        const [showDeleteTaskDialog, setShowDeleteTaskDialog] = React.useState(false);
+        const [showDeleteCareDialog, setShowDeleteCareDialog] = React.useState(false);
 
         return (
           <>
@@ -156,6 +158,9 @@ export function getColumns(t: Function): ColumnDef<any>[] {
               tasks={[row]}
               showTrigger={false}
             /> */}
+
+            <DeleteCaresDialog open={showDeleteCareDialog} onOpenChange={setShowDeleteCareDialog} cares={[row]} />
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button aria-label="Open menu" variant="ghost" className="flex size-8 p-0 data-[state=open]:bg-muted">
@@ -169,7 +174,7 @@ export function getColumns(t: Function): ColumnDef<any>[] {
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={() => setShowDeleteTaskDialog(true)}>
+                <DropdownMenuItem onSelect={() => setShowDeleteCareDialog(true)}>
                   {t('delete')}
                   <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
                 </DropdownMenuItem>
