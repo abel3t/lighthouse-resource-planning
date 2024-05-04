@@ -2,11 +2,8 @@
 
 import { DiscipleshipProcess, Gender, PersonalType } from '@/enums';
 import useAccountStore from '@/stores/useAccountStore';
-import useFundRecordStore from '@/stores/useFundRecordStore';
-import useFundStore from '@/stores/useFundStore';
 import useMemberStore from '@/stores/useMemberStore';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FundRecordType } from '@prisma/client';
 import { PlusIcon } from '@radix-ui/react-icons';
 import axios from 'axios';
 import { CommandList } from 'cmdk';
@@ -25,13 +22,12 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -190,7 +186,7 @@ const CuratorField = ({ form, t }: any) => {
                   role="combobox"
                   className={cn('justify-between', !field.value && 'text-muted-foreground')}
                 >
-                  {field.value ? accounts.find((account) => account.id === field.value)?.name : 'Select contributor'}
+                  {field.value ? accounts.find((account) => account.id === field.value)?.name : t('select_curator')}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </FormControl>
@@ -427,8 +423,8 @@ const GenderField = ({ form, t }: any) => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value={Gender.Male}>{Gender.Male}</SelectItem>
-                <SelectItem value={Gender.Female}>{Gender.Female}</SelectItem>
+                <SelectItem value={Gender.Male}>{t(Gender.Male.toLowerCase())}</SelectItem>
+                <SelectItem value={Gender.Female}>{t(Gender.Female.toLowerCase())}</SelectItem>
               </SelectContent>
             </Select>
           </FormControl>
@@ -462,10 +458,16 @@ const DiscipleshipProcessField = ({ form, t }: any) => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value={DiscipleshipProcess.Basic}>{DiscipleshipProcess.Basic}</SelectItem>
-                <SelectItem value={DiscipleshipProcess.Commitment}>{DiscipleshipProcess.Commitment}</SelectItem>
-                <SelectItem value={DiscipleshipProcess.Equipment}>{DiscipleshipProcess.Equipment}</SelectItem>
-                <SelectItem value={DiscipleshipProcess.Empowerment}>{DiscipleshipProcess.Empowerment}</SelectItem>
+                <SelectItem value={DiscipleshipProcess.Basic}>{t(DiscipleshipProcess.Basic.toLowerCase())}</SelectItem>
+                <SelectItem value={DiscipleshipProcess.Commitment}>
+                  {t(DiscipleshipProcess.Commitment.toLowerCase())}
+                </SelectItem>
+                <SelectItem value={DiscipleshipProcess.Equipment}>
+                  {t(DiscipleshipProcess.Equipment.toLowerCase())}
+                </SelectItem>
+                <SelectItem value={DiscipleshipProcess.Empowerment}>
+                  {t(DiscipleshipProcess.Empowerment.toLowerCase())}
+                </SelectItem>
               </SelectContent>
             </Select>
           </FormControl>

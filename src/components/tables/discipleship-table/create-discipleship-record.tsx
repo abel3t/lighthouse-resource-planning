@@ -1,5 +1,6 @@
 'use client';
 
+import { DiscipleshipPriorityText, DiscipleshipTypeText } from '@/constant';
 import {
   CarePriority,
   CareType,
@@ -167,6 +168,24 @@ export function CreateDiscipleshipDialog() {
               {!fileUrl && (
                 <UploadButton
                   endpoint="imageUploader"
+                  content={{
+                    button({ ready }) {
+                      if (ready) return <div>{t('choose_image')}</div>;
+
+                      return t('getting_ready');
+                    },
+                    allowedContent({ ready, isUploading }) {
+                      if (!ready) {
+                        return t('wait_a_moment');
+                      }
+
+                      if (isUploading) {
+                        return t('uploading_image');
+                      }
+
+                      return t('max_image_size', { size: '8MB' });
+                    }
+                  }}
                   onClientUploadComplete={(res) => {
                     const file: any = res?.[0];
 
@@ -228,14 +247,16 @@ const MemberField = ({ form, t }: any) => {
                   role="combobox"
                   className={cn('justify-between', !field.value && 'text-muted-foreground')}
                 >
-                  {field.value ? people.find((person) => person.id === field.value)?.name : 'Select Member'}
+                  {field.value
+                    ? people.find((person) => person.id === field.value)?.name
+                    : t('search_member_and_friend')}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </FormControl>
             </PopoverTrigger>
             <PopoverContent className=" p-0">
               <Command>
-                <CommandInput placeholder={t('search_member')} />
+                <CommandInput placeholder={t('search_member_and_friend')} />
                 <ScrollArea className="h-72">
                   <CommandList>
                     <CommandEmpty>{t('not_found')}.</CommandEmpty>
@@ -291,9 +312,15 @@ const CareTypeField = ({ form, t }: any) => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value={DiscipleshipType.Believe}>{DiscipleshipType.Believe}</SelectItem>
-                <SelectItem value={DiscipleshipType.ShareGospel}>{DiscipleshipType.ShareGospel}</SelectItem>
-                <SelectItem value={DiscipleshipType.Disciple}>{DiscipleshipType.Disciple}</SelectItem>
+                <SelectItem value={DiscipleshipType.Believe}>
+                  {t(DiscipleshipTypeText[DiscipleshipType.Believe])}
+                </SelectItem>
+                <SelectItem value={DiscipleshipType.ShareGospel}>
+                  {t(DiscipleshipTypeText[DiscipleshipType.ShareGospel])}
+                </SelectItem>
+                <SelectItem value={DiscipleshipType.Disciple}>
+                  {t(DiscipleshipTypeText[DiscipleshipType.Disciple])}
+                </SelectItem>
               </SelectContent>
             </Select>
           </FormControl>
@@ -326,9 +353,11 @@ const CarePriorityField = ({ form, t }: any) => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value={CarePriority.Warning}>{CarePriority.Warning}</SelectItem>
-                <SelectItem value={CarePriority.Normal}>{CarePriority.Normal}</SelectItem>
-                <SelectItem value={CarePriority.Good}>{CarePriority.Good}</SelectItem>
+                <SelectItem value={CarePriority.Warning}>
+                  {t(DiscipleshipPriorityText[CarePriority.Warning])}
+                </SelectItem>
+                <SelectItem value={CarePriority.Normal}>{t(DiscipleshipPriorityText[CarePriority.Normal])}</SelectItem>
+                <SelectItem value={CarePriority.Good}>{t(DiscipleshipPriorityText[CarePriority.Good])}</SelectItem>
               </SelectContent>
             </Select>
           </FormControl>

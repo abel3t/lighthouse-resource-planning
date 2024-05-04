@@ -20,16 +20,22 @@ export const CareTypeColor = {
 };
 
 export const CareTypeText = {
-  [CareType.Message]: 'message',
-  [CareType.FaceToFace]: 'face_to_face',
-  [CareType.Call]: 'call',
-  [CareType.Visit]: 'visit'
+  [CareType.Message]: 'care_type_message',
+  [CareType.FaceToFace]: 'care_type_face_to_face',
+  [CareType.Call]: 'care_type_call',
+  [CareType.Visit]: 'care_type_visit'
 };
 
 export const CarePriorityColor = {
   [CarePriority.Warning]: '#ef4444',
   [CarePriority.Normal]: '#fde047',
   [CarePriority.Good]: '##22c55e'
+};
+
+export const CarePriorityText = {
+  [CarePriority.Warning]: 'care_priority_warning',
+  [CarePriority.Normal]: 'care_priority_normal',
+  [CarePriority.Good]: 'care_priority_good'
 };
 
 export const DiscipleshipPriorityColor = {
@@ -45,9 +51,15 @@ export const DiscipleshipTypeColor = {
 };
 
 export const DiscipleshipTypeText = {
-  [DiscipleshipType.Believe]: 'Believe',
-  [DiscipleshipType.ShareGospel]: 'Share the Gospel',
-  [DiscipleshipType.Disciple]: 'Disciple'
+  [DiscipleshipType.Believe]: 'believe_in_Jesus',
+  [DiscipleshipType.ShareGospel]: 'share_the_gospel',
+  [DiscipleshipType.Disciple]: 'discipleship'
+};
+
+export const DiscipleshipPriorityText = {
+  [DiscipleshipPriority.Warning]: 'discipleship_priority_warning',
+  [DiscipleshipPriority.Normal]: 'discipleship_priority_normal',
+  [DiscipleshipPriority.Good]: 'discipleship_priority_good'
 };
 
 export const DiscipleshipProcessColor = {

@@ -2,6 +2,7 @@ import { PersonalType } from '@/enums';
 import { SearchParams } from '@/types';
 import axios from 'axios';
 
+import { client } from './client';
 import prisma from './prisma';
 
 export const getMembers = async (searchParams: SearchParams) => {
@@ -77,11 +78,13 @@ export async function getFundRecords() {
 }
 
 export const deleteImageUploadThing = async (url: string) => {
-  await axios.delete('api/uploadthing', {
-    data: {
-      url
-    }
-  });
+  if (url) {
+    await client.delete('api/uploadthing', {
+      data: {
+        url
+      }
+    });
+  }
 };
 
 export const getPersonById = async (id: string) => {

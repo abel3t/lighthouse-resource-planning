@@ -2,6 +2,7 @@ import { DiscipleshipProcessColor, NOT_APPLICABLE } from '@/constant';
 import { DiscipleshipProcess } from '@/enums';
 import { Care, Discipleship } from '@prisma/client';
 import { format } from 'date-fns';
+import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -12,7 +13,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { getMemberById, getPersonHaveCares, getPersonHaveDiscipleship } from '@/lib/api';
 
-export default async function MemberDetailPage({ params }: { params: { id: string } }) {
+export default async function MemberDetailPage({ params }: { params: { id: string; locale: string } }) {
+  const t = await getTranslations({ locale: params.locale });
   const [member, discipleshipList, cares] = await Promise.all([
     getMemberById(params.id),
     getPersonHaveDiscipleship(params.id),
@@ -35,11 +37,14 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
 
             <div className="py-2 font-bold">{member.name}</div>
 
-            <Badge
-              style={{ backgroundColor: DiscipleshipProcessColor[member.discipleshipProcess as DiscipleshipProcess] }}
-            >
-              {member.discipleshipProcess}
-            </Badge>
+            {member?.discipleshipProcess && (
+              <Badge
+                className="capitalize"
+                style={{ backgroundColor: DiscipleshipProcessColor[member.discipleshipProcess as DiscipleshipProcess] }}
+              >
+                {t(member.discipleshipProcess.toLowerCase())}
+              </Badge>
+            )}
           </div>
 
           <Separator />
@@ -73,7 +78,7 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
           </div>
 
           <div className="mt-4 flex justify-center">
-            <Button>Edit</Button>
+            <Button>{t('edit')}</Button>
           </div>
         </div>
       </div>

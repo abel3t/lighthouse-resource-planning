@@ -1,6 +1,6 @@
 'use client';
 
-import { CarePriorityColor, CareTypeColor, CareTypeText, NOT_APPLICABLE } from '@/constant';
+import { CarePriorityColor, CarePriorityText, CareTypeColor, CareTypeText } from '@/constant';
 import { CarePriority, CareType } from '@/enums';
 import type { DataTableFilterField } from '@/types';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
@@ -87,7 +87,7 @@ export function getColumns(t: Function): ColumnDef<any>[] {
       meta: t('name'),
       header: ({ column }) => <DataTableColumnHeader column={column} title={t('name')} />,
       cell: ({ row }) => {
-        return <div className="w-full">{row.getValue('personName')}</div>;
+        return <div className="w-32">{row.getValue('personName')}</div>;
       },
       enableSorting: true
     },
@@ -99,8 +99,8 @@ export function getColumns(t: Function): ColumnDef<any>[] {
         const type = row.getValue('type') as CareType;
 
         return (
-          <div className="flex space-x-2">
-            <Badge style={{ backgroundColor: CareTypeColor[type] }}>{CareTypeText[type]}</Badge>
+          <div className="flex w-32 space-x-2">
+            <Badge style={{ backgroundColor: CareTypeColor[type] }}>{t(CareTypeText[type])}</Badge>
           </div>
         );
       },
@@ -116,8 +116,8 @@ export function getColumns(t: Function): ColumnDef<any>[] {
       cell: ({ row }) => {
         const priority = row.getValue('priority') as CarePriority;
         return (
-          <div className="flex space-x-2">
-            <Badge style={{ backgroundColor: CarePriorityColor[priority] }}>{priority}</Badge>
+          <div className="flex w-32 space-x-2">
+            <Badge style={{ backgroundColor: CarePriorityColor[priority] }}>{t(CarePriorityText[priority])}</Badge>
           </div>
         );
       },
@@ -131,7 +131,7 @@ export function getColumns(t: Function): ColumnDef<any>[] {
       meta: t('curator'),
       header: ({ column }) => <DataTableColumnHeader column={column} title={t('curator')} />,
       cell: ({ row }) => {
-        return <div className="w-20">{row.getValue('curatorName')}</div>;
+        return <div className="w-32">{row.getValue('curatorName')}</div>;
       },
       enableSorting: true,
       enableHiding: false

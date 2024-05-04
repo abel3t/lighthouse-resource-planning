@@ -93,7 +93,9 @@ export function getColumns(t: Function): ColumnDef<any>[] {
         const type = row.getValue('type') as FriendType;
         return (
           <div className="flex space-x-2">
-            <Badge style={{ backgroundColor: FriendTypeColor[type] }}>{type}</Badge>
+            <Badge className="capitalize" style={{ backgroundColor: FriendTypeColor[type] }}>
+              {t(type.toLowerCase())}
+            </Badge>
           </div>
         );
       },
@@ -129,12 +131,14 @@ export function getColumns(t: Function): ColumnDef<any>[] {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-40">
-                <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>Edit</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => router.push(`/friends/${row.getValue('id')}`)}>View</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>{t('edit')}</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => router.push(`/friends/${row.getValue('id')}`)}>
+                  {t('view')}
+                </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onSelect={() => setShowDeleteTaskDialog(true)}>
-                  Delete
+                  {t('delete')}
                   <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
                 </DropdownMenuItem>
               </DropdownMenuContent>

@@ -5,7 +5,6 @@ import { DiscipleshipProcess } from '@/enums';
 import type { DataTableFilterField } from '@/types';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { type ColumnDef } from '@tanstack/react-table';
-import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 
@@ -98,8 +97,8 @@ export function getColumns(t: Function): ColumnDef<any>[] {
         return (
           <div className="flex space-x-2">
             {discipleshipProcess ? (
-              <Badge style={{ backgroundColor: DiscipleshipProcessColor[discipleshipProcess] }}>
-                {discipleshipProcess}
+              <Badge className="capitalize" style={{ backgroundColor: DiscipleshipProcessColor[discipleshipProcess] }}>
+                {t(discipleshipProcess.toLowerCase())}
               </Badge>
             ) : (
               NOT_APPLICABLE
@@ -148,12 +147,14 @@ export function getColumns(t: Function): ColumnDef<any>[] {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-40">
-                <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>Edit</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => router.push(`/members/${row.getValue('id')}`)}>View</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>{t('edit')}</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => router.push(`/members/${row.getValue('id')}`)}>
+                  {t('view')}
+                </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onSelect={() => setShowDeleteTaskDialog(true)}>
-                  Delete
+                  {t('delete')}
                   <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
                 </DropdownMenuItem>
               </DropdownMenuContent>

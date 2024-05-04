@@ -22,7 +22,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -173,7 +172,7 @@ const IntroducedByField = ({ form, t }: any) => {
                   role="combobox"
                   className={cn('justify-between', !field.value && 'text-muted-foreground')}
                 >
-                  {field.value ? members.find((member) => member.id === field.value)?.name : 'Select Member'}
+                  {field.value ? members.find((member) => member.id === field.value)?.name : t('select_member')}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </FormControl>
@@ -343,8 +342,8 @@ const GenderField = ({ form, t }: any) => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value={Gender.Male}>{Gender.Female}</SelectItem>
-                <SelectItem value={Gender.Female}>{Gender.Female}</SelectItem>
+                <SelectItem value={Gender.Male}>{t(Gender.Male.toLowerCase())}</SelectItem>
+                <SelectItem value={Gender.Female}>{t(Gender.Female.toLowerCase())}</SelectItem>
               </SelectContent>
             </Select>
           </FormControl>
@@ -378,10 +377,10 @@ const FriendTypeField = ({ form, t }: any) => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value={FriendType.Unbeliever}>{FriendType.Unbeliever}</SelectItem>
-                <SelectItem value={FriendType.Unsure}>{FriendType.Unsure}</SelectItem>
-                <SelectItem value={FriendType.NewLife}>{FriendType.NewLife}</SelectItem>
-                <SelectItem value={FriendType.Friend}>{FriendType.Friend}</SelectItem>
+                <SelectItem value={FriendType.Unbeliever}>{t(FriendType.Unbeliever.toLowerCase())}</SelectItem>
+                <SelectItem value={FriendType.Unsure}>{t(FriendType.Unsure.toLowerCase())}</SelectItem>
+                <SelectItem value={FriendType.NewLife}>{t(FriendType.NewLife.toLowerCase())}</SelectItem>
+                <SelectItem value={FriendType.Friend}>{t(FriendType.Friend.toLowerCase())}</SelectItem>
               </SelectContent>
             </Select>
           </FormControl>

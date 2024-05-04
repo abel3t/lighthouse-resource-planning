@@ -1,5 +1,6 @@
 'use client';
 
+import { CarePriorityText, CareTypeText } from '@/constant';
 import { CarePriority, CareType } from '@/enums';
 import useAccountStore from '@/stores/useAccountStore';
 import useCareStore from '@/stores/useCareStore';
@@ -160,6 +161,24 @@ export function CreateFundRecordDialog() {
               {!fileUrl && (
                 <UploadButton
                   endpoint="imageUploader"
+                  content={{
+                    button({ ready }) {
+                      if (ready) return <div>{t('choose_image')}</div>;
+
+                      return t('getting_ready');
+                    },
+                    allowedContent({ ready, isUploading }) {
+                      if (!ready) {
+                        return t('wait_a_moment');
+                      }
+
+                      if (isUploading) {
+                        return t('uploading_image');
+                      }
+
+                      return t('max_image_size', { size: '8MB' });
+                    }
+                  }}
                   config={{ appendOnPaste: true }}
                   onClientUploadComplete={(res) => {
                     const file: any = res?.[0];
@@ -227,7 +246,7 @@ const MemberField = ({ form, t }: any) => {
                   role="combobox"
                   className={cn('justify-between', !field.value && 'text-muted-foreground')}
                 >
-                  {field.value ? members.find((member) => member.id === field.value)?.name : 'Select Member'}
+                  {field.value ? members.find((member) => member.id === field.value)?.name : t('select_member')}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </FormControl>
@@ -309,10 +328,10 @@ const CareTypeField = ({ form, t }: any) => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value={CareType.Message}>{CareType.Message}</SelectItem>
-                <SelectItem value={CareType.Call}>{CareType.Call}</SelectItem>
-                <SelectItem value={CareType.FaceToFace}>{CareType.FaceToFace}</SelectItem>
-                <SelectItem value={CareType.Visit}>{CareType.Visit}</SelectItem>
+                <SelectItem value={CareType.Message}>{t(CareTypeText[CareType.Message])}</SelectItem>
+                <SelectItem value={CareType.Call}>{t(CareTypeText[CareType.Call])}</SelectItem>
+                <SelectItem value={CareType.FaceToFace}>{t(CareTypeText[CareType.FaceToFace])}</SelectItem>
+                <SelectItem value={CareType.Visit}>{t(CareTypeText[CareType.Visit])}</SelectItem>
               </SelectContent>
             </Select>
           </FormControl>
@@ -345,9 +364,9 @@ const CarePriorityField = ({ form, t }: any) => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value={CarePriority.Warning}>{CarePriority.Warning}</SelectItem>
-                <SelectItem value={CarePriority.Normal}>{CarePriority.Normal}</SelectItem>
-                <SelectItem value={CarePriority.Good}>{CarePriority.Good}</SelectItem>
+                <SelectItem value={CarePriority.Warning}>{t(CarePriorityText[CarePriority.Warning])}</SelectItem>
+                <SelectItem value={CarePriority.Normal}>{t(CarePriorityText[CarePriority.Normal])}</SelectItem>
+                <SelectItem value={CarePriority.Good}>{t(CarePriorityText[CarePriority.Good])}</SelectItem>
               </SelectContent>
             </Select>
           </FormControl>

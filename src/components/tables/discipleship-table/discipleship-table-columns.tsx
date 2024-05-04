@@ -1,6 +1,12 @@
 'use client';
 
-import { DiscipleshipPriorityColor, DiscipleshipTypeColor, DiscipleshipTypeText, NOT_APPLICABLE } from '@/constant';
+import {
+  DiscipleshipPriorityColor,
+  DiscipleshipPriorityText,
+  DiscipleshipTypeColor,
+  DiscipleshipTypeText,
+  NOT_APPLICABLE
+} from '@/constant';
 import { DiscipleshipPriority, DiscipleshipType } from '@/enums';
 import type { DataTableFilterField } from '@/types';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
@@ -101,7 +107,7 @@ export function getColumns(t: Function): ColumnDef<any>[] {
         const type = row.getValue('type') as DiscipleshipType;
         return (
           <div className="flex w-32 space-x-2">
-            <Badge style={{ backgroundColor: DiscipleshipTypeColor[type] }}>{DiscipleshipTypeText[type]}</Badge>
+            <Badge style={{ backgroundColor: DiscipleshipTypeColor[type] }}>{t(DiscipleshipTypeText[type])}</Badge>
           </div>
         );
       },
@@ -118,7 +124,9 @@ export function getColumns(t: Function): ColumnDef<any>[] {
         const priority = row.getValue('priority') as DiscipleshipPriority;
         return (
           <div className="flex space-x-2">
-            <Badge style={{ backgroundColor: DiscipleshipPriorityColor[priority] }}>{priority}</Badge>
+            <Badge style={{ backgroundColor: DiscipleshipPriorityColor[priority] }}>
+              {t(DiscipleshipPriorityText[priority])}
+            </Badge>
           </div>
         );
       },
@@ -163,14 +171,14 @@ export function getColumns(t: Function): ColumnDef<any>[] {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-40">
-                <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>Edit</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>{t('edit')}</DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => router.push(`/discipleship/${row.getValue('id')}`)}>
-                  View
+                  {t('view')}
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onSelect={() => setShowDeleteTaskDialog(true)}>
-                  Delete
+                  {t('delete')}
                   <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
                 </DropdownMenuItem>
               </DropdownMenuContent>
