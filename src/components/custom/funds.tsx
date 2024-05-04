@@ -2,7 +2,7 @@
 
 import useFundStore from '@/stores/useFundStore';
 import { Fund } from '@prisma/client';
-import { PlusIcon, WalletIcon } from 'lucide-react';
+import { WalletIcon } from 'lucide-react';
 import { useEffect } from 'react';
 
 import { cn } from '@/lib/utils';
@@ -18,7 +18,7 @@ export default function Funds() {
   }, []);
 
   return (
-    <div className="mt-3 grid grid-cols-2 gap-2 px-1 md:grid-cols-3 md:gap-3 lg:grid-cols-4 lg:gap-4">
+    <div className="mt-2 grid grid-cols-2 gap-2 px-1 md:grid-cols-3 md:gap-3 lg:grid-cols-4 lg:gap-4">
       {funds.map((fund) => (
         <FundCard key={fund.id} fund={fund} />
       ))}

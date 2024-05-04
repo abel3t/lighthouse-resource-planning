@@ -48,7 +48,7 @@ export function DataTableToolbar<TData>({
           placeholder={t(search.placeholder)}
           value={(table.getColumn(search.name)?.getFilterValue() as string) ?? ''}
           onChange={(event) => table.getColumn(search.name)?.setFilterValue(event.target.value)}
-          className="h-8 w-[150px] lg:w-[250px]"
+          className="h-8 w-[200px] truncate lg:w-[350px]"
         />
 
         {filterFields.map(

@@ -1,5 +1,8 @@
+'use client';
+
 import { ArrowDownIcon, ArrowUpIcon, CaretSortIcon, EyeNoneIcon } from '@radix-ui/react-icons';
 import { Column } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -26,6 +29,8 @@ export function DataTableColumnHeader<TData, TValue>({
     return <div className={cn(className)}>{title}</div>;
   }
 
+  const t = useTranslations();
+
   return (
     <div className={cn('flex items-center space-x-2', className)}>
       <DropdownMenu>
@@ -44,16 +49,16 @@ export function DataTableColumnHeader<TData, TValue>({
         <DropdownMenuContent align="start">
           <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
             <ArrowUpIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Asc
+            {t('table_asc')}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
             <ArrowDownIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Desc
+            {t('table_desc')}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => column.toggleVisibility(false)}>
             <EyeNoneIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Hide
+            {t('table_hide')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
