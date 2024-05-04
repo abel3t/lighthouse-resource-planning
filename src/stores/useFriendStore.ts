@@ -28,7 +28,7 @@ const useFriendStore = create<FriendStore>((set) => ({
       pageSize: pagination.pageSize
     });
 
-    const data = await client.get('/friends/?' + qs).then((res) => res.data);
+    const data = await client.get('/friends?' + qs).then((res) => res.data);
     set({ friends: data?.data || [] });
     set({ metadata: data?.metadata || {} });
   },

@@ -7,6 +7,8 @@ import {
   FriendType
 } from './enums';
 
+export const locales = ['en', 'vi'];
+
 export const DATE_FORMAT = 'DD/MM/YYYY';
 export const NOT_APPLICABLE = 'N/A';
 
@@ -18,16 +20,22 @@ export const CareTypeColor = {
 };
 
 export const CareTypeText = {
-  [CareType.Message]: 'Message',
-  [CareType.FaceToFace]: 'Face to Face',
-  [CareType.Call]: 'Call',
-  [CareType.Visit]: 'Visit'
+  [CareType.Message]: 'care_type_message',
+  [CareType.FaceToFace]: 'care_type_face_to_face',
+  [CareType.Call]: 'care_type_call',
+  [CareType.Visit]: 'care_type_visit'
 };
 
 export const CarePriorityColor = {
   [CarePriority.Warning]: '#ef4444',
   [CarePriority.Normal]: '#fde047',
   [CarePriority.Good]: '##22c55e'
+};
+
+export const CarePriorityText = {
+  [CarePriority.Warning]: 'care_priority_warning',
+  [CarePriority.Normal]: 'care_priority_normal',
+  [CarePriority.Good]: 'care_priority_good'
 };
 
 export const DiscipleshipPriorityColor = {
@@ -43,9 +51,15 @@ export const DiscipleshipTypeColor = {
 };
 
 export const DiscipleshipTypeText = {
-  [DiscipleshipType.Believe]: 'Believe',
-  [DiscipleshipType.ShareGospel]: 'Share the Gospel',
-  [DiscipleshipType.Disciple]: 'Disciple'
+  [DiscipleshipType.Believe]: 'believe_in_Jesus',
+  [DiscipleshipType.ShareGospel]: 'share_the_gospel',
+  [DiscipleshipType.Disciple]: 'discipleship'
+};
+
+export const DiscipleshipPriorityText = {
+  [DiscipleshipPriority.Warning]: 'discipleship_priority_warning',
+  [DiscipleshipPriority.Normal]: 'discipleship_priority_normal',
+  [DiscipleshipPriority.Good]: 'discipleship_priority_good'
 };
 
 export const DiscipleshipProcessColor = {
@@ -53,6 +67,13 @@ export const DiscipleshipProcessColor = {
   [DiscipleshipProcess.Commitment]: '#22c55e',
   [DiscipleshipProcess.Equipment]: '#06b6d4',
   [DiscipleshipProcess.Empowerment]: '#6d28d9'
+};
+
+export const DiscipleshipProcessText = {
+  [DiscipleshipProcess.Basic]: 'basic',
+  [DiscipleshipProcess.Commitment]: 'commitment',
+  [DiscipleshipProcess.Equipment]: 'equipment',
+  [DiscipleshipProcess.Empowerment]: 'empowerment'
 };
 
 export const FriendTypeColor = {

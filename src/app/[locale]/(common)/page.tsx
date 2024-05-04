@@ -1,12 +1,15 @@
 'use client';
 
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
+import { useLocale } from 'next-intl';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import { Icons } from '@/components/custom/icons';
 
 export default async function Home() {
+  const locale = useLocale();
+
   const { isAuthenticated, isLoading } = useKindeBrowserClient();
 
   const router = useRouter();
@@ -20,9 +23,9 @@ export default async function Home() {
   }
 
   if (isAuthenticated) {
-    router.push('/dashboard');
+    router.push(`/${locale}/dashboard`);
   } else {
-    router.push('/login');
+    router.push(`/${locale}/login`);
   }
 
   return (

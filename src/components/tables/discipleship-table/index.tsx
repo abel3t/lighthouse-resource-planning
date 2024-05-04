@@ -12,6 +12,7 @@ import {
   useReactTable
 } from '@tanstack/react-table';
 import { useDebounce } from '@uidotdev/usehooks';
+import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 
 import { DataTable } from '@/components/custom/data-table';
@@ -25,8 +26,10 @@ export default function DiscipleshipTable() {
   const discipleshipList = useDiscipleshipStore((state) => state.discipleshipList);
   const fetchDiscipleshipList = useDiscipleshipStore((state) => state.fetchDiscipleshipList);
 
+  const t = useTranslations();
+
   // Memoize the columns so they don't re-render on every render
-  const columns = useMemo(() => getColumns(), []);
+  const columns = useMemo(() => getColumns(t), []);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
@@ -121,7 +124,7 @@ export default function DiscipleshipTable() {
   });
 
   return (
-    <div className="space-y-1overflow-auto w-full">
+    <div className="w-screen  space-y-1 px-1 sm:w-full">
       <DataTableToolbar table={table} search={searchField} filterFields={[]}>
         <MemberTableToolbarActions table={table} />
       </DataTableToolbar>

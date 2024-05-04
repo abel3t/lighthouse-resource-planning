@@ -12,21 +12,24 @@ import {
   useReactTable
 } from '@tanstack/react-table';
 import { useDebounce } from '@uidotdev/usehooks';
+import { useTranslations } from 'next-intl';
 import { useEffect, useMemo, useState } from 'react';
 
 import { DataTable } from '@/components/custom/data-table';
 import { DataTableToolbar } from '@/components/custom/data-table/data-table-toolbar';
 
 import { getColumns, searchField } from './friend-table-columns';
-import { MemberTableToolbarActions } from './member-table-toolbar-actions';
+import { FriendTableToolbarActions } from './member-table-toolbar-actions';
 
 export default function FriendTable() {
   const metadata = useFriendStore((state) => state.metadata);
   const friends = useFriendStore((state) => state.friends);
   const fetchFriends = useFriendStore((state) => state.fetchFriends);
 
+  const t = useTranslations();
+
   // Memoize the columns so they don't re-render on every render
-  const columns = useMemo(() => getColumns(), []);
+  const columns = useMemo(() => getColumns(t), []);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize: 10 });
@@ -121,9 +124,9 @@ export default function FriendTable() {
   });
 
   return (
-    <div className="space-y-1overflow-auto w-full">
+    <div className="w-screen  space-y-1 px-1  sm:w-full">
       <DataTableToolbar table={table} search={searchField} filterFields={[]}>
-        <MemberTableToolbarActions table={table} />
+        <FriendTableToolbarActions table={table} />
       </DataTableToolbar>
 
       <DataTable table={table} />

@@ -3,6 +3,8 @@
 import { SidebarItems } from '@/types';
 import { motion } from 'framer-motion';
 import { ChevronLeftIcon, LogOut, LogOutIcon, MoreHorizontal, Settings } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -28,6 +30,9 @@ export function SidebarDesktop({ sidebarItems, className, user }: SidebarDesktop
   const [isLogoutLoading, setIsLogoutLoading] = useState(false);
   const router = useRouter();
 
+  const t = useTranslations();
+  const locale = useLocale();
+
   return (
     <motion.div
       initial={false}
@@ -39,7 +44,9 @@ export function SidebarDesktop({ sidebarItems, className, user }: SidebarDesktop
       <div className="flex h-full flex-col justify-between">
         <div>
           <div className="flex items-start justify-between py-3">
-            <h3 className="mx-3 text-lg font-semibold text-foreground">LRP</h3>
+            <div className="mx-3 text-lg font-semibold text-foreground">
+              <Image src="/images/lec.png" alt={'Logo'} width={40} height={40} />
+            </div>
 
             <div className="relative cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
               <ChevronLeftIcon className="absolute right-0 top-0" />
@@ -49,14 +56,21 @@ export function SidebarDesktop({ sidebarItems, className, user }: SidebarDesktop
 
           <div className="flex flex-col gap-1">
             {sidebarItems.links.map((link, index) => (
-              <Link key={index} href={link.href}>
+              <Link
+                key={index}
+                href={`/${locale}${link.href}`}
+                className={cn({
+                  'rounded-md bg-gray-100 opacity-80 dark:bg-gray-700':
+                    link.href !== '/' && pathname.includes(link.href)
+                })}
+              >
                 <SidebarButton
                   variant={pathname === link.href ? 'secondary' : 'ghost'}
                   icon={link.icon}
                   className="w-full"
                   isExpanded={isExpanded}
                 >
-                  {link.label}
+                  {t(link.label)}
                 </SidebarButton>
               </Link>
             ))}
@@ -105,7 +119,7 @@ export function SidebarDesktop({ sidebarItems, className, user }: SidebarDesktop
                     <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                   ) : (
                     <div className="flex justify-start gap-2 ">
-                      <div>Logout</div>
+                      <div>Đăng Xuất</div>
                     </div>
                   )}
                 </Button>

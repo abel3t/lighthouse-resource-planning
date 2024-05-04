@@ -1,6 +1,12 @@
 'use client';
 
-import { DiscipleshipPriorityColor, DiscipleshipTypeColor, DiscipleshipTypeText, NOT_APPLICABLE } from '@/constant';
+import {
+  DiscipleshipPriorityColor,
+  DiscipleshipPriorityText,
+  DiscipleshipTypeColor,
+  DiscipleshipTypeText,
+  NOT_APPLICABLE
+} from '@/constant';
 import { DiscipleshipPriority, DiscipleshipType } from '@/enums';
 import type { DataTableFilterField } from '@/types';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
@@ -23,9 +29,11 @@ import {
 
 import { getErrorMessage } from '@/lib/handle-error';
 
+import DeleteDiscipleshipDialog from './delete-dialog';
+
 export const searchField = {
   name: 'personName',
-  placeholder: 'Search...'
+  placeholder: 'search_discipleship_person'
 };
 
 export const filterFields: DataTableFilterField<any>[] = [
@@ -36,7 +44,7 @@ export const filterFields: DataTableFilterField<any>[] = [
   }
 ];
 
-export function getColumns(): ColumnDef<any>[] {
+export function getColumns(t: Function): ColumnDef<any>[] {
   const router = useRouter();
   const updateTask = async (data: any) => {
     console.log('update task', data);
@@ -72,7 +80,7 @@ export function getColumns(): ColumnDef<any>[] {
     {
       accessorKey: 'personName',
       meta: 'Tên',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Tên" />,
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('name')} />,
       cell: ({ row }) => {
         return <div className="w-20">{row.getValue('personName')}</div>;
       },
@@ -80,8 +88,8 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'date',
-      meta: 'Ngày',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Ngày" />,
+      meta: t('date'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('date')} />,
       cell: ({ row }) => {
         const date = new Date(row.getValue('date'));
 
@@ -95,13 +103,13 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'type',
-      meta: 'Hình Thức',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Hình Thức" />,
+      meta: t('discipleship_type'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('discipleship_type')} />,
       cell: ({ row }) => {
         const type = row.getValue('type') as DiscipleshipType;
         return (
-          <div className="flex space-x-2">
-            <Badge style={{ backgroundColor: DiscipleshipTypeColor[type] }}>{DiscipleshipTypeText[type]}</Badge>
+          <div className="flex w-32 space-x-2">
+            <Badge style={{ backgroundColor: DiscipleshipTypeColor[type] }}>{t(DiscipleshipTypeText[type])}</Badge>
           </div>
         );
       },
@@ -112,13 +120,15 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'priority',
-      meta: 'Đáp Ứng',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Đáp Ứng" />,
+      meta: t('discipleship_priority'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('discipleship_priority')} />,
       cell: ({ row }) => {
         const priority = row.getValue('priority') as DiscipleshipPriority;
         return (
           <div className="flex space-x-2">
-            <Badge style={{ backgroundColor: DiscipleshipPriorityColor[priority] }}>{priority}</Badge>
+            <Badge style={{ backgroundColor: DiscipleshipPriorityColor[priority] }}>
+              {t(DiscipleshipPriorityText[priority])}
+            </Badge>
           </div>
         );
       },
@@ -129,8 +139,8 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'curatorName',
-      meta: 'Người Chăm Sóc',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Người Chăm Sóc" />,
+      meta: t('curator'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('curator')} />,
       cell: ({ row }) => {
         return <div className="w-20">{row.getValue('curatorName')}</div>;
       },
@@ -138,10 +148,11 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       id: 'actions',
-      cell: function Cell({ row }) {
+      cell: function Cell({ row, table }) {
         const [isUpdatePending, startUpdateTransition] = React.useTransition();
         const [showUpdateTaskSheet, setShowUpdateTaskSheet] = React.useState(false);
-        const [showDeleteTaskDialog, setShowDeleteTaskDialog] = React.useState(false);
+        const [showDeleteDiscipleshipDialog, setShowDiscipleshipDialog] = React.useState(false);
+        const selectedRows = table.getFilteredSelectedRowModel().rows.length;
 
         return (
           <>
@@ -156,21 +167,32 @@ export function getColumns(): ColumnDef<any>[] {
               tasks={[row]}
               showTrigger={false}
             /> */}
+            <DeleteDiscipleshipDialog
+              open={showDeleteDiscipleshipDialog}
+              onOpenChange={setShowDiscipleshipDialog}
+              discipleshipList={[row]}
+            />
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button aria-label="Open menu" variant="ghost" className="flex size-8 p-0 data-[state=open]:bg-muted">
+                <Button
+                  disabled={selectedRows > 1}
+                  aria-label="Open menu"
+                  variant="ghost"
+                  className="flex size-8 p-0 data-[state=open]:bg-muted"
+                >
                   <DotsHorizontalIcon className="size-4" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-40">
-                <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>Edit</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>{t('edit')}</DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => router.push(`/discipleship/${row.getValue('id')}`)}>
-                  View
+                  {t('view')}
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={() => setShowDeleteTaskDialog(true)}>
-                  Delete
+                <DropdownMenuItem onSelect={() => setShowDiscipleshipDialog(true)}>
+                  {t('delete')}
                   <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
                 </DropdownMenuItem>
               </DropdownMenuContent>

@@ -1,27 +1,38 @@
-// import { type Task } from "@/db/schema"
+'use client';
+
 import { type Table } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 
 import { CreateFundRecordDialog } from './create-record';
-
-// import { CreateTaskDialog } from "./create-task-dialog"
-// import { DeleteTasksDialog } from "./delete-tasks-dialog"
+import DeleteFuncRecordDialog from './delete-dialog';
 
 interface TasksTableToolbarActionsProps {
   table: Table<any>;
 }
 
 export function FundRecordTableToolbarActions({ table }: TasksTableToolbarActionsProps) {
+  const t = useTranslations();
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
   return (
     <div className="flex items-center gap-2">
-      {table.getFilteredSelectedRowModel().rows.length > 0 ? (
-        <Button>Delete</Button>
-      ) : // <DeleteTasksDialog
-      //   tasks={table.getFilteredSelectedRowModel().rows}
-      //   onSuccess={() => table.toggleAllPageRowsSelected(false)}
-      // />
-      null}
+      {table.getFilteredSelectedRowModel().rows.length > 0 && (
+        <div>
+          <Button onClick={() => setShowDeleteDialog(true)} variant="destructive">
+            {t('delete')}
+          </Button>
+
+          <DeleteFuncRecordDialog
+            open={showDeleteDialog}
+            onOpenChange={setShowDeleteDialog}
+            fundRecords={table.getFilteredSelectedRowModel().rows}
+            onSuccess={() => table.toggleAllPageRowsSelected(false)}
+          />
+        </div>
+      )}
 
       <CreateFundRecordDialog />
     </div>

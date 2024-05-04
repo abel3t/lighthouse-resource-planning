@@ -2,6 +2,7 @@ import { FriendTypeColor, NOT_APPLICABLE } from '@/constant';
 import { FriendType } from '@/enums';
 import { Care, Discipleship } from '@prisma/client';
 import { format } from 'date-fns';
+import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -12,9 +13,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import { getFriendById, getPersonHaveDiscipleship } from '@/lib/api';
 
-export default async function MemberDetailPage({ params }: { params: { id: string } }) {
+export default async function MemberDetailPage({ params }: { params: { id: string; locale: string } }) {
   const friend = await getFriendById(params.id);
   const discipleshipList = await getPersonHaveDiscipleship(params.id);
+
+  const t = await getTranslations({ locale: params.locale });
 
   if (!friend) {
     notFound();
@@ -32,41 +35,43 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
 
             <div className="py-2 font-bold">{friend.name}</div>
 
-            <Badge style={{ backgroundColor: FriendTypeColor[friend.type as FriendType] }}>{friend.type}</Badge>
+            <Badge className="capitalize" style={{ backgroundColor: FriendTypeColor[friend.type as FriendType] }}>
+              {t(friend.type.toLowerCase())}
+            </Badge>
           </div>
 
           <Separator />
 
           <div>
             <div className="pt-2">
-              <span className="font-bold">Introduced By:</span> {friend.friend?.name || NOT_APPLICABLE}
+              <span className="font-bold">{t('introduced_by')}:</span> {friend.friend?.name || NOT_APPLICABLE}
             </div>
             <div className="pt-2">
-              <span className="font-bold">Gender:</span> {friend.gender || NOT_APPLICABLE}
+              <span className="font-bold">{t('gender')}:</span> {friend.gender || NOT_APPLICABLE}
             </div>
             <div className="pt-2">
-              <span className="font-bold">Phone:</span> {friend.phone || NOT_APPLICABLE}
+              <span className="font-bold">{t('phone')}:</span> {friend.phone || NOT_APPLICABLE}
             </div>
             <div className="pt-2">
-              <span className="font-bold">Email:</span> {friend.email || NOT_APPLICABLE}
+              <span className="font-bold">{t('email')}:</span> {friend.email || NOT_APPLICABLE}
             </div>
             <div className="pt-2">
-              <span className="font-bold">Birthday:</span>{' '}
+              <span className="font-bold">{t('date_of_birth')}:</span>{' '}
               {friend.birthday ? format(new Date(friend.birthday), 'dd/MM/yyyy') : NOT_APPLICABLE}
             </div>
             <div className="pt-2">
-              <span className="font-bold">Address:</span> {friend.address || NOT_APPLICABLE}
+              <span className="font-bold">{t('address')}:</span> {friend.address || NOT_APPLICABLE}
             </div>
             <div className="pt-2">
-              <span className="font-bold">Hometown:</span> {friend.hometown || NOT_APPLICABLE}
+              <span className="font-bold">{t('hometown')}:</span> {friend.hometown || NOT_APPLICABLE}
             </div>
             <div className="pt-2">
-              <span className="font-bold">Description:</span> {friend.description || NOT_APPLICABLE}
+              <span className="font-bold">{t('description')}:</span> {friend.description || NOT_APPLICABLE}
             </div>
           </div>
 
           <div className="mt-4 flex justify-center">
-            <Button>Edit</Button>
+            <Button>{t('edit')}</Button>
           </div>
         </div>
       </div>
@@ -74,8 +79,12 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
       <div className="max-h-screen flex-1 overflow-scroll px-5">
         <Tabs defaultValue="discipleship" className="w-[400px]">
           <TabsList>
-            <TabsTrigger value="discipleship">Discipleship</TabsTrigger>
-            <TabsTrigger value="friend">Friends</TabsTrigger>
+            <TabsTrigger className="px-5" value="discipleship">
+              {t('discipleship')}
+            </TabsTrigger>
+            <TabsTrigger className="px-5" value="friend">
+              {t('relation_friends')}
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="discipleship">
             <DiscipleTimeline discipleshipList={discipleshipList} />

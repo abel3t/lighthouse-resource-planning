@@ -16,36 +16,33 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 
-import { getErrorMessage } from '@/lib/handle-error';
+import DeleteMembersDialog from './delete-dialog';
 
 export const searchField = {
   name: 'name',
-  placeholder: 'Search...'
+  placeholder: 'search_member'
 };
 
 export const filterFields: DataTableFilterField<any>[] = [
   {
     label: 'Name',
     value: 'name',
-    placeholder: 'Filter name...'
+    placeholder: 'search_member'
   }
 ];
 
-export function getColumns(): ColumnDef<any>[] {
+export function getColumns(t: Function): ColumnDef<any>[] {
   const updateTask = async (data: any) => {
     console.log('update task', data);
   };
 
   const router = useRouter();
+
   return [
     {
       id: 'select',
@@ -76,36 +73,34 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'name',
-      meta: 'Tên',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Tên" />,
+      meta: t('name'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('name')} />,
       cell: ({ row }) => {
-        return <div className="w-full">{row.getValue('name')}</div>;
+        return <div className="w-32">{row.getValue('name')}</div>;
       },
       enableSorting: true
     },
     {
       accessorKey: 'phone',
-      meta: 'Số Điện Thoại',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Số Điện Thoại" />,
+      meta: t('phone'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('phone')} />,
       cell: ({ row }) => {
-        const date = new Date(row.getValue('phone'));
-
-        return <div className="w-full">{row.getValue('phone')}</div>;
+        return <div className="w-32">{row.getValue('phone')}</div>;
       },
       enableSorting: false
     },
     {
       accessorKey: 'discipleshipProcess',
-      meta: 'Discipleship',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Discipleship" />,
+      meta: t('discipleship_process'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('discipleship_process')} />,
       cell: ({ row }) => {
         const discipleshipProcess = row.getValue('discipleshipProcess') as DiscipleshipProcess;
 
         return (
           <div className="flex space-x-2">
             {discipleshipProcess ? (
-              <Badge style={{ backgroundColor: DiscipleshipProcessColor[discipleshipProcess] }}>
-                {discipleshipProcess}
+              <Badge className="capitalize" style={{ backgroundColor: DiscipleshipProcessColor[discipleshipProcess] }}>
+                {t(discipleshipProcess.toLowerCase())}
               </Badge>
             ) : (
               NOT_APPLICABLE
@@ -120,19 +115,21 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'curatorName',
-      meta: 'Người Chăm Sóc',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Người Chăm Sóc" />,
+      meta: t('curator'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('curator')} />,
       cell: ({ row }) => {
-        return <div className="flex w-full space-x-2">{row.getValue('curatorName') || NOT_APPLICABLE}</div>;
+        return <div className="flex w-32  space-x-2">{row.getValue('curatorName') || NOT_APPLICABLE}</div>;
       },
       enableSorting: false
     },
     {
       id: 'actions',
-      cell: function Cell({ row }) {
+      cell: function Cell({ row, table }) {
+        const selectedRows = table.getFilteredSelectedRowModel().rows.length;
+
         const [isUpdatePending, startUpdateTransition] = React.useTransition();
         const [showUpdateTaskSheet, setShowUpdateTaskSheet] = React.useState(false);
-        const [showDeleteTaskDialog, setShowDeleteTaskDialog] = React.useState(false);
+        const [showDeleteMemberDialog, setShowDeleteMemberDialog] = React.useState(false);
 
         return (
           <>
@@ -147,19 +144,31 @@ export function getColumns(): ColumnDef<any>[] {
               tasks={[row]}
               showTrigger={false}
             /> */}
+            <DeleteMembersDialog
+              open={showDeleteMemberDialog}
+              onOpenChange={setShowDeleteMemberDialog}
+              members={[row]}
+            />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button aria-label="Open menu" variant="ghost" className="flex size-8 p-0 data-[state=open]:bg-muted">
+                <Button
+                  disabled={selectedRows > 1}
+                  aria-label="Open menu"
+                  variant="ghost"
+                  className="flex size-8 p-0 data-[state=open]:bg-muted"
+                >
                   <DotsHorizontalIcon className="size-4" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-40">
-                <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>Edit</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => router.push(`/members/${row.getValue('id')}`)}>View</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>{t('edit')}</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => router.push(`/members/${row.getValue('id')}`)}>
+                  {t('view')}
+                </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={() => setShowDeleteTaskDialog(true)}>
-                  Delete
+                <DropdownMenuItem onSelect={() => setShowDeleteMemberDialog(true)}>
+                  {t('delete')}
                   <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
                 </DropdownMenuItem>
               </DropdownMenuContent>

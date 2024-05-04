@@ -1,16 +1,19 @@
 'use client';
 
 import { SidebarItems } from '@/types';
-import { LogOut, Menu, MoreHorizontal, Settings, X } from 'lucide-react';
+import { Menu, MoreHorizontal, Settings, X } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
+
+import { cn } from '@/lib/utils';
 
 import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar';
 import { Button } from '../../ui/button';
 import { Drawer, DrawerContent, DrawerTrigger } from '../../ui/drawer';
 import { Separator } from '../../ui/separator';
-import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTrigger } from '../../ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTrigger } from '../../ui/sheet';
 import { Icons } from '../icons';
 import { SidebarButtonSheet as SidebarButton } from './sidebar-button';
 
@@ -24,6 +27,8 @@ export function SidebarMobile({ sidebarItems, user }: SidebarMobileProps) {
   const [isLogoutLoading, setIsLogoutLoading] = useState(false);
 
   const router = useRouter();
+  const t = useTranslations();
+  const locale = useLocale();
 
   return (
     <Sheet>
@@ -39,14 +44,21 @@ export function SidebarMobile({ sidebarItems, user }: SidebarMobileProps) {
         <div className="h-full">
           <div className="mt-5 flex w-full flex-col gap-1">
             {sidebarItems.links.map((link, idx) => (
-              <Link key={idx} href={link.href}>
+              <Link
+                key={idx}
+                href={`/${locale}${link.href}`}
+                className={cn({
+                  'rounded-md bg-gray-100 opacity-80 dark:bg-gray-700':
+                    link.href !== '/' && pathname.includes(link.href)
+                })}
+              >
                 <SidebarButton
                   variant={pathname === link.href ? 'secondary' : 'ghost'}
                   icon={link.icon}
                   className="w-full"
                   isExpanded={true}
                 >
-                  {link.label}
+                  {t(link.label)}
                 </SidebarButton>
               </Link>
             ))}
@@ -91,7 +103,7 @@ export function SidebarMobile({ sidebarItems, user }: SidebarMobileProps) {
                       <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                     ) : (
                       <div className="flex justify-start gap-2 ">
-                        <div>Logout</div>
+                        <div>Đăng Xuất</div>
                       </div>
                     )}
                   </Button>

@@ -2,31 +2,31 @@
 
 import { SidebarItems } from '@/types';
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
-import { BookUser, Church, HandPlatter, Home, User, Users, Wallet2 } from 'lucide-react';
+import { BookUser, Church, HandPlatter, Home, Users, Wallet2 } from 'lucide-react';
 import { useMediaQuery } from 'usehooks-ts';
 
 import { SidebarDesktop } from './sidebar-desktop';
 import { SidebarMobile } from './sidebar-mobile';
 
-const sidebarItems: SidebarItems = {
+export const sidebarItems: SidebarItems = {
   links: [
-    { label: 'Thống kê', href: '/', icon: Home },
-    { label: 'Thành Viên', href: '/members', icon: Users },
-    { label: 'Bạn hữu / Thân hữu', href: '/friends', icon: BookUser },
+    { label: 'dashboard', href: '/dashboard', icon: Home },
+    { label: 'members', href: '/members', icon: Users },
+    { label: 'friends', href: '/friends', icon: BookUser },
     {
       href: '/cares',
       icon: HandPlatter,
-      label: 'Chăm sóc'
+      label: 'cares'
     },
     {
       href: '/discipleship',
       icon: Church,
-      label: 'Môn đồ hóa'
+      label: 'discipleship'
     },
     {
       href: '/funds',
       icon: Wallet2,
-      label: 'Quỹ'
+      label: 'funds'
     }
   ],
   extras: <div className="flex flex-col gap-2"></div>

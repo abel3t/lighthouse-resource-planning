@@ -9,6 +9,7 @@ import { PlusIcon } from '@radix-ui/react-icons';
 import axios from 'axios';
 import { CommandList } from 'cmdk';
 import { Check, ChevronsUpDown } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useEffect, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
@@ -23,14 +24,13 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { CurrencyInput, Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -41,15 +41,6 @@ import { deleteImageUploadThing } from '@/lib/api';
 import { getErrorMessage } from '@/lib/handle-error';
 import { cn } from '@/lib/utils';
 
-const createFundRecordSchema = z.object({
-  amount: z.string().min(3, 'Số tiền không hợp lệ'),
-  type: z.nativeEnum(FundRecordType),
-  contributorId: z.string().optional(),
-  description: z.string().optional(),
-  image: z.string().optional()
-});
-export type CreateRecordSchema = z.infer<typeof createFundRecordSchema>;
-
 export function CreateFundRecordDialog() {
   const [open, setOpen] = useState(false);
   const [, startCreateTransition] = useTransition();
@@ -57,8 +48,22 @@ export function CreateFundRecordDialog() {
   const [fileUrl, setFileUrl] = useState<string | undefined>();
   const [isUploading, setIsUploading] = useState(false);
 
+  const t = useTranslations();
+
+  const createFundRecordSchema = z.object({
+    amount: z.number().min(1000, { message: t('field_is_invalid', { field: t('amount') }) }),
+    type: z.nativeEnum(FundRecordType),
+    contributorId: z.string().optional(),
+    description: z.string().optional(),
+    image: z.string().optional()
+  });
+  type CreateRecordSchema = z.infer<typeof createFundRecordSchema>;
+
   const form = useForm<CreateRecordSchema>({
-    resolver: zodResolver(createFundRecordSchema)
+    resolver: zodResolver(createFundRecordSchema),
+    defaultValues: {
+      amount: 0
+    }
   });
 
   const queryParams = useFundRecordStore((state) => state.queryParams);
@@ -80,17 +85,17 @@ export function CreateFundRecordDialog() {
     setIsOnCreating(true);
 
     startCreateTransition(() => {
-      const amount = parseFloat(input.amount);
+      const amount = input.amount;
 
       toast.promise(
-        axios.post('/api/fund-record', {
+        axios.post('/api/fund-records', {
           ...input,
           image: fileUrl,
           fundId: currentFund.id,
           amount: input.type === FundRecordType.Expense ? -amount : amount
         }),
         {
-          loading: 'Creating record...',
+          loading: t('create_record_processing', { name: t('fund_record').toLowerCase() }),
           success: () => {
             form.reset();
             setOpen(false);
@@ -100,7 +105,7 @@ export function CreateFundRecordDialog() {
             setIsOnCreating(false);
             setFileUrl(undefined);
 
-            return 'Record created';
+            return t('create_record_successfully', { name: t('fund_record').toLowerCase() });
           },
           error: (error) => {
             setOpen(false);
@@ -111,7 +116,9 @@ export function CreateFundRecordDialog() {
             }
             setFileUrl(undefined);
 
-            return getErrorMessage(error);
+            console.log(getErrorMessage(error));
+
+            return t('create_record_failed', { name: t('fund_record').toLowerCase() });
           }
         }
       );
@@ -134,35 +141,52 @@ export function CreateFundRecordDialog() {
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <PlusIcon className="mr-2 size-4" aria-hidden="true" />
-          New Record
+          {t('new_record')}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-screen overflow-y-scroll">
         <DialogHeader>
-          <DialogTitle>Create Record</DialogTitle>
-          <DialogDescription>Điền thông tin.</DialogDescription>
+          <DialogTitle>{t('new_record')}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
-            <RecordTypeField form={form} />
+            <RecordTypeField form={form} t={t} />
 
             <div className="flex items-start gap-2">
-              <AmountField form={form} />
+              <AmountField form={form} t={t} />
 
-              <ContributorField form={form} />
+              <ContributorField form={form} t={t} />
             </div>
 
             <div className="flex items-start gap-2">
               {!fileUrl && (
                 <UploadButton
                   endpoint="imageUploader"
+                  content={{
+                    button({ ready }) {
+                      if (ready) return <div>{t('choose_image')}</div>;
+
+                      return t('getting_ready');
+                    },
+                    allowedContent({ ready, isUploading }) {
+                      if (!ready) {
+                        return t('wait_a_moment');
+                      }
+
+                      if (isUploading) {
+                        return t('uploading_image');
+                      }
+
+                      return t('max_image_size', { size: '8MB' });
+                    }
+                  }}
                   onClientUploadComplete={(res) => {
                     const file: any = res?.[0];
 
                     setFileUrl(file?.url || '');
                     setIsUploading(false);
 
-                    toast('Upload Completed');
+                    toast.success(t('upload_image_successfully'));
                   }}
                   onUploadError={(error: Error) => {
                     alert(`ERROR! ${error.message}`);
@@ -180,16 +204,16 @@ export function CreateFundRecordDialog() {
               )}
             </div>
 
-            <DescriptionField form={form} />
+            <DescriptionField form={form} t={t} />
 
-            <DialogFooter className="gap-2 pt-2 sm:space-x-0">
+            <DialogFooter className="flex flex-row justify-end gap-2 pt-2 sm:space-x-0">
               <DialogClose asChild>
-                <Button type="button" variant="outline" disabled={isOnCreating || isUploading}>
-                  Cancel
+                <Button className="w-24" type="button" variant="outline" disabled={isOnCreating || isUploading}>
+                  {t('cancel')}
                 </Button>
               </DialogClose>
               <Button className="flex w-24 justify-center" disabled={isOnCreating || isUploading}>
-                {isOnCreating ? <Icons.spinner className="h-4 w-4 animate-spin" /> : 'Submit'}
+                {isOnCreating ? <Icons.spinner className="h-4 w-4 animate-spin" /> : t('submit')}
               </Button>
             </DialogFooter>
           </form>
@@ -199,7 +223,7 @@ export function CreateFundRecordDialog() {
   );
 }
 
-const ContributorField = ({ form }: any) => {
+const ContributorField = ({ form, t }: any) => {
   const members = useMemberStore((state) => state.allMembers);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -210,7 +234,7 @@ const ContributorField = ({ form }: any) => {
       name="contributorId"
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
-          <FormLabel>Người Dâng</FormLabel>
+          <FormLabel>{t('giver')}</FormLabel>
           <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
               <FormControl>
@@ -219,17 +243,17 @@ const ContributorField = ({ form }: any) => {
                   role="combobox"
                   className={cn('justify-between', !field.value && 'text-muted-foreground')}
                 >
-                  {field.value ? members.find((member) => member.id === field.value)?.name : 'Select contributor'}
+                  {field.value ? members.find((member) => member.id === field.value)?.name : t('search_giver')}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </FormControl>
             </PopoverTrigger>
             <PopoverContent className=" p-0">
               <Command>
-                <CommandInput placeholder="Search Contributor..." />
+                <CommandInput placeholder={t('search_giver')} />
                 <CommandList>
                   <ScrollArea className="h-72">
-                    <CommandEmpty>No contributor found.</CommandEmpty>
+                    <CommandEmpty>{t('not_found')}</CommandEmpty>
 
                     <CommandGroup>
                       {members.map((member) => (
@@ -260,14 +284,14 @@ const ContributorField = ({ form }: any) => {
   );
 };
 
-const DescriptionField = ({ form }: any) => {
+const DescriptionField = ({ form, t }: any) => {
   return (
     <FormField
       control={form.control}
       name="description"
       render={({ field }) => (
         <FormItem className="flex w-full flex-col">
-          <FormLabel>Ghi chú</FormLabel>
+          <FormLabel>{t('note')}</FormLabel>
           <FormControl>
             <Textarea placeholder="Thông tin chi tiết..." className="resize-none" {...field} />
           </FormControl>
@@ -278,16 +302,16 @@ const DescriptionField = ({ form }: any) => {
   );
 };
 
-const AmountField = ({ form }: any) => {
+const AmountField = ({ form, t }: any) => {
   return (
     <FormField
       control={form.control}
       name="amount"
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
-          <FormLabel className="my-0 py-0">Số tiền</FormLabel>
+          <FormLabel className="my-0 py-0">{t('amount')}</FormLabel>
           <FormControl className="mt-0 py-0">
-            <Input className="mt-0 py-0" type="number" {...field} />
+            <CurrencyInput className="mt-0 py-0" {...field} />
           </FormControl>
 
           <FormMessage />
@@ -297,7 +321,7 @@ const AmountField = ({ form }: any) => {
   );
 };
 
-const RecordTypeField = ({ form }: any) => {
+const RecordTypeField = ({ form, t }: any) => {
   const bgColor: Record<string, string> = {
     [FundRecordType.Income]: 'bg-green-400',
     [FundRecordType.Expense]: 'bg-red-400'
@@ -313,12 +337,12 @@ const RecordTypeField = ({ form }: any) => {
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger className={cn(`${bgColor[field.value]}`, field.value && 'font-bold text-white')}>
-                  <SelectValue placeholder="Thu/Chi" />
+                  <SelectValue placeholder={`${t('income')}/${t('expense')}`} />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value={FundRecordType.Income}>{FundRecordType.Income}</SelectItem>
-                <SelectItem value={FundRecordType.Expense}>{FundRecordType.Expense}</SelectItem>
+                <SelectItem value={FundRecordType.Income}>{t(FundRecordType.Income.toLowerCase())}</SelectItem>
+                <SelectItem value={FundRecordType.Expense}>{t(FundRecordType.Expense.toLowerCase())}</SelectItem>
               </SelectContent>
             </Select>
           </FormControl>

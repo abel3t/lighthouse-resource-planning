@@ -3,8 +3,9 @@ import { CarePriority, CareType, PersonalType } from '@/enums';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
 import { Account, Care } from '@prisma/client';
 import { formatRelative, subMonths } from 'date-fns';
-import { vi } from 'date-fns/locale';
+import { enUS, vi } from 'date-fns/locale';
 import { User2Icon } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
 import { Timeline, TimelineItem } from '@/components/custom/timeline';
 import { Badge } from '@/components/ui/badge';
@@ -14,7 +15,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import prisma from '@/lib/prisma';
 import { cn } from '@/lib/utils';
 
-export default async function MemberPage() {
+export default async function MemberPage({ params: { locale } }: { params: { locale: string } }) {
   const organization = await getKindeServerSession()?.getOrganization();
 
   const [totalMembers, totalFriends, totalUnbelievers] = await Promise.all([
@@ -55,11 +56,13 @@ export default async function MemberPage() {
     })
   ]);
 
+  const t = await getTranslations({ locale });
+
   return (
     <div className="mt-8 grid grid-cols-1 gap-3 text-xs md:mt-0 md:text-sm lg:grid-cols-2">
       <div className="rounded-md p-5 shadow-lg">
         <div className="flex flex-col">
-          <div className="text-md font-bold md:text-lg">Over view</div>
+          <div className="text-md font-bold md:text-lg">{t('overview')}</div>
         </div>
 
         <div className="flex justify-between py-3">
@@ -70,7 +73,7 @@ export default async function MemberPage() {
 
             <div className="flex flex-col">
               <div className="font-bold">{totalMembers}</div>
-              <div className="text-xs font-bold text-gray-500 md:text-sm">Members</div>
+              <div className="text-xs font-bold text-gray-500 md:text-sm">{t('members')}</div>
             </div>
           </div>
 
@@ -81,7 +84,7 @@ export default async function MemberPage() {
 
             <div className="flex flex-col">
               <div className="font-bold">{totalFriends}</div>
-              <div className="text-xs font-bold text-gray-500 md:text-sm">Friends</div>
+              <div className="text-xs font-bold text-gray-500 md:text-sm">{t('dashboard_friends')}</div>
             </div>
           </div>
 
@@ -92,7 +95,7 @@ export default async function MemberPage() {
 
             <div className="flex flex-col">
               <div className="font-bold">{totalUnbelievers}</div>
-              <div className="text-xs font-bold text-gray-500 md:text-sm">Unbelievers</div>
+              <div className="text-xs font-bold text-gray-500 md:text-sm">{t('dashboard_unbelievers')}</div>
             </div>
           </div>
         </div>
@@ -101,28 +104,38 @@ export default async function MemberPage() {
       <div className="hidden h-32 rounded-md shadow-lg md:block"></div>
 
       <ScrollArea className="h-96 rounded-md p-2 shadow-lg">
-        <div className="text-md font-bold md:text-lg">Needing More Care</div>
-        <NeedingMoreCares cares={cares} />
+        <div className="text-md font-bold md:text-lg">{t('needing_more_cares')}</div>
+        <NeedingMoreCares cares={cares} t={t} locale={locale} />
       </ScrollArea>
 
       <div className="h-96 rounded-md p-2 shadow-lg">
-        <div className="text-md font-bold md:text-lg">Top Caring People</div>
-        <TopCaringPeople accounts={accounts} />
+        <div className="text-md font-bold md:text-lg">{t('caring_ranking')}</div>
+        <TopCaringPeople accounts={accounts} t={t} />
       </div>
     </div>
   );
 }
 
 const formatRelativeLocale = {
-  lastWeek: "EEEE 'tuần trước' '-' dd/MM/yyyy",
-  yesterday: "'Hôm qua' '-' dd/MM/yyyy",
-  today: "'Hôm nay'",
-  tomorrow: "'Ngày mai'",
-  nextWeek: "EEEE 'tới'",
-  other: 'P'
+  vi: {
+    lastWeek: "EEEE 'tuần trước' '-' dd/MM/yyyy",
+    yesterday: "'Hôm qua' '-' dd/MM/yyyy",
+    today: "'Hôm nay'",
+    tomorrow: "'Ngày mai'",
+    nextWeek: "EEEE 'tới'",
+    other: 'P'
+  },
+  en: {
+    lastWeek: "EEEE 'last week' '-' dd/MM/yyyy",
+    yesterday: "'Yesterday' '-' dd/MM/yyyy",
+    today: "'Today'",
+    tomorrow: "'Tomorrow'",
+    nextWeek: "EEEE 'next week'",
+    other: 'P'
+  }
 };
 
-const NeedingMoreCares = ({ cares }: { cares: Care[] }) => {
+const NeedingMoreCares = ({ cares, t, locale }: { cares: Care[]; t: Function; locale: string }) => {
   return (
     <div className="ml-2 pt-4">
       <Timeline>
@@ -138,19 +151,20 @@ const NeedingMoreCares = ({ cares }: { cares: Care[] }) => {
                 <div className="text-sm font-bold">{care.personName || NOT_APPLICABLE}</div>
                 {care.type && (
                   <Badge style={{ backgroundColor: CareTypeColor[care.type as CareType] }}>
-                    {CareTypeText[care.type as CareType]}
+                    {t(CareTypeText[care.type as CareType])}
                   </Badge>
                 )}
               </div>
             }
           >
             <div className="text-primary">
-              by <span className="font-bold">{care.curatorName || NOT_APPLICABLE}</span>
+              {t('care_by')} <span className="font-bold">{care.curatorName || NOT_APPLICABLE}</span>
               <span className="ml-5">
                 {formatRelative(care.date, new Date(), {
                   locale: {
-                    ...vi,
-                    formatRelative: (token) => formatRelativeLocale[token]
+                    ...(locale === 'vi' ? vi : enUS),
+                    formatRelative: (token) =>
+                      formatRelativeLocale[locale as keyof typeof formatRelativeLocale]?.[token]
                   }
                 })}
               </span>
@@ -165,15 +179,15 @@ const NeedingMoreCares = ({ cares }: { cares: Care[] }) => {
   );
 };
 
-const TopCaringPeople = ({ accounts }: { accounts: Account[] }) => {
+const TopCaringPeople = ({ accounts, t }: { accounts: Account[]; t: any }) => {
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">ID</TableHead>
-          <TableHead>Name</TableHead>
-          <TableHead>Title</TableHead>
-          <TableHead className="text-right">Care</TableHead>
+          <TableHead>{t('caring_ranking_name')}</TableHead>
+          <TableHead>{t('caring_ranking_title')}</TableHead>
+          <TableHead className="text-right">{t('caring_ranking_amount')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

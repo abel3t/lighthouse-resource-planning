@@ -4,7 +4,6 @@ import type { DataTableFilterField } from '@/types';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { type ColumnDef } from '@tanstack/react-table';
 import * as React from 'react';
-import { toast } from 'sonner';
 
 import { DataTableColumnHeader } from '@/components/custom/data-table/data-table-column-header';
 import { Button } from '@/components/ui/button';
@@ -13,21 +12,18 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 
-import { getErrorMessage } from '@/lib/handle-error';
 import { cn } from '@/lib/utils';
+
+import DeleteFuncRecordDialog from './delete-dialog';
 
 export const searchField = {
   name: 'contributorName',
-  placeholder: 'Search...'
+  placeholder: 'search_giver'
 };
 
 export const filterFields: DataTableFilterField<any>[] = [
@@ -38,7 +34,7 @@ export const filterFields: DataTableFilterField<any>[] = [
   }
 ];
 
-export function getColumns(): ColumnDef<any>[] {
+export function getColumns(t: Function): ColumnDef<any>[] {
   const updateTask = async (data: any) => {
     console.log('update task', data);
   };
@@ -72,8 +68,8 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'date',
-      meta: 'Ngày',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Ngày" />,
+      meta: t('date'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('date')} />,
       cell: ({ row }) => {
         const date = new Date(row.getValue('date'));
 
@@ -87,8 +83,8 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'contributorName',
-      meta: 'Người Dâng',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Người Dâng" />,
+      meta: t('giver'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('giver')} />,
       cell: ({ row }) => {
         return <div className="flex space-x-2">{row.getValue('contributorName')}</div>;
       },
@@ -96,8 +92,8 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'description',
-      meta: 'Ghi Chú',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Ghi Chú" />,
+      meta: t('note'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('note')} />,
       cell: ({ row }) => {
         return <div className="flex space-x-2">{row.getValue('description')}</div>;
       },
@@ -105,8 +101,8 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'amount',
-      meta: 'Số Tiền',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Số Tiền" />,
+      meta: t('amount'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('amount')} />,
       cell: ({ row }) => {
         const amount = parseFloat(row.getValue('amount')) || 0;
 
@@ -125,10 +121,12 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       id: 'actions',
-      cell: function Cell({ row }) {
+      cell: function Cell({ row, table }) {
         const [isUpdatePending, startUpdateTransition] = React.useTransition();
         const [showUpdateTaskSheet, setShowUpdateTaskSheet] = React.useState(false);
-        const [showDeleteTaskDialog, setShowDeleteTaskDialog] = React.useState(false);
+        const [showDeleteFundRecordDialog, setShowDeleteFundRecordDialog] = React.useState(false);
+
+        const selectedRows = table.getFilteredSelectedRowModel().rows.length;
 
         return (
           <>
@@ -143,17 +141,29 @@ export function getColumns(): ColumnDef<any>[] {
               tasks={[row]}
               showTrigger={false}
             /> */}
+            <DeleteFuncRecordDialog
+              open={showDeleteFundRecordDialog}
+              onOpenChange={setShowDeleteFundRecordDialog}
+              fundRecords={[row]}
+              onSuccess={() => table.toggleAllPageRowsSelected(false)}
+            />
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button aria-label="Open menu" variant="ghost" className="flex size-8 p-0 data-[state=open]:bg-muted">
+                <Button
+                  disabled={selectedRows > 1}
+                  aria-label="Open menu"
+                  variant="ghost"
+                  className="flex size-8 p-0 data-[state=open]:bg-muted"
+                >
                   <DotsHorizontalIcon className="size-4" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-40">
-                <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>Edit</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>{t('edit')}</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={() => setShowDeleteTaskDialog(true)}>
-                  Delete
+                <DropdownMenuItem onSelect={() => setShowDeleteFundRecordDialog(true)}>
+                  {t('delete')}
                   <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
                 </DropdownMenuItem>
               </DropdownMenuContent>

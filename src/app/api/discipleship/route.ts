@@ -1,4 +1,5 @@
 import { SortType } from '@/types';
+import { is } from 'date-fns/locale';
 import { NextResponse } from 'next/server';
 
 import prisma from '@/lib/prisma';
@@ -71,7 +72,7 @@ export async function GET(req: Request) {
     orderByType = 'desc';
   }
 
-  const $condition: Record<string, any> = { organizationId };
+  const $condition: Record<string, any> = { organizationId, isDeleted: false };
 
   if (search) {
     $condition.personName = {
@@ -101,4 +102,33 @@ export async function GET(req: Request) {
     },
     data: fundRecords
   });
+}
+
+export async function DELETE(req: Request) {
+  const searchParams = new URL(req.url)?.searchParams;
+  const ids = searchParams.get('ids');
+
+  const organizationId = req.headers.get('x-organizationId');
+
+  if (!organizationId) {
+    return new Response('Invalid', {
+      status: 400
+    });
+  }
+
+  const discipleshipIds = ids?.split(',') || [];
+
+  if (!discipleshipIds.length) {
+    return new Response('Invalid', {
+      status: 400
+    });
+  }
+
+  await prisma.$transaction(
+    discipleshipIds.map((id) =>
+      prisma.discipleship.update({ where: { id, organizationId }, data: { isDeleted: true } })
+    )
+  );
+
+  return NextResponse.json({ ids });
 }

@@ -1,13 +1,12 @@
 'use client';
 
-import { CarePriorityColor, CareTypeColor, CareTypeText, NOT_APPLICABLE } from '@/constant';
+import { CarePriorityColor, CarePriorityText, CareTypeColor, CareTypeText } from '@/constant';
 import { CarePriority, CareType } from '@/enums';
 import type { DataTableFilterField } from '@/types';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { type ColumnDef } from '@tanstack/react-table';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
-import { toast } from 'sonner';
 
 import { DataTableColumnHeader } from '@/components/custom/data-table/data-table-column-header';
 import { Badge } from '@/components/ui/badge';
@@ -17,19 +16,16 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 
+import DeleteCaresDialog from './delete-dialog';
+
 export const searchField = {
   name: 'personName',
-  placeholder: 'Search...'
+  placeholder: 'search_caring_person'
 };
 
 export const filterFields: DataTableFilterField<any>[] = [
@@ -40,7 +36,7 @@ export const filterFields: DataTableFilterField<any>[] = [
   }
 ];
 
-export function getColumns(): ColumnDef<any>[] {
+export function getColumns(t: Function): ColumnDef<any>[] {
   const router = useRouter();
   const updateTask = async (data: any) => {
     console.log('update task', data);
@@ -75,8 +71,8 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'date',
-      meta: 'Ngày',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Ngày" />,
+      meta: t('care_date'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('care_date')} />,
       cell: ({ row }) => {
         const date = new Date(row.getValue('date'));
 
@@ -90,23 +86,23 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'personName',
-      meta: 'Tên',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Tên" />,
+      meta: t('name'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('name')} />,
       cell: ({ row }) => {
-        return <div className="w-full">{row.getValue('personName')}</div>;
+        return <div className="w-32">{row.getValue('personName')}</div>;
       },
       enableSorting: true
     },
     {
       accessorKey: 'type',
-      meta: 'Phương Thức',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Phương Thức" />,
+      meta: t('care_type'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('care_type')} />,
       cell: ({ row }) => {
         const type = row.getValue('type') as CareType;
 
         return (
-          <div className="flex space-x-2">
-            <Badge style={{ backgroundColor: CareTypeColor[type] }}>{CareTypeText[type]}</Badge>
+          <div className="flex w-32 space-x-2">
+            <Badge style={{ backgroundColor: CareTypeColor[type] }}>{t(CareTypeText[type])}</Badge>
           </div>
         );
       },
@@ -117,13 +113,13 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'priority',
-      meta: 'Trạng Thái',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Trạng Thái" />,
+      meta: t('care_priority'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('care_priority')} />,
       cell: ({ row }) => {
         const priority = row.getValue('priority') as CarePriority;
         return (
-          <div className="flex space-x-2">
-            <Badge style={{ backgroundColor: CarePriorityColor[priority] }}>{priority}</Badge>
+          <div className="flex w-32 space-x-2">
+            <Badge style={{ backgroundColor: CarePriorityColor[priority] }}>{t(CarePriorityText[priority])}</Badge>
           </div>
         );
       },
@@ -134,20 +130,21 @@ export function getColumns(): ColumnDef<any>[] {
     },
     {
       accessorKey: 'curatorName',
-      meta: 'Người Chăm Sóc',
-      header: ({ column }) => <DataTableColumnHeader column={column} title="Người Chăm Sóc" />,
+      meta: t('curator'),
+      header: ({ column }) => <DataTableColumnHeader column={column} title={t('curator')} />,
       cell: ({ row }) => {
-        return <div className="w-20">{row.getValue('curatorName')}</div>;
+        return <div className="w-32">{row.getValue('curatorName')}</div>;
       },
       enableSorting: true,
       enableHiding: false
     },
     {
       id: 'actions',
-      cell: function Cell({ row }) {
+      cell: function Cell({ row, table }) {
         const [isUpdatePending, startUpdateTransition] = React.useTransition();
         const [showUpdateTaskSheet, setShowUpdateTaskSheet] = React.useState(false);
-        const [showDeleteTaskDialog, setShowDeleteTaskDialog] = React.useState(false);
+        const [showDeleteCareDialog, setShowDeleteCareDialog] = React.useState(false);
+        const selectedRows = table.getFilteredSelectedRowModel().rows.length;
 
         return (
           <>
@@ -162,19 +159,29 @@ export function getColumns(): ColumnDef<any>[] {
               tasks={[row]}
               showTrigger={false}
             /> */}
+
+            <DeleteCaresDialog open={showDeleteCareDialog} onOpenChange={setShowDeleteCareDialog} cares={[row]} />
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button aria-label="Open menu" variant="ghost" className="flex size-8 p-0 data-[state=open]:bg-muted">
+                <Button
+                  disabled={selectedRows > 1}
+                  aria-label="Open menu"
+                  variant="ghost"
+                  className="flex size-8 p-0 data-[state=open]:bg-muted"
+                >
                   <DotsHorizontalIcon className="size-4" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-40">
-                <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>Edit</DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => router.push(`/cares/${row.getValue('id')}`)}>View</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>{t('edit')}</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => router.push(`/cares/${row.getValue('id')}`)}>
+                  {t('view')}
+                </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={() => setShowDeleteTaskDialog(true)}>
-                  Delete
+                <DropdownMenuItem onSelect={() => setShowDeleteCareDialog(true)}>
+                  {t('delete')}
                   <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
                 </DropdownMenuItem>
               </DropdownMenuContent>
