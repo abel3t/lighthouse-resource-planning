@@ -27,7 +27,7 @@ const useDiscipleshipStore = create<DiscipleshipStore>((set) => ({
       pageSize: pagination.pageSize
     });
 
-    const data = await client.get('/discipleship/?' + qs).then((res) => res.data);
+    const data = await client.get('/discipleship?' + qs).then((res) => res.data);
     set({ discipleshipList: data?.data || [] });
     set({ metadata: data?.metadata || {} });
   },

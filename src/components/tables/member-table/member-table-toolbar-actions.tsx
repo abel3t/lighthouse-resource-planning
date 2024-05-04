@@ -29,6 +29,7 @@ export function MemberTableToolbarActions({ table }: TasksTableToolbarActionsPro
             open={showDeleteDialog}
             onOpenChange={setShowDeleteDialog}
             members={table.getFilteredSelectedRowModel().rows}
+            onSuccess={() => table.toggleAllPageRowsSelected(false)}
           />
         </div>
       )}

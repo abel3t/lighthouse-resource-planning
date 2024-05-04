@@ -29,6 +29,7 @@ export function FriendTableToolbarActions({ table }: TasksTableToolbarActionsPro
             open={showDeleteDialog}
             onOpenChange={setShowDeleteDialog}
             friends={table.getFilteredSelectedRowModel().rows}
+            onSuccess={() => table.toggleAllPageRowsSelected(false)}
           />
         </div>
       )}

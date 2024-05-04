@@ -144,10 +144,25 @@ export async function DELETE(req: Request) {
       status: 400
     });
   }
+  const fundRecords = await prisma.fundRecord.findMany({
+    where: {
+      id: { in: fundRecordIds },
+      fundId
+    },
+    select: { id: true, amount: true }
+  });
 
-  await prisma.$transaction(
-    fundRecordIds.map((id) => prisma.fundRecord.update({ where: { id, fundId }, data: { isDeleted: true } }))
-  );
+  await prisma.$transaction([
+    ...fundRecordIds.map((id) => prisma.fundRecord.update({ where: { id, fundId }, data: { isDeleted: true } })),
+    prisma.fund.update({
+      where: {
+        id: fundId
+      },
+      data: {
+        amount: { decrement: fundRecords.reduce((acc, record) => acc + record.amount, 0) }
+      }
+    })
+  ]);
 
   return NextResponse.json({ ids });
 }

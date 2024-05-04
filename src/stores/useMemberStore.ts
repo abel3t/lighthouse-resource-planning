@@ -34,7 +34,7 @@ const useMemberStore = create<MemberStore>((set) => ({
       pageSize: pagination.pageSize
     });
 
-    const data = await client.get('/members/?' + qs).then((res) => res.data);
+    const data = await client.get('/members?' + qs).then((res) => res.data);
     set({ members: data?.data || [] });
     set({ metadata: data?.metadata || {} });
   },

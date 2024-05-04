@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
 import { client } from '@/lib/client';
 import { getErrorMessage } from '@/lib/handle-error';
 
-const DeleteMembersDialog = ({ open, onOpenChange, members }: any) => {
+const DeleteMembersDialog = ({ open, onOpenChange, members, onSuccess }: any) => {
   const [, startDeleteTransition] = useTransition();
   const fetchMembers = useMemberStore((state) => state.fetchMembers);
   const queryParams = useMemberStore((state) => state.queryParams);
@@ -25,6 +25,10 @@ const DeleteMembersDialog = ({ open, onOpenChange, members }: any) => {
         loading: t('delete_record_processing', { name: t('member').toLowerCase() }),
         success: () => {
           onOpenChange(false);
+
+          if (onSuccess) {
+            onSuccess();
+          }
 
           fetchMembers(queryParams);
 

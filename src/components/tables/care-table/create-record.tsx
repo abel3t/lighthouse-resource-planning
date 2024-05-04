@@ -7,7 +7,6 @@ import useCareStore from '@/stores/useCareStore';
 import useMemberStore from '@/stores/useMemberStore';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlusIcon } from '@radix-ui/react-icons';
-import axios from 'axios';
 import { CommandList } from 'cmdk';
 import { format } from 'date-fns';
 import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
@@ -16,7 +15,6 @@ import Image from 'next/image';
 import * as React from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import * as sharp from 'sharp';
 import { toast } from 'sonner';
 import * as z from 'zod';
 
@@ -47,16 +45,16 @@ import { client } from '@/lib/client';
 import { getErrorMessage } from '@/lib/handle-error';
 import { cn } from '@/lib/utils';
 
-const createFundRecordSchema = z.object({
+const createCareSchema = z.object({
   type: z.nativeEnum(CareType),
   personId: z.string().optional(),
   date: z.date(),
   description: z.string().optional(),
   priority: z.nativeEnum(CarePriority)
 });
-export type CreateRecordSchema = z.infer<typeof createFundRecordSchema>;
+export type CreateRecordSchema = z.infer<typeof createCareSchema>;
 
-export function CreateFundRecordDialog() {
+export function CreateCareDialog() {
   const [open, setOpen] = React.useState(false);
   const [isCreatePending, startCreateTransition] = React.useTransition();
   const [fileUrl, setFileUrl] = useState<string | undefined>();
@@ -66,7 +64,7 @@ export function CreateFundRecordDialog() {
   const t = useTranslations();
 
   const form = useForm<CreateRecordSchema>({
-    resolver: zodResolver(createFundRecordSchema)
+    resolver: zodResolver(createCareSchema)
   });
 
   const queryParams = useCareStore((state) => state.queryParams);

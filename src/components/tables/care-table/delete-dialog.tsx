@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
 import { client } from '@/lib/client';
 import { getErrorMessage } from '@/lib/handle-error';
 
-const DeleteCaresDialog = ({ open, onOpenChange, cares }: any) => {
+const DeleteCaresDialog = ({ open, onOpenChange, cares, onSuccess }: any) => {
   const [, startDeleteTransition] = useTransition();
   const fetchCares = useCareStore((state) => state.fetchCares);
   const queryParams = useCareStore((state) => state.queryParams);
@@ -25,6 +25,10 @@ const DeleteCaresDialog = ({ open, onOpenChange, cares }: any) => {
         loading: t('delete_record_processing', { name: t('care').toLowerCase().toLowerCase() }),
         success: () => {
           onOpenChange(false);
+
+          if (onSuccess) {
+            onSuccess();
+          }
 
           fetchCares(queryParams);
 

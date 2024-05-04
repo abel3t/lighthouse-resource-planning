@@ -29,6 +29,8 @@ import {
 
 import { getErrorMessage } from '@/lib/handle-error';
 
+import DeleteDiscipleshipDialog from './delete-dialog';
+
 export const searchField = {
   name: 'personName',
   placeholder: 'search_discipleship_person'
@@ -149,7 +151,7 @@ export function getColumns(t: Function): ColumnDef<any>[] {
       cell: function Cell({ row, table }) {
         const [isUpdatePending, startUpdateTransition] = React.useTransition();
         const [showUpdateTaskSheet, setShowUpdateTaskSheet] = React.useState(false);
-        const [showDeleteTaskDialog, setShowDeleteTaskDialog] = React.useState(false);
+        const [showDeleteDiscipleshipDialog, setShowDiscipleshipDialog] = React.useState(false);
         const selectedRows = table.getFilteredSelectedRowModel().rows.length;
 
         return (
@@ -165,6 +167,12 @@ export function getColumns(t: Function): ColumnDef<any>[] {
               tasks={[row]}
               showTrigger={false}
             /> */}
+            <DeleteDiscipleshipDialog
+              open={showDeleteDiscipleshipDialog}
+              onOpenChange={setShowDiscipleshipDialog}
+              discipleshipList={[row]}
+            />
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -183,7 +191,7 @@ export function getColumns(t: Function): ColumnDef<any>[] {
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={() => setShowDeleteTaskDialog(true)}>
+                <DropdownMenuItem onSelect={() => setShowDiscipleshipDialog(true)}>
                   {t('delete')}
                   <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
                 </DropdownMenuItem>

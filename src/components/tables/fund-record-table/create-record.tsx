@@ -86,7 +86,7 @@ export function CreateFundRecordDialog() {
       const amount = parseFloat(input.amount);
 
       toast.promise(
-        axios.post('/api/fund-record', {
+        axios.post('/api/fund-records', {
           ...input,
           image: fileUrl,
           fundId: currentFund.id,

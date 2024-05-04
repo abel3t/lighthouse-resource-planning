@@ -84,7 +84,7 @@ export const config = {
     '/api/cares/:path*',
     '/api/discipleship/:path*',
     '/api/friends/:path*',
-    '/api/fund-record',
+    '/api/fund-records',
     '/api/funds/:path*',
     '/api/members/:path*',
     '/api/people/:path*',

@@ -27,7 +27,7 @@ const useCareStore = create<CareStore>((set) => ({
       pageSize: pagination.pageSize
     });
 
-    const data = await client.get('/cares/?' + qs).then((res) => res.data);
+    const data = await client.get('/cares?' + qs).then((res) => res.data);
 
     set({ cares: data?.data || [] });
     set({ metadata: data?.metadata || {} });

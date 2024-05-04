@@ -1,6 +1,6 @@
 'use client';
 
-import useMemberStore from '@/stores/useMemberStore';
+import useDiscipleshipStore from '@/stores/useDiscipleshipStore';
 import { useTranslations } from 'next-intl';
 import { useTransition } from 'react';
 import { toast } from 'sonner';
@@ -11,31 +11,34 @@ import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
 import { client } from '@/lib/client';
 import { getErrorMessage } from '@/lib/handle-error';
 
-const DeleteMembersDialog = ({ open, onOpenChange, members }: any) => {
-  const [is, startDeleteTransition] = useTransition();
-  const fetchMembers = useMemberStore((state) => state.fetchMembers);
-  const queryParams = useMemberStore((state) => state.queryParams);
+const DeleteDiscipleshipDialog = ({ open, onOpenChange, discipleshipList, onSuccess }: any) => {
+  const [, startDeleteTransition] = useTransition();
+  const fetchDiscipleshipList = useDiscipleshipStore((state) => state.fetchDiscipleshipList);
+  const queryParams = useDiscipleshipStore((state) => state.queryParams);
 
   const t = useTranslations();
-  const memberIds = members.map((member: any) => member.getValue('id'));
+  const discipleshipIds = discipleshipList.map((discipleship: any) => discipleship.getValue('id'));
 
   const handleDeleteMember = async () => {
     startDeleteTransition(() => {
-      toast.promise(client.delete(`/members?ids=${memberIds.join(',')}`), {
-        loading: t('delete_record_processing', { name: t('member').toLowerCase() }),
+      toast.promise(client.delete(`/discipleship?ids=${discipleshipIds.join(',')}`), {
+        loading: t('delete_record_processing', { name: t('discipleship').toLowerCase() }),
         success: () => {
           onOpenChange(false);
+          if (onSuccess) {
+            onSuccess();
+          }
 
-          fetchMembers(queryParams);
+          fetchDiscipleshipList(queryParams);
 
-          return t('delete_record_successfully', { name: t('member').toLowerCase() });
+          return t('delete_record_successfully', { name: t('discipleship').toLowerCase() });
         },
         error: (error) => {
           onOpenChange(false);
 
           console.log(getErrorMessage(error));
 
-          return t('create_record_failed', { name: t('friend').toLowerCase() });
+          return t('create_record_failed', { name: t('discipleship').toLowerCase() });
         }
       });
     });
@@ -44,11 +47,11 @@ const DeleteMembersDialog = ({ open, onOpenChange, members }: any) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="top-[200px] sm:max-w-[425px]">
-        {members.length > 1 && (
+        {discipleshipList.length > 1 && (
           <p>{t('are_you_sure_to_delete_these_records', { name: t('discipleship').toLowerCase() })}</p>
         )}
 
-        {members.length === 1 && (
+        {discipleshipList.length === 1 && (
           <p>{t('are_you_sure_to_delete_this_record', { name: t('discipleship').toLowerCase() })}</p>
         )}
 
@@ -66,4 +69,4 @@ const DeleteMembersDialog = ({ open, onOpenChange, members }: any) => {
   );
 };
 
-export default DeleteMembersDialog;
+export default DeleteDiscipleshipDialog;

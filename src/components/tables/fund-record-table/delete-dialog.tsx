@@ -1,6 +1,7 @@
 'use client';
 
-import useMemberStore from '@/stores/useMemberStore';
+import useFundRecordStore from '@/stores/useFundRecordStore';
+import useFundStore from '@/stores/useFundStore';
 import { useTranslations } from 'next-intl';
 import { useTransition } from 'react';
 import { toast } from 'sonner';
@@ -11,22 +12,30 @@ import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
 import { client } from '@/lib/client';
 import { getErrorMessage } from '@/lib/handle-error';
 
-const DeleteMembersDialog = ({ open, onOpenChange, members }: any) => {
+const DeleteFuncRecordDialog = ({ open, onOpenChange, fundRecords, onSuccess }: any) => {
   const [, startDeleteTransition] = useTransition();
-  const fetchMembers = useMemberStore((state) => state.fetchMembers);
-  const queryParams = useMemberStore((state) => state.queryParams);
+
+  const fetchFunds = useFundStore((state) => state.fetchFunds);
+  const fetchRecords = useFundRecordStore((state) => state.fetchRecords);
+  const queryParams = useFundRecordStore((state) => state.queryParams);
+  const currentFund = useFundStore((state) => state.currentFund);
 
   const t = useTranslations();
-  const memberIds = members.map((member: any) => member.getValue('id'));
+  const fundRecordIds = fundRecords.map((fundRecord: any) => fundRecord.getValue('id'));
 
   const handleDeleteMember = async () => {
     startDeleteTransition(() => {
-      toast.promise(client.delete(`/members?ids=${memberIds.join(',')}`), {
+      toast.promise(client.delete(`/fund-records?fundId=${currentFund?.id}&ids=${fundRecordIds.join(',')}`), {
         loading: t('delete_record_processing', { name: t('fund_record').toLowerCase() }),
         success: () => {
           onOpenChange(false);
 
-          fetchMembers(queryParams);
+          if (onSuccess) {
+            onSuccess();
+          }
+
+          fetchFunds();
+          fetchRecords(currentFund?.id || '', queryParams);
 
           return t('delete_record_successfully', { name: t('fund_record').toLowerCase() });
         },
@@ -44,11 +53,11 @@ const DeleteMembersDialog = ({ open, onOpenChange, members }: any) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="top-[200px] sm:max-w-[425px]">
-        {members.length > 1 && (
+        {fundRecords.length > 1 && (
           <p>{t('are_you_sure_to_delete_these_records', { name: t('fund_records').toLowerCase() })}</p>
         )}
 
-        {members.length === 1 && (
+        {fundRecords.length === 1 && (
           <p>{t('are_you_sure_to_delete_this_record', { name: t('fund_record').toLowerCase() })}</p>
         )}
 
@@ -66,4 +75,4 @@ const DeleteMembersDialog = ({ open, onOpenChange, members }: any) => {
   );
 };
 
-export default DeleteMembersDialog;
+export default DeleteFuncRecordDialog;

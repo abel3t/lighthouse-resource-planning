@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
 import { client } from '@/lib/client';
 import { getErrorMessage } from '@/lib/handle-error';
 
-const DeleteFriendsDialog = ({ open, onOpenChange, friends }: any) => {
+const DeleteFriendsDialog = ({ open, onOpenChange, friends, onSuccess }: any) => {
   const [, startDeleteTransition] = useTransition();
   const fetchFriends = useFriendStore((state) => state.fetchFriends);
   const queryParams = useFriendStore((state) => state.queryParams);
@@ -25,6 +25,9 @@ const DeleteFriendsDialog = ({ open, onOpenChange, friends }: any) => {
         loading: t('delete_record_processing', { name: t('dialog_friend').toLowerCase() }),
         success: () => {
           onOpenChange(false);
+          if (onSuccess) {
+            onSuccess();
+          }
 
           fetchFriends(queryParams);
 

@@ -19,6 +19,8 @@ import {
 
 import { cn } from '@/lib/utils';
 
+import DeleteFuncRecordDialog from './delete-dialog';
+
 export const searchField = {
   name: 'contributorName',
   placeholder: 'search_giver'
@@ -122,7 +124,7 @@ export function getColumns(t: Function): ColumnDef<any>[] {
       cell: function Cell({ row, table }) {
         const [isUpdatePending, startUpdateTransition] = React.useTransition();
         const [showUpdateTaskSheet, setShowUpdateTaskSheet] = React.useState(false);
-        const [showDeleteTaskDialog, setShowDeleteTaskDialog] = React.useState(false);
+        const [showDeleteFundRecordDialog, setShowDeleteFundRecordDialog] = React.useState(false);
 
         const selectedRows = table.getFilteredSelectedRowModel().rows.length;
 
@@ -139,6 +141,13 @@ export function getColumns(t: Function): ColumnDef<any>[] {
               tasks={[row]}
               showTrigger={false}
             /> */}
+            <DeleteFuncRecordDialog
+              open={showDeleteFundRecordDialog}
+              onOpenChange={setShowDeleteFundRecordDialog}
+              fundRecords={[row]}
+              onSuccess={() => table.toggleAllPageRowsSelected(false)}
+            />
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -153,7 +162,7 @@ export function getColumns(t: Function): ColumnDef<any>[] {
               <DropdownMenuContent align="end" className="w-40">
                 <DropdownMenuItem onSelect={() => setShowUpdateTaskSheet(true)}>{t('edit')}</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onSelect={() => setShowDeleteTaskDialog(true)}>
+                <DropdownMenuItem onSelect={() => setShowDeleteFundRecordDialog(true)}>
                   {t('delete')}
                   <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
                 </DropdownMenuItem>

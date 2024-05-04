@@ -38,7 +38,7 @@ const useFundRecordStore = create<FundStore>((set) => ({
       fundId
     });
 
-    const data = await client.get('/fund-record/?' + qs).then((res) => res.data);
+    const data = await client.get('/fund-records?' + qs).then((res) => res.data);
     set({ records: data?.data || [] });
     set({ metadata: data?.metadata || {} });
   },
