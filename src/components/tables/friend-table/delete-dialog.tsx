@@ -17,7 +17,7 @@ const DeleteFriendsDialog = ({ open, onOpenChange, friends }: any) => {
   const queryParams = useFriendStore((state) => state.queryParams);
 
   const t = useTranslations();
-  const friendIds = friends.map((member: any) => member.getValue('id'));
+  const friendIds = friends.map((friend: any) => friend.getValue('id'));
 
   const handleDeleteFriend = async () => {
     startDeleteTransition(() => {

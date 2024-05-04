@@ -38,7 +38,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { getErrorMessage } from '@/lib/handle-error';
 import { cn } from '@/lib/utils';
 
-const createFundRecordSchema = z.object({
+const createFriendSchema = z.object({
   name: z.string().min(3),
   type: z.nativeEnum(FriendType),
   friendId: z.string().optional(),
@@ -49,9 +49,9 @@ const createFundRecordSchema = z.object({
   gender: z.nativeEnum(Gender).optional(),
   description: z.string().optional()
 });
-export type CreateRecordSchema = z.infer<typeof createFundRecordSchema>;
+export type CreateRecordSchema = z.infer<typeof createFriendSchema>;
 
-export function CreateFundRecordDialog() {
+export function CreateFriendDialog() {
   const [open, setOpen] = React.useState(false);
   const [isUploading, setIsUploading] = React.useState(false);
   const [isOnCreating, setIsOnCreating] = React.useState(false);
@@ -60,7 +60,7 @@ export function CreateFundRecordDialog() {
   const t = useTranslations();
 
   const form = useForm<CreateRecordSchema>({
-    resolver: zodResolver(createFundRecordSchema)
+    resolver: zodResolver(createFriendSchema)
   });
 
   const queryParams = useMemberStore((state) => state.queryParams);

@@ -19,7 +19,7 @@ import { DataTable } from '@/components/custom/data-table';
 import { DataTableToolbar } from '@/components/custom/data-table/data-table-toolbar';
 
 import { getColumns, searchField } from './friend-table-columns';
-import { MemberTableToolbarActions } from './member-table-toolbar-actions';
+import { FriendTableToolbarActions } from './member-table-toolbar-actions';
 
 export default function FriendTable() {
   const metadata = useFriendStore((state) => state.metadata);
@@ -126,7 +126,7 @@ export default function FriendTable() {
   return (
     <div className="w-screen  space-y-1 px-1  sm:w-full">
       <DataTableToolbar table={table} search={searchField} filterFields={[]}>
-        <MemberTableToolbarActions table={table} />
+        <FriendTableToolbarActions table={table} />
       </DataTableToolbar>
 
       <DataTable table={table} />

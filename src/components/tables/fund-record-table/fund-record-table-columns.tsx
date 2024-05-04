@@ -124,6 +124,8 @@ export function getColumns(t: Function): ColumnDef<any>[] {
         const [showUpdateTaskSheet, setShowUpdateTaskSheet] = React.useState(false);
         const [showDeleteTaskDialog, setShowDeleteTaskDialog] = React.useState(false);
 
+        const selectedRows = table.getFilteredSelectedRowModel().rows.length;
+
         return (
           <>
             {/* <UpdateTaskSheet
@@ -139,7 +141,12 @@ export function getColumns(t: Function): ColumnDef<any>[] {
             /> */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button aria-label="Open menu" variant="ghost" className="flex size-8 p-0 data-[state=open]:bg-muted">
+                <Button
+                  disabled={selectedRows > 1}
+                  aria-label="Open menu"
+                  variant="ghost"
+                  className="flex size-8 p-0 data-[state=open]:bg-muted"
+                >
                   <DotsHorizontalIcon className="size-4" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
