@@ -113,5 +113,7 @@
   "discipleship_priority_normal": "Normal",
   "discipleship_priority_warning": "Warning",
   "relation_friends": "Friends",
-  "care_by": "by"
+  "care_by": "by",
+  "copied": "Copied",
+  "copy_failed": "Copy failed"
 }

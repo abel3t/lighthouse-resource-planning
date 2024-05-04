@@ -4,7 +4,7 @@ import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs';
 import { ExternalLink, SettingsIcon, UserIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 import { useMediaQuery } from 'usehooks-ts';
 
@@ -49,7 +49,6 @@ export default function Header() {
 const AvatarIcon = ({ user }: { user: any }) => {
   const [isLogoutLoading, setIsLogoutLoading] = useState(false);
   const [open, setOpen] = useState(false);
-
   const t = useTranslations();
   const router = useRouter();
 
@@ -103,7 +102,13 @@ const AvatarIcon = ({ user }: { user: any }) => {
 
         <Separator />
 
-        <div className="flex cursor-pointer items-center py-3 hover:bg-gray-100 hover:opacity-80  dark:hover:bg-gray-700">
+        <div
+          onClick={() => {
+            router.push('/api/auth/logout');
+            setIsLogoutLoading(true);
+          }}
+          className="flex cursor-pointer items-center py-3 hover:bg-gray-100 hover:opacity-80  dark:hover:bg-gray-700"
+        >
           <div className="px-3">
             <ExternalLink />
           </div>
@@ -111,10 +116,6 @@ const AvatarIcon = ({ user }: { user: any }) => {
             <Button
               variant={'outline'}
               className="w-full cursor-pointer border-none bg-transparent p-0 ring-offset-transparent focus-visible:ring-0 focus-visible:ring-offset-0  dark:hover:bg-gray-700"
-              onClick={() => {
-                router.push('/api/auth/logout');
-                setIsLogoutLoading(true);
-              }}
             >
               {isLogoutLoading ? (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />

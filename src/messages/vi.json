@@ -114,5 +114,7 @@
   "discipleship_priority_normal": "Bình thường",
   "discipleship_priority_warning": "Không tốt",
   "relation_friends": "Bạn bè",
-  "care_by": "bởi"
+  "care_by": "bởi",
+  "copied": "Đã sao chép",
+  "copy_failed": "Sao chép thất bại"
 }
