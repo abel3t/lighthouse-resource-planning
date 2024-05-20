@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import type { Viewport } from 'next';
 import { NextIntlClientProvider, useLocale, useMessages } from 'next-intl';
 import { Inter as FontSans } from 'next/font/google';
 
@@ -8,6 +9,13 @@ import { Toaster } from '@/components/ui/sonner';
 import { cn } from '@/lib/utils';
 
 import '../globals.css';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false
+};
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -38,8 +46,6 @@ export default function RootLayout({
 
   return (
     <html lang={params?.locale}>
-      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-
       <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>

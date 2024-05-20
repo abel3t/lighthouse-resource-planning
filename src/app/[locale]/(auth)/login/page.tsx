@@ -1,8 +1,6 @@
 import UserAuthForm from '@/app/[locale]/(auth)/login/user-form';
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server';
-import { useTranslations } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 export default async function LoginPage({ params: { locale } }: { params: { locale: string } }) {

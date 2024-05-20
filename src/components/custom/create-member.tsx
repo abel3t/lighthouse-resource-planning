@@ -42,10 +42,7 @@ export function CreateDialog() {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values, 'hhi');
-    axios.post('/api/members', values).then((res) => {
-      console.log(res, 'hihi');
-    });
+    axios.post('/api/members', values);
   }
 
   return (

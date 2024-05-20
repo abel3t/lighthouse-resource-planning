@@ -13,6 +13,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useEffect, useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
+import removeAccents from 'remove-accents';
 import { toast } from 'sonner';
 import * as z from 'zod';
 
@@ -249,7 +250,17 @@ const ContributorField = ({ form, t }: any) => {
               </FormControl>
             </PopoverTrigger>
             <PopoverContent className=" p-0">
-              <Command>
+              <Command
+                filter={(value, search) => {
+                  const member = members.find((x) => x.id === value);
+
+                  return removeAccents(member?.name?.toLowerCase() || '').includes(
+                    removeAccents(search.toLowerCase() || '')
+                  )
+                    ? 1
+                    : 0;
+                }}
+              >
                 <CommandInput placeholder={t('search_giver')} />
                 <CommandList>
                   <ScrollArea className="h-72">

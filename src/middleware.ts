@@ -61,8 +61,6 @@ const intlMiddleware = createMiddleware({
 });
 
 export default function middleware(req: NextRequest) {
-  console.log('Request URL nè:', req.nextUrl.pathname);
-
   // Define a regex pattern for private URLs
   const excludePattern = '^(/(' + locales.join('|') + '))?/api/?.*?$';
   const publicPathnameRegex = RegExp(excludePattern, 'i');

@@ -15,6 +15,7 @@ import Image from 'next/image';
 import * as React from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import removeAccents from 'remove-accents';
 import { toast } from 'sonner';
 import * as z from 'zod';
 
@@ -260,7 +261,17 @@ const MemberField = ({ form, t }: any) => {
               </FormControl>
             </PopoverTrigger>
             <PopoverContent className=" p-0">
-              <Command>
+              <Command
+                filter={(value, search) => {
+                  const member = members.find((x) => x.id === value);
+
+                  return removeAccents(member?.name?.toLowerCase() || '').includes(
+                    removeAccents(search.toLowerCase() || '')
+                  )
+                    ? 1
+                    : 0;
+                }}
+              >
                 <CommandInput placeholder={t('search_member')} />
                 <ScrollArea className="h-72">
                   <CommandList>

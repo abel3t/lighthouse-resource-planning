@@ -12,6 +12,7 @@ import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
+import removeAccents from 'remove-accents';
 import { toast } from 'sonner';
 import * as z from 'zod';
 
@@ -273,7 +274,17 @@ const IntroducedByField = ({ form, t }: any) => {
               </FormControl>
             </PopoverTrigger>
             <PopoverContent className=" p-0">
-              <Command>
+              <Command
+                filter={(value, search) => {
+                  const member = members.find((x) => x.id === value);
+
+                  return removeAccents(member?.name?.toLowerCase() || '').includes(
+                    removeAccents(search.toLowerCase() || '')
+                  )
+                    ? 1
+                    : 0;
+                }}
+              >
                 <CommandInput placeholder={t('search_member')} />
                 <CommandList>
                   <ScrollArea className="h-72">

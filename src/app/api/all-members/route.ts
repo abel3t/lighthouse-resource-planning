@@ -17,7 +17,8 @@ export async function GET(req: Request) {
     select: {
       id: true,
       name: true
-    }
+    },
+    orderBy: { firstName: 'asc' }
   });
 
   return NextResponse.json(members);
