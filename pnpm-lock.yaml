@@ -9,8 +9,8 @@ dependencies:
     specifier: ^3.3.4
     version: 3.3.4(react-hook-form@7.51.3)
   '@kinde-oss/kinde-auth-nextjs':
-    specifier: ^2.2.3
-    version: 2.2.3(@babel/core@7.24.5)(next@14.2.1)(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^2.2.10
+    version: 2.2.10(@babel/core@7.24.5)(next@14.2.1)(react-dom@18.2.0)(react@18.2.0)
   '@prisma/client':
     specifier: ^5.12.1
     version: 5.12.1(prisma@5.12.1)
@@ -128,6 +128,9 @@ dependencies:
   react-resizable-panels:
     specifier: ^2.0.16
     version: 2.0.16(react-dom@18.2.0)(react@18.2.0)
+  remove-accents:
+    specifier: ^0.5.0
+    version: 0.5.0
   sharp:
     specifier: ^0.33.3
     version: 0.33.3
@@ -1428,8 +1431,8 @@ packages:
       fast-check: 3.18.0
     dev: false
 
-  /@emnapi/runtime@1.1.1:
-    resolution: {integrity: sha512-3bfqkzuR1KLx57nZfjr2NLnFOobvyS0aTszaEGCGqmYMVDRaGvgIZbjGSV/MHSSmLgQ/b9JFHQ5xm5WRZYd+XQ==}
+  /@emnapi/runtime@1.2.0:
+    resolution: {integrity: sha512-bV21/9LQmcQeCPEg3BDFtvwL6cwiTMksYNWQQ4KOxCZikEGalWtenoZ0wCiukJINlGCIi2KXx01g4FoH/LxpzQ==}
     requiresBuild: true
     dependencies:
       tslib: 2.6.2
@@ -1725,7 +1728,7 @@ packages:
     cpu: [wasm32]
     requiresBuild: true
     dependencies:
-      '@emnapi/runtime': 1.1.1
+      '@emnapi/runtime': 1.2.0
     dev: false
     optional: true
 
@@ -1783,16 +1786,16 @@ packages:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
-  /@kinde-oss/kinde-auth-nextjs@2.2.3(@babel/core@7.24.5)(next@14.2.1)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-x9AxRB9mxNSNzQMYe03zXJk28FlhhKfU4V3lUTzBY1/o78vuZpU0/t8jxFvoTps+inw4NmI8YDwyjWBcMtU/Hg==}
+  /@kinde-oss/kinde-auth-nextjs@2.2.10(@babel/core@7.24.5)(next@14.2.1)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-tx0+0O6BtnD2yjos8rZLTAViJ0HMQb9xHvb8I9asU2l2bRA8JUlVKnsYjCOc8iWqYXwllJ9HFCXr1cD9eSkCzg==}
     peerDependencies:
       next: ^12.2.5 || ^13 || ^14
       react: ^18.1.0
       react-dom: ^18.1.0
     dependencies:
       '@babel/preset-env': 7.24.5(@babel/core@7.24.5)
-      '@kinde-oss/kinde-typescript-sdk': 2.9.0
-      cookie: 0.5.0
+      '@kinde-oss/kinde-typescript-sdk': 2.9.1
+      cookie: 0.6.0
       crypto-js: 4.2.0
       jwt-decode: 3.1.2
       next: 14.2.1(@babel/core@7.24.5)(react-dom@18.2.0)(react@18.2.0)
@@ -1804,10 +1807,10 @@ packages:
       - supports-color
     dev: false
 
-  /@kinde-oss/kinde-typescript-sdk@2.9.0:
-    resolution: {integrity: sha512-wCu9eRAyNWp5AVv5QWaY4wrdQiAR9tYkBnQXeYshmbTRRMr/sm57+Td09ZabXorE4sPk4uB2tXBlaczJvnakXA==}
+  /@kinde-oss/kinde-typescript-sdk@2.9.1:
+    resolution: {integrity: sha512-3BBFQ3/WgAgoWigfpK9ItUkpyleuHN14in+V44NLWi+zHwE1B8II/HR5CHhw+s6qR1wyJwQh4ddz2tUJwEXysg==}
     dependencies:
-      jose: 5.2.4
+      jose: 5.3.0
       uncrypto: 0.1.3
     dev: false
 
@@ -3678,8 +3681,8 @@ packages:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
     dev: false
 
-  /cookie@0.5.0:
-    resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}
+  /cookie@0.6.0:
+    resolution: {integrity: sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==}
     engines: {node: '>= 0.6'}
     dev: false
 
@@ -4961,8 +4964,8 @@ packages:
     resolution: {integrity: sha512-gFqAIbuKyyso/3G2qhiO2OM6shY6EPP/R0+mkDbyspxKazh8BXDC5FiFsUjlczgdNz/vfra0da2y+aHrusLG/Q==}
     hasBin: true
 
-  /jose@5.2.4:
-    resolution: {integrity: sha512-6ScbIk2WWCeXkmzF6bRPmEuaqy1m8SbsRFMa/FLrSCkGIhj8OLVG/IH+XHVmNMx/KUo8cVWEE6oKR4dJ+S0Rkg==}
+  /jose@5.3.0:
+    resolution: {integrity: sha512-IChe9AtAE79ru084ow8jzkN2lNrG3Ntfiv65Cvj9uOCE2m5LNsdHG+9EbxWxAoWRF9TgDOqLN5jm08++owDVRg==}
     dev: false
 
   /js-tokens@4.0.0:
@@ -5809,6 +5812,10 @@ packages:
     hasBin: true
     dependencies:
       jsesc: 0.5.0
+    dev: false
+
+  /remove-accents@0.5.0:
+    resolution: {integrity: sha512-8g3/Otx1eJaVD12e31UbJj1YzdtVvzH85HV7t+9MJYk/u3XmkOUJ5Ys9wQrf9PCPK8+xn4ymzqYCiZl6QWKn+A==}
     dev: false
 
   /resolve-from@4.0.0:

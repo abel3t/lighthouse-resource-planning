@@ -11,7 +11,11 @@ export async function GET(req: Request) {
     });
   }
 
-  const data = await prisma.person.findMany({ where: { organizationId }, select: { id: true, name: true } });
+  const data = await prisma.person.findMany({
+    where: { organizationId },
+    select: { id: true, name: true },
+    orderBy: { firstName: 'asc' }
+  });
 
   return NextResponse.json(data);
 }

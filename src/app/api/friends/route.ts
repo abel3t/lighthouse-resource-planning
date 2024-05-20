@@ -58,7 +58,7 @@ export async function GET(req: Request) {
     orderByType = 'asc';
   }
 
-  if (sortField === 'name') {
+  if (orderByField === 'name') {
     orderByField = 'firstName';
   }
 
