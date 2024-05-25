@@ -1,8 +1,8 @@
-import type { NextRequest } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 
 export function GET(request: NextRequest) {
   // const authHeader = request.headers.get('authorization');
   console.log('here is request for cron quarterly', request.json());
 
-  return Response.json({ success: true });
+  return NextResponse.json({ success: true });
 }
