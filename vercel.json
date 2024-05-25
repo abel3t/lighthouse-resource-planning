@@ -3,10 +3,6 @@
     {
       "path": "/api/cron/birthday/daily",
       "schedule": "15 * 25 * *"
-    },
-    {
-      "path": "/api/cron/birthday/quarterly",
-      "schedule": "15 * 25 * *"
     }
   ]
 }
