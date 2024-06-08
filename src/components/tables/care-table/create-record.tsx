@@ -68,14 +68,14 @@ export function CreateCareDialog() {
   });
 
   const queryParams = useCareStore((state) => state.queryParams);
-  const fetchMembers = useMemberStore((state) => state.fetchMembers);
+  const fetchAllMembers = useMemberStore((state) => state.fetchAllMembers);
   const fetchCares = useCareStore((state) => state.fetchCares);
 
   const fetchAccounts = useAccountStore((state) => state.fetchAccounts);
   const accounts = useAccountStore((state) => state.accounts);
 
   React.useEffect(() => {
-    fetchMembers({});
+    fetchAllMembers();
     fetchAccounts();
   }, []);
 
@@ -238,7 +238,7 @@ export function CreateCareDialog() {
 const MemberField = ({ form, t }: any) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const members = useMemberStore((state) => state.members);
+  const members = useMemberStore((state) => state.allMembers);
 
   return (
     <FormField
