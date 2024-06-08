@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/birthday/daily",
+      "schedule": "28 12 25 * *"
+    },
+    {
+      "path": "/api/cron/birthday/quaterly",
+      "schedule": "28 12 25 * *"
+    }
+  ]
+}

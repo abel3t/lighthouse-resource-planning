@@ -1,6 +1,4 @@
-import { PersonalType } from '@/enums';
 import { SortType } from '@/types';
-import { is } from 'date-fns/locale';
 import { NextResponse } from 'next/server';
 
 import prisma from '@/lib/prisma';
