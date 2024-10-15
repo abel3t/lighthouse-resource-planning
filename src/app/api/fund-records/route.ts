@@ -26,14 +26,14 @@ export async function POST(req: Request, res: Response) {
 
   const contributor = data.contributorId
     ? await prisma.person.findUnique({
-        where: {
-          id: data.contributorId,
-          organizationId
-        },
-        select: {
-          name: true
-        }
-      })
+      where: {
+        id: data.contributorId,
+        organizationId
+      },
+      select: {
+        name: true
+      }
+    })
     : null;
 
   if (!fund) {
@@ -77,10 +77,20 @@ export async function GET(req: Request) {
 
   const $condition: Record<string, any> = { fundId, isDeleted: false };
   if (search) {
-    $condition.contributorName = {
-      contains: search,
-      mode: 'insensitive'
-    };
+    $condition.OR = [
+      {
+        contributorName: {
+          contains: search,
+          mode: 'insensitive'
+        }
+      },
+      {
+        description: {
+          contains: search,
+          mode: 'insensitive'
+        }
+      }
+    ];
   }
 
   const [total, fundRecords] = await Promise.all([
