@@ -8,7 +8,7 @@ import { FundRecordType } from '@prisma/client';
 import { PlusIcon } from '@radix-ui/react-icons';
 import axios from 'axios';
 import { CommandList } from 'cmdk';
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { useEffect, useState, useTransition } from 'react';
@@ -41,6 +41,8 @@ import { UploadButton } from '@/components/uploadthing';
 import { deleteImageUploadThing } from '@/lib/api';
 import { getErrorMessage } from '@/lib/handle-error';
 import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
+import { Calendar } from '@/components/ui/calendar';
 
 export function CreateFundRecordDialog() {
   const [open, setOpen] = useState(false);
@@ -56,7 +58,8 @@ export function CreateFundRecordDialog() {
     type: z.nativeEnum(FundRecordType),
     contributorId: z.string().optional(),
     description: z.string().optional(),
-    image: z.string().optional()
+    image: z.string().optional(),
+    date: z.date().optional(),
   });
   type CreateRecordSchema = z.infer<typeof createFundRecordSchema>;
 
@@ -151,8 +154,10 @@ export function CreateFundRecordDialog() {
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
-            <RecordTypeField form={form} t={t} />
-
+            <div className="flex items-start gap-2">
+              <RecordTypeField form={form} t={t} />
+              <GiveDayField form={form} t={t} />
+            </div>
             <div className="flex items-start gap-2">
               <AmountField form={form} t={t} />
 
@@ -324,7 +329,6 @@ const AmountField = ({ form, t }: any) => {
           <FormControl className="mt-0 py-0">
             <CurrencyInput className="mt-0 py-0" {...field} />
           </FormControl>
-
           <FormMessage />
         </FormItem>
       )}
@@ -344,6 +348,7 @@ const RecordTypeField = ({ form, t }: any) => {
       name="type"
       render={({ field }) => (
         <FormItem className="flex w-1/2 flex-col">
+          <FormLabel>Type</FormLabel>
           <FormControl>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
@@ -357,6 +362,43 @@ const RecordTypeField = ({ form, t }: any) => {
               </SelectContent>
             </Select>
           </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+};
+
+const GiveDayField = ({ form, t }: any) => {
+  return (
+    <FormField
+      control={form.control}
+      name="date"
+      render={({ field }) => (
+        <FormItem className="flex w-1/2 flex-col">
+          <FormLabel>Date</FormLabel>
+          <Popover modal>
+            <PopoverTrigger asChild>
+              <FormControl>
+                <Button
+                  variant={'outline'}
+                  className={cn('pl-3 text-left font-normal', !field.value && 'text-muted-foreground')}
+                >
+                  {field.value ? format(field.value, 'dd/MM/yyyy') : <span>{t('pick_a_date')}</span>}
+                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                </Button>
+              </FormControl>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={field.value}
+                onSelect={field.onChange}
+                disabled={(date) => date > new Date() || date < new Date('1900-01-01')}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
           <FormMessage />
         </FormItem>
       )}
