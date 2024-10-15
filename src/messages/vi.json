@@ -109,7 +109,7 @@
   "getting_ready": "Đang chuẩn bị...",
   "choose_image": "Chọn tập tin",
   "wait_a_moment": "Vui lòng chờ một chút...",
-  "Image": "Hình ảnh",
+  "image": "Hình ảnh",
   "max_image_size": "Kích thước tối đa {size}",
   "uploading_image": "Đang tải ảnh lên...",
   "upload_image_successfully": "Tải ảnh lên thành công",
@@ -141,5 +141,6 @@
   "please_enter_an_amount": "Vui lòng nhập số tiền",
   "fund_name": "Tên Quỹ",
   "create_fund": "Tạo Quỹ",
-  "initial_balance": "Số tiền ban đầu"
+  "initial_balance": "Số tiền ban đầu",
+  "clear_filters": "Xoá tìm kiếm"
 }

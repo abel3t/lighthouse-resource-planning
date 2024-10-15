@@ -140,5 +140,6 @@
   "please_enter_an_amount": "Please enter an amount",
   "fund_name": "Fund's Name",
   "create_fund": "Create Fund",
-  "initial_balance": "Initial Balance"
+  "initial_balance": "Initial Balance",
+    "clear_filters": "Clear filters"
 }
